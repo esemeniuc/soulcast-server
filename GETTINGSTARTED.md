@@ -6,7 +6,7 @@ sudo wget https://github.com/docker/compose/releases/download/1.8.0/docker-compo
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-###Set up the Dockerfile
+###Set up Docker
 ```bash
 echo "FROM ruby:2.3
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs use #note: -qq to suppress log
@@ -38,3 +38,4 @@ services:
       - db" > docker-compose.yml
 
 docker-compose run web rails new . --force --database=postgresql --skip-bundle
+```
