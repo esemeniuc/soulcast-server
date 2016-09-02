@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Soultype:</strong>
+  <%= @soul.soulType %>
+</p>
+
+<p>
+  <strong>S3key:</strong>
+  <%= @soul.s3Key %>
+</p>
+
+<p>
+  <strong>Epoch:</strong>
+  <%= @soul.epoch %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @soul.longitude %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @soul.latitude %>
+</p>
+
+<p>
+  <strong>Radius:</strong>
+  <%= @soul.radius %>
+</p>
+
+<p>
+  <strong>Token:</strong>
+  <%= @soul.token %>
+</p>
+
+<p>
+  <strong>Device:</strong>
+  <%= @soul.device %>
+</p>
+
+<%= link_to 'Edit', edit_soul_path(@soul) %> |
+<%= link_to 'Back', souls_path %>

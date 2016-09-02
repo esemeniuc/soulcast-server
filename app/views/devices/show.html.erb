@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Token:</strong>
+  <%= @device.token %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @device.longitude %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @device.latitude %>
+</p>
+
+<p>
+  <strong>Radius:</strong>
+  <%= @device.radius %>
+</p>
+
+<p>
+  <strong>Arn:</strong>
+  <%= @device.arn %>
+</p>
+
+<%= link_to 'Edit', edit_device_path(@device) %> |
+<%= link_to 'Back', devices_path %>
