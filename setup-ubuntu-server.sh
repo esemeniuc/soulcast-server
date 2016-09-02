@@ -4,8 +4,8 @@ echo "Please enter in aws_access_key_id (look in Google Sheets): "
 read aws_access_key_id
 echo "Please enter in aws_secret_access_key (look in Google Sheets): "
 read aws_secret_access_key
-echo "You entered: aws_access_key_id = $aws_access_key_id"
-echo "You entered: aws_secret_access_key = $aws_secret_access_key"
+echo "You entered aws_access_key_id = $aws_access_key_id"
+echo "You entered aws_secret_access_key = $aws_secret_access_key"
 
 #Setting up rails on a new system
 sudo apt-get update -qq && sudo apt-get upgrade --yes #installs updates on server
