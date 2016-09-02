@@ -1,5 +1,6 @@
 class SoulsController < ApplicationController
   before_action :set_soul, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token, only: [:create] #for dev only, disables authenticity checking on create
 
   # GET /souls
   # GET /souls.json
