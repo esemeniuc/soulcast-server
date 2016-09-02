@@ -15,7 +15,7 @@ sudo apt-get install curl
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-###this installs RVM
+###this installs RVM and Rails
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
 source ~/.rvm/scripts/rvm
@@ -25,7 +25,7 @@ gem install rails
 ###for debian, use the following as root: mkdir -p /var/www/soulcast.domain && cd /var/www/soulcast.domain
 mkdir ~/soulcast.domain && cd ~/soulcast.domain
 
-###make new rails installation
+###make new rails app
 rails new soulcast-server-dev
 cd soulcast-server-dev
 
@@ -33,7 +33,7 @@ cd soulcast-server-dev
 echo "gem 'aws-sdk', '~> 2'" >> soulcast-server-dev/Gemfile
 bundle install
 
-###Rails AWS access - Create file at ~/.aws/credentials and create config file (for SNS) at ~/.aws/config:
+###Rails AWS access - Create file at ~/.aws/credentials and create config file for SNS at ~/.aws/config:
 mkdir ~/.aws
 echo "[default]
 aws_access_key_id = $aws_access_key_id
