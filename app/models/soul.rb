@@ -58,7 +58,7 @@ class Soul < ApplicationRecord
   before_save do
     if (withinMutualRange)
       puts("we got called-------------------------------------")
-      sendToDevices(Device.all)
+      #sendToDevices(Device.all)
     end
   end
 end
