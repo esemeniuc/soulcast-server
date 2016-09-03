@@ -1,3 +1,23 @@
+###For local dev environments
+
+
+```bash
+echo "Please enter in aws_access_key_id (look in Google Sheets): "
+read aws_access_key_id
+echo "Please enter in aws_secret_access_key (look in Google Sheets): "
+read aws_secret_access_key
+echo "You entered aws_access_key_id = $aws_access_key_id"
+echo "You entered aws_secret_access_key = $aws_secret_access_key"
+
+mkdir ~/.aws
+echo "[default]
+aws_access_key_id = $aws_access_key_id
+aws_secret_access_key = $aws_secret_access_key" > ~/.aws/credentials
+echo "[default]
+region=us-west-2" > ~/.aws/config
+```
+
+
 ##Ubuntu Setup Guide
 
 ###Get Docker Compose
