@@ -26,6 +26,8 @@ class SoulsController < ApplicationController
   # POST /souls.json
   def create
     @soul = Soul.new(soul_params)
+	deviceID = Device.where(token: @soul.token)
+	@soul.device_id = deviceID.id
 
     respond_to do |format|
       if @soul.save
@@ -70,6 +72,7 @@ class SoulsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def soul_params
-      params.require(:soul).permit(:soulType, :s3Key, :epoch, :longitude, :latitude, :radius, :token, :device_id)
+      params.require(:soul).permit(:soulType, :s3Key, :epoch, :longitude, :latitude, :radius, :token)
+      #### note the lack of :device_id as well (we dont need it)
     end
 end

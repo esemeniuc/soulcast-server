@@ -17,7 +17,7 @@ sudo apt-get install -y nodejs
 
 ###this installs RVM and Rails
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-\curl -sSL https://get.rvm.io | bash -s stable --ruby
+\curl -sSL https://get.rvm.io | sudo bash -s stable --ruby
 source ~/.rvm/scripts/rvm
 gem install rails
 
@@ -42,8 +42,8 @@ echo "[default]
 region=us-west-2" > ~/.aws/config
 
 ###make scaffold for soul object and device model
-###note dont make type:string (column named "type") or else get ActiveRecord::SubclassNotFound in SoulController#create
-rails generate scaffold device token:string longitude:float latitude:float radius:float arn:string
+###note dont make type:string (column named "type") or else we get ActiveRecord::SubclassNotFound in SoulController#create
+rails generate scaffold device token:string:uniq longitude:float latitude:float radius:float arn:string:index
 rails generate scaffold soul soulType:string s3Key:string epoch:integer longitude:float latitude:float radius:float token:string device:references
 
 ###go to app/controllers/souls_controller.rb, (under before_action :...), add this on line 3

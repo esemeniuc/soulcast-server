@@ -1,20 +1,9 @@
 class Soul < ApplicationRecord
   belongs_to :device
-  before_validation :addfakeARN
-
-  def addfakeARN
-      self.device_id = 1
-      puts ("added fake arn-----------------------------------")
-  end
-
-  def withinMutualRange
-    #checks if the souls devices are within a mutually overlapping range
-    puts "within range----------------------------------------"
-    return true
-  end
 
   def devicesWithinMutualRange
-    return [self.device.arn]
+	#temporarily returns all devices with unique arns from the devices table
+    return Device.all.to_ary #returns all
   end
 
   def sendToDevices(inputDeviceArray) #use self so we can call function from controller
@@ -56,9 +45,10 @@ class Soul < ApplicationRecord
 
 
   before_save do
-    if (withinMutualRange)
-      puts("we got called-------------------------------------")
-      #sendToDevices(Device.all)
+	  deviceCount = devicesWithinMutualRange.count
+    if deviceCount > 0
+		puts deviceCount.to_s + " devices within range------------------"
+		sendToDevices(devicesWithinMutualRange)
     end
   end
 end
