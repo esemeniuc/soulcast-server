@@ -36,7 +36,7 @@ class Soul < ApplicationRecord
         message: sns_message.to_json,
         message_structure: "json")
 
-      puts "endpoint arn is " + device.arn
+      puts "sent to endpoint arn: " + device.arn
     end
 
 
@@ -47,7 +47,7 @@ class Soul < ApplicationRecord
   before_save do
 	  deviceCount = devicesWithinMutualRange.count
     if deviceCount > 0
-		puts deviceCount.to_s + " devices within range------------------"
+		puts deviceCount.to_s + " devices within range--------------------------------"
 		sendToDevices(devicesWithinMutualRange)
     end
   end

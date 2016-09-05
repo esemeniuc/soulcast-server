@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160902175711) do
+ActiveRecord::Schema.define(version: 20160904235639) do
 
   create_table "devices", force: :cascade do |t|
     t.string   "token"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 20160902175711) do
     t.string   "arn"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["arn"], name: "index_devices_on_arn", unique: true
+    t.index ["token"], name: "index_devices_on_token", unique: true
   end
 
   create_table "souls", force: :cascade do |t|
