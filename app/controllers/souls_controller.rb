@@ -26,7 +26,7 @@ class SoulsController < ApplicationController
   # POST /souls.json
   def create
     @soul = Soul.new(soul_params)
-	@soul.device_id = Device.find_by_token(@soul.token).id
+    @soul.device_id = Device.find_by_token(@soul.token).id
 
     respond_to do |format|
       if @soul.save

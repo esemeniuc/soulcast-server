@@ -22,7 +22,7 @@ class Soul < ApplicationRecord
     devicesInRange.each do |device|
       subscriptionARN = device.subscribeToTopic(@snsTopic)
       @subscriptionARNArray.push(subscriptionARN)
-      puts device.subscriptionARN
+      puts subscriptionARN
     end
 
   end
@@ -48,7 +48,7 @@ class Soul < ApplicationRecord
     @snsTopic.publish({message: snsMessage.to_json, message_structure: "json"})
   end
 
-  def cleanup
+  def cleanUp
     #clean up unneeded topic and subscriptions
     @snsTopic.delete
 
