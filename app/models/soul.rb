@@ -1,72 +1,91 @@
 class Soul < ApplicationRecord
   belongs_to :device
 
+  def createSNSTopic
+    #make a new SNS topic and returns the topic
+    snsResource = Aws::SNS::Resource.new
+    topic = snsResource.create_topic(name: Time.now.to_i.to_s) #make topic based on current time
+    puts "topic arn is: " + topic.arn
+    @snsTopic = topic
+    return topic
+  end
+
   def devicesWithinMutualRange
 	#temporarily returns all devices with unique arns from the devices table
     return Device.all.to_ary #returns all
   end
 
-  def createSNSTopic
-    #make a new SNS topic
-    require 'aws-sdk'
-    sns = Aws::SNS::Resource.new
-    topic = sns.create_topic(name: Time.now.to_i.to_s) #make topic based on current time
-    puts topic.arn
-    return topic
-  end
+  def subscribeDevicesInRange
+    devicesInRange = self.devicesWithinMutualRange
 
-  def subscribeDevicesToTopic(inputDeviceArray, inputTopic)
-    #subscribes devices from inputDeviceArray to inputTopic
-    return true
+    @subscriptionARNArray = [] #store the arns in an array so we can clear the subscriptions later
+    devicesInRange.each do |device|
+      subscriptionARN = device.subscribeToTopic(@snsTopic)
+      @subscriptionARNArray.push(subscriptionARN)
+      puts device.subscriptionARN
+    end
+
   end
 
   def makeSNSMessage
     iphone_notification = {
-      aps: { alert: "Hi2", sound: "default", badge: 1 },
+      aps: { alert: "Incoming Soul", sound: "default", badge: 1 },
       soulObject: self
     }
 
-    sns_message = {
-      default: "Hi there3",
+    snsMessage = {
+      default: "This is the default message which must be present when publishing a message to a topic. The default message will only be used if a message is not present for one of the notification platforms.",
       APNS_SANDBOX: iphone_notification.to_json,
       APNS: iphone_notification.to_json
     }
 
-    return sns_message
+    return snsMessage
   end
 
-  def sendToDevices(inputDeviceArray) #use self so we can call function from controller
+  def broadcast
+    #send sns message to all subscibers in the topic
+    snsMessage = self.makeSNSMessage
+    @snsTopic.publish({message: snsMessage.to_json, message_structure: "json"})
+  end
 
-    #topic = createSNSTopic #make new topic
-    #subscribeResult = DevicesToTopic(inputDeviceArray, inputTopic) #subscribe devices to the topic
+  def cleanup
+    #clean up unneeded topic and subscriptions
+    @snsTopic.delete
 
-    sns = Aws::SNS::Client.new
-
-    sns_message = makeSNSMessage
-
-    #send message to each device
-    #TODO: convert so we post the soul (an instance of self) to the topic
-    inputDeviceArray.each do |device|
-      snsResult = sns.publish(
-        target_arn: device.arn,
-        message: sns_message.to_json,
-        message_structure: "json")
-
-    #   if(snsResult is bad)
-    #     puts "error"
-    #   end
-
-      puts "sent to endpoint arn: " + device.arn
+    @subscriptionARNArray.each do |subscription|
+      subscription.delete
     end
+  end
 
-    #topic.destroy #destroy the topic
+  def goldenPath
+    #reset the db first
+    #rails db:reset
+    Device.first.delete
+    testDevice = Device.create(token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6")
+    testDevice.register
+
+    testSoul = Soul.create(soulType: "testSoulType1", s3Key: "testS3Key", epoch: 1000000000, longitude: 10.0, latitude: 10.0, radius: 1, token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6", device_id: 3)
+
+    testSoul.createSNSTopic
+    testSoul.subscribeDevicesInRange
+    testSoul.broadcast
+
+    testSoul.cleanUp
+  end
+
+  def sendToDevices
+    #sends a soul to all devices in range
+    testSoul.createSNSTopic
+    testSoul.subscribeDevicesInRange
+    testSoul.broadcast
+    testSoul.cleanUp
   end
 
   before_save do
     deviceCount = devicesWithinMutualRange.count
     if deviceCount > 0
       puts deviceCount.to_s + " devices within range--------------------------------"
-      sendToDevices(devicesWithinMutualRange)
+      #sendToDevices
     end
   end
 end
