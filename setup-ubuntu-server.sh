@@ -43,7 +43,7 @@ region=us-west-2" > ~/.aws/config
 
 ###make scaffold for soul object and device model
 ###note dont make type:string (column named "type") or else we get ActiveRecord::SubclassNotFound in SoulController#create
-rails generate scaffold device token:string:uniq longitude:float latitude:float radius:float arn:string:index
+rails generate scaffold device token:string:uniq longitude:float latitude:float radius:float arn:string:uniq
 rails generate scaffold soul soulType:string s3Key:string epoch:integer longitude:float latitude:float radius:float token:string device:references
 
 ###go to app/controllers/souls_controller.rb, (under before_action :...), add this on line 3
