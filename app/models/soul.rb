@@ -7,7 +7,7 @@ class Soul < ApplicationRecord
     topic = snsResource.create_topic(name: Time.now.to_i.to_s) #make topic based on current time
     puts "topic arn is: " + topic.arn
     @snsTopic = topic
-    return topic
+    return topicb
   end
 
   def devicesWithinMutualRange
@@ -18,7 +18,7 @@ class Soul < ApplicationRecord
   def subscribeDevicesInRange
     devicesInRange = self.devicesWithinMutualRange
 
-    @subscriptionARNArray = [] #store the arns in an array so we can clear the subscriptions later
+    @subscriptionARNArray = [] #store the arns in an array so we can clear the subscriptions later-
     devicesInRange.each do |device|
       subscriptionARN = device.subscribeToTopic(@snsTopic)
       @subscriptionARNArray.push(subscriptionARN)

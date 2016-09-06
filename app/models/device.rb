@@ -1,5 +1,7 @@
 class Device < ApplicationRecord
   has_many :souls
+  after_create :register
+  validates :token, presence: true, uniqueness: true
 
   def register
     #create platform endpoint (take in iPhone token, and generate an Endpoint ARN)

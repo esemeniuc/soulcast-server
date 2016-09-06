@@ -26,6 +26,7 @@ class DevicesController < ApplicationController
   # POST /devices.json
   def create
     @device = Device.new(device_params)
+    #@device.register
 
     respond_to do |format|
       if @device.save
