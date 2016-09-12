@@ -26,7 +26,14 @@ class SoulsController < ApplicationController
   # POST /souls.json
   def create
     @soul = Soul.new(soul_params)
-    @soul.device_id = Device.find_by_token(@soul.token).id
+    deviceMatchingToken = Device.find_by_token(@soul.token)
+
+    if deviceMatchingToken == nil
+        render :nothing => true, :status => 405
+        return
+    end
+
+    @soul.device_id = deviceMatchingToken.id
 
     respond_to do |format|
       if @soul.save

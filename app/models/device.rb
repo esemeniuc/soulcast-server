@@ -1,6 +1,6 @@
 class Device < ApplicationRecord
   has_many :souls
-  after_create :register
+  #after_create :register
   validates :token, presence: true, uniqueness: true
 
   def register

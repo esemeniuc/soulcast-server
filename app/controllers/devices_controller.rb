@@ -1,6 +1,6 @@
 class DevicesController < ApplicationController
   before_action :set_device, only: [:show, :edit, :update, :destroy]
-  skip_before_action :verify_authenticity_token, only: [:create] #for dev only, disables authenticity checking on create
+  skip_before_action :verify_authenticity_token, only: [:create, :update] #for dev only, disables authenticity checking on create
 
   # GET /devices
   # GET /devices.json
@@ -26,15 +26,19 @@ class DevicesController < ApplicationController
   # POST /devices.json
   def create
     @device = Device.new(device_params)
-    #@device.register
+
+    @device.register
 
     respond_to do |format|
       if @device.save
         format.html { redirect_to @device, notice: 'Device was successfully created.' }
         format.json { render :show, status: :created, location: @device }
       else
+        deviceWithID = Device.find_by_token(@device.token)
+
         format.html { render :new }
-        format.json { render json: @device.errors, status: :unprocessable_entity }
+        #format.json { render json: @device.errors, status: :unprocessable_entity }
+        format.json { render json: deviceWithID} #return json rather than show error
       end
     end
   end
@@ -42,6 +46,7 @@ class DevicesController < ApplicationController
   # PATCH/PUT /devices/1
   # PATCH/PUT /devices/1.json
   def update
+    #binding.pry
     respond_to do |format|
       if @device.update(device_params)
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }
