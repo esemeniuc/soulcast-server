@@ -1,5 +1,6 @@
 class Soul < ApplicationRecord
   belongs_to :device
+  before_save :echoToOthers
 
   def createSNSTopic
     #make a new SNS topic and returns the topic
@@ -7,24 +8,53 @@ class Soul < ApplicationRecord
     topic = snsResource.create_topic(name: Time.now.to_i.to_s) #make topic based on current time
     puts "topic arn is: " + topic.arn
     @snsTopic = topic
-    return topicb
+    return topic
   end
 
   def devicesWithinMutualRange
 	#temporarily returns all devices with unique arns from the devices table
-    return Device.all.to_ary #returns all
+    # result = devices_within_radius.each do |each_device|
+    #   reaches(each_device)
+    # end
+    return Device.all.to_ary
   end
 
-  def subscribeDevicesInRange
-    devicesInRange = self.devicesWithinMutualRange
+  def reaches(device)
+    deviceRadius = device.radius
+    deviceLongitude = device.longitude
+    deviceLatitude = device.latitude
 
-    @subscriptionARNArray = [] #store the arns in an array so we can clear the subscriptions later-
+    #give distance between soul and device
+    Geocoder::Calculations.distance_between([latitude, longitude], [device.latitude, device.longitude])
+    #Geocoder::Calculations.distance_between([49.25, -122.95], [48.8584, 2.294694])
+    if condition
+
+    end
+  end
+
+  def devices_within_radius
+    rDelta = to_latitude_convert(radius)
+    minLongitude =  longitude - rDelta
+    maxLongitude = longitude + rDelta
+    minLatitude =  latitude - rDelta
+    maxLatitude =  latitude + rDelta
+    squareAreaDevices = Device.where(longitude: minLongitude..maxLongitude, latitude: minLatitude..maxLatitude)
+    puts(squareAreaDevices)
+    squareAreaDevices
+  end
+
+  def to_latitude_convert(radius)
+    return radius * 1 #TODO: some constant to convert radius to latitudeDelta
+  end
+
+  def subscribe(devicesInRange)
+    subscriptionARNArray = []
+
     devicesInRange.each do |device|
       subscriptionARN = device.subscribeToTopic(@snsTopic)
-      @subscriptionARNArray.push(subscriptionARN)
-      puts subscriptionARN
+      subscriptionARNArray.push(subscriptionARN)
     end
-
+    return subscriptionARNArray
   end
 
   def makeSNSMessage
@@ -48,11 +78,11 @@ class Soul < ApplicationRecord
     @snsTopic.publish({message: snsMessage.to_json, message_structure: "json"})
   end
 
-  def cleanUp
+  def cleanUp(subscriptionARNArray)
     #clean up unneeded topic and subscriptions
     @snsTopic.delete
 
-    @subscriptionARNArray.each do |subscription|
+    subscriptionARNArray.each do |subscription|
       subscription.delete
     end
   end
@@ -73,12 +103,23 @@ class Soul < ApplicationRecord
     testSoul.cleanUp
   end
 
-  def sendToDevices
-    #sends a soul to all devices in range
-    testSoul.createSNSTopic
-    testSoul.subscribeDevicesInRange
-    testSoul.broadcast
-    testSoul.cleanUp
+  def echoToOrigin
+    #send back to june for testing
+    notify([device])
+  end
+
+  def echoToOthers
+    #send back to june for testing
+    notify(Device.all.where.not(id: device.id).to_ary)
+  end
+
+  def notify(devices)
+    #expect an array parameter
+    createSNSTopic
+    subscriptionARNArray = subscribe(devices) #store arns for cleanup
+    broadcast
+    cleanUp(subscriptionARNArray)
+
   end
 
   before_save do
