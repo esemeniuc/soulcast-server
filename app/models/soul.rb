@@ -87,7 +87,7 @@ class Soul < ApplicationRecord
     end
   end
 
-  def goldenPath
+  def goldenPath #a test function to test sending messages to all users
     #reset the db first
     #rails db:reset
     Device.first.delete

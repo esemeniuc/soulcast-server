@@ -29,12 +29,13 @@ class SoulsController < ApplicationController
     deviceMatchingToken = Device.find_by_token(@soul.token)
 
     if deviceMatchingToken == nil
-        render :nothing => true, :status => 405
-        return
+        # render :nothing => true, :status => 405
+        # return
+        deviceMatchingToken = Device.find_by_token("95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6") #temp hack, beware
+        @soul.token = "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6"
     end
 
     @soul.device_id = deviceMatchingToken.id
-
     respond_to do |format|
       if @soul.save
         format.html { redirect_to @soul, notice: 'Soul was successfully created.' }
