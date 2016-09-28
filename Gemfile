@@ -40,8 +40,6 @@ group :development do
   gem 'web-console'
   gem 'listen', '~> 3.0.5'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'pry'
-
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
@@ -49,7 +47,15 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+#custom stuff down here
 gem 'aws-sdk', '~> 2'
-
 gem 'geocoder'
-gem 'rspec'
+
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller' #for better_errors
+  gem 'meta_request' #for chrome rails panel
+  gem 'pry'  #Add pry for easy variable access
+  gem 'pry-rails'
+  gem 'rspec'
+end
