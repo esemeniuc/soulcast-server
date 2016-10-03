@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(version: 20160904235639) do
 
   create_table "devices", force: :cascade do |t|
     t.string   "token"
-    t.float    "longitude"
     t.float    "latitude"
+    t.float    "longitude"
     t.float    "radius"
     t.string   "arn"
     t.datetime "created_at", null: false
