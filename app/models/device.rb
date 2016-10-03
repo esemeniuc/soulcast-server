@@ -2,6 +2,15 @@ class Device < ApplicationRecord
   has_many :souls
   #after_create :register
   validates :token, presence: true, uniqueness: true
+  validates :latitude, presence: true
+  validates :longitude, presence: true
+  validates :radius, presence: true
+
+  def simulator
+    if self.token == nil #for simulator, add june's token if we have none
+      self.token = "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6" #temp hack, beware
+    end
+  end
 
   def register
     #create platform endpoint (take in iPhone token, and generate an Endpoint ARN)
@@ -21,7 +30,6 @@ class Device < ApplicationRecord
 
     #update our database to have the new arn
     self.arn = endpointARN.endpoint_arn
-    self.save
 
     puts "endpoint arn is: " + self.arn
   end
