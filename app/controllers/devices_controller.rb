@@ -26,7 +26,7 @@ class DevicesController < ApplicationController
   # POST /devices.json
   def create
     @device = Device.new(device_params)
-
+    @device.simulator #for june's simulator
     @device.register
 
     respond_to do |format|
@@ -34,11 +34,9 @@ class DevicesController < ApplicationController
         format.html { redirect_to @device, notice: 'Device was successfully created.' }
         format.json { render :show, status: :created, location: @device }
       else
-        deviceWithID = Device.find_by_token(@device.token)
-
         format.html { render :new }
-        #format.json { render json: @device.errors, status: :unprocessable_entity }
-        format.json { render json: deviceWithID} #return json rather than show error
+        # format.json { render json: @device.errors, status: :unprocessable_entity }
+        format.json { render json: Device.find_by_token(@device.token)} #return json of matching token rather than show error
       end
     end
   end
@@ -46,7 +44,8 @@ class DevicesController < ApplicationController
   # PATCH/PUT /devices/1
   # PATCH/PUT /devices/1.json
   def update
-    #binding.pry
+    @device.simulator #hax for june's simulator
+
     respond_to do |format|
       if @device.update(device_params)
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }
@@ -76,6 +75,7 @@ class DevicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def device_params
-      params.require(:device).permit(:token, :longitude, :latitude, :radius, :arn)
+      params.permit(:token, :latitude, :longitude, :radius, :arn) #hack for json double nesting
+      # params.require(:device).permit(:token, :longitude, :latitude, :radius, :arn)
     end
 end
