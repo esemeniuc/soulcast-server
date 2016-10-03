@@ -57,5 +57,6 @@ group :development do
   gem 'meta_request' #for chrome rails panel
   gem 'pry'  #Add pry for easy variable access
   gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'rspec'
 end
