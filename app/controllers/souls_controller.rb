@@ -31,9 +31,12 @@ class SoulsController < ApplicationController
     if deviceMatchingToken == nil
         # render :nothing => true, :status => 405
         # return
-        deviceMatchingToken = Device.find_by_token("95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6") #temp hack, beware
-        @soul.token = "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6"
+        deviceMatchingToken = Device.find_by_token(Rails.application.secrets.juneToken) #temp hack to enable simulator
+        @soul.token = Rails.application.secrets.juneToken #enable use without any devices in db
     end
+
+    #update device
+    deviceMatchingToken.update(latitude: @soul.latitude, longitude: @soul.longitude, radius: @soul.radius)
 
     @soul.device_id = deviceMatchingToken.id
     respond_to do |format|

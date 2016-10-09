@@ -1,6 +1,6 @@
 class Soul < ApplicationRecord
   belongs_to :device
-  before_save :echoToOthers
+  before_save :sendToOthers
 
   def createSNSTopic
     #make a new SNS topic and returns the topic
@@ -11,40 +11,26 @@ class Soul < ApplicationRecord
     return topic
   end
 
-  def devicesWithinMutualRange
-	#temporarily returns all devices with unique arns from the devices table
-    # result = devices_within_radius.each do |each_device|
-    #   reaches(each_device)
-    # end
-    return Device.all.to_ary
-  end
-
   def reaches(device)
-    deviceRadius = device.radius
-    deviceLongitude = device.longitude
-    deviceLatitude = device.latitude
-
-    #give distance between soul and device
-    Geocoder::Calculations.distance_between([latitude, longitude], [device.latitude, device.longitude])
-    #Geocoder::Calculations.distance_between([49.25, -122.95], [48.8584, 2.294694])
-    if condition
-
+    #check if this soul reaches another device
+    radiusBounds = [self.radius, device.radius].min
+    distance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
+    if distance < radiusBounds
+      return true
     end
+    return false
   end
 
-  def devices_within_radius
-    rDelta = to_latitude_convert(radius)
-    minLongitude =  longitude - rDelta
-    maxLongitude = longitude + rDelta
-    minLatitude =  latitude - rDelta
-    maxLatitude =  latitude + rDelta
-    squareAreaDevices = Device.where(longitude: minLongitude..maxLongitude, latitude: minLatitude..maxLatitude)
-    puts(squareAreaDevices)
-    squareAreaDevices
-  end
+  def devicesWithinMutualRange #returns recent devices in the mutual radius
+    devicesInRange = []
 
-  def to_latitude_convert(radius)
-    return radius * 1 #TODO: some constant to convert radius to latitudeDelta
+    self.device.otherRecentDevices.each do |device|
+      if reaches(device)
+        devicesInRange.append(device)
+      end
+    end
+
+    return devicesInRange
   end
 
   def subscribe(devicesInRange)
@@ -73,7 +59,7 @@ class Soul < ApplicationRecord
   end
 
   def broadcast
-    #send sns message to all subscibers in the topic
+    #send sns message to all subscribers in the topic
     snsMessage = self.makeSNSMessage
     @snsTopic.publish({message: snsMessage.to_json, message_structure: "json"})
   end
@@ -87,46 +73,27 @@ class Soul < ApplicationRecord
     end
   end
 
-  def goldenPath #a test function to test sending messages to all users
-    #reset the db first
-    #rails db:reset
-    Device.first.delete
-    testDevice = Device.create(token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6")
-    testDevice.register
-
-    testSoul = Soul.create(soulType: "testSoulType1", s3Key: "testS3Key", epoch: 1000000000, longitude: 10.0, latitude: 10.0, radius: 1, token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6", device_id: 3)
-
-    testSoul.createSNSTopic
-    testSoul.subscribeDevicesInRange
-    testSoul.broadcast
-
-    testSoul.cleanUp
-  end
-
-  def echoToOrigin
-    #send back to june for testing
-    notify([device])
-  end
-
-  def echoToOthers
-    #send back to june for testing
-    notify(Device.all.where.not(id: device.id).to_ary)
-  end
-
   def notify(devices)
-    #expect an array parameter
+    #expects an array parameter
     createSNSTopic
     subscriptionARNArray = subscribe(devices) #store arns for cleanup
     broadcast
     cleanUp(subscriptionARNArray)
-
   end
+
+  def sendToOrigin #send back to june for testing
+    notify([device])
+  end
+
+  def sendToOthers #send back to june for testing
+    notify(devicesWithinMutualRange)
+  end
+
 
   before_save do
     deviceCount = devicesWithinMutualRange.count
     if deviceCount > 0
       puts deviceCount.to_s + " devices within range--------------------------------"
-      #sendToDevices
     end
   end
 end
