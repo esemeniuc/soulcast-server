@@ -67,6 +67,20 @@ class DevicesController < ApplicationController
     end
   end
 
+  # GET /nearby/SOME_ID_HERE.json
+  # GET /nearby/SOME_USELESS_ID_HERE.json?latitude=49.3&longitude=-122.9&radius=0.1
+  def nearby
+    if params[:latitude] && params[:longitude] && params[:radius] #check if we're getting no extra params
+      #make temp device with random token
+      @device = Device.new(token: SecureRandom.hex, latitude: params[:latitude], longitude: params[:longitude], radius: params[:radius])
+    else
+      set_device
+    end
+
+    jsonReturn = {nearby: @device.nearbyDeviceCount}
+    render json: jsonReturn
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_device
@@ -75,7 +89,7 @@ class DevicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def device_params
-      params.permit(:token, :latitude, :longitude, :radius, :arn) #hack for json double nesting
+      params.permit(:token, :longitude, :latitude, :radius, :arn) #hack for json double nesting, breaks edit page functionality
       # params.require(:device).permit(:token, :longitude, :latitude, :radius, :arn)
     end
 end
