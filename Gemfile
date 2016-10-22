@@ -50,6 +50,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #custom stuff down here
 gem 'aws-sdk', '~> 2'
 gem 'geocoder'
+gem 'dotenv-rails'
 
 group :development do
   gem 'better_errors'

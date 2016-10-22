@@ -21,9 +21,9 @@ sudo add-apt-repository ppa:nginx/stable
 sudo apt-get update
 sudo apt-get install nginx-light
 
-sudo wget $nginx_config -O /etc/nginx/sites-available/soulcast.ml
+sudo wget $nginx_config -O /etc/nginx/sites-available/soulcast.ml.conf
 
-sudo ln -s /etc/nginx/sites-available/soulcast.ml /etc/nginx/sites-enabled/soulcast.ml
+sudo ln -s /etc/nginx/sites-available/soulcast.ml.conf /etc/nginx/sites-enabled/soulcast.ml.conf
 sudo rm /etc/nginx/sites-enabled/default
 sudo service nginx start
 
