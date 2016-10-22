@@ -12,7 +12,14 @@ capybara-*.html
 **.orig
 rerun.txt
 pickle-email-*.html
+
+#custom stuff
 .idea/
+/public/cache
+/public/stylesheets/compiled
+/public/system/*
+/public/assets/*
+/public/sitemaps
 
 # TODO Comment out these rules if you are OK with secrets being uploaded to the repo
 config/initializers/secret_token.rb
