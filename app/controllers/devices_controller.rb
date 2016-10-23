@@ -26,8 +26,7 @@ class DevicesController < ApplicationController
   # POST /devices.json
   def create
     @device = Device.new(device_params)
-    @device.simulator #for june's simulator
-    @device.register
+    @device.simulator #hax for june's simulator
 
     respond_to do |format|
       if @device.save
