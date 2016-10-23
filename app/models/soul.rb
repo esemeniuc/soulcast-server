@@ -24,30 +24,15 @@ class Soul < ApplicationRecord
     return devicesInRange
   end
 
-  def makeJSONMessage
-    iphone_notification = {
-      soulObject: self
-    }
-
-    return iphone_notification
-  end
-
   def broadcast(devices)
-    #send sns message to all subscribers in the topic
 
-    jsonMessage = self.to_json
-    alertMessage = "Incoming Soul"
-    jsonObject = @soul
+    alertMessage = 'Incoming Soul'
+    jsonObject = self.to_json
 
     devices.each do |currentDevice|
       deviceToken = currentDevice.token
-      execString = 'node app.js ' + alertMessage.shellescape + " " + jsonObject.to_json + " " + deviceToken
-      begin
-        exec execString
-      rescue
-        puts "rescued!"
-      end
-
+      execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject + ' ' + deviceToken
+      system execString
     end
   end
 

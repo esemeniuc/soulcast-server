@@ -1,6 +1,9 @@
 class Device < ApplicationRecord
   has_many :souls
-
+  validates :token, presence: true, uniqueness: true
+  validates :latitude, presence: true
+  validates :longitude, presence: true
+  validates :radius, presence: true
 
   def simulator
     if self.token == nil #for simulator, add june's token if we have none
