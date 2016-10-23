@@ -2,10 +2,11 @@
 
 $HOMEDIR = echo $HOME
 #need this for loading up environment variables
-echo "Please enter in the url for the the environment vars script (look in Google Sheets): "
-read $environment_vars
+echo "Please enter in the url for the dotenv file (look in Google Sheets): "
+read $dotenv
 echo "Please enter in the url for the the nginx config (look in Google Sheets): "
 read $nginx_config
+echo "You entered dotenv = $dotenv"
 echo "You entered nginx_config = $nginx_config"
 
 #Setting up rails on a new system
@@ -40,8 +41,13 @@ mkdir ~/soulcast.ml && cd ~/soulcast.ml
 ###set up deploy script
 echo "#Deploy and start script
 git pull https://github.com/cwaffles/soulcast-server.git
-wget $environment_vars -O /etc/init.d/soulcast-server-startup.sh
+wget $dotenv -O ~/soulcast.ml/soulcast-server/.env
+wget $dotenv -O ~/soulcast.ml/soulcast-server/.env.production
+#################################FIX THIS for dotenv
+
+/etc/init.d/soulcast-server-startup.sh
 sudo update-rc.d soulcast-server-startup defaults
+bundle install
 rake db:reset RAILS_ENV=production
 rake assets:clobber RAILS_ENV=production
 rake assets:precompile RAILS_ENV=production
