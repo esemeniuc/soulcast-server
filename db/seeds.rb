@@ -6,11 +6,11 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Device.create(arn: "arn:aws:sns:us-west-2:692812027053:endpoint/APNS_SANDBOX/restappPA/0e01488f-6278-392f-a77b-acfe8902a6ac", token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6", latitude: 10, longitude: 10, radius: 10)
-Device.create(arn: "arn:aws:sns:us-west-2:692812027053:endpoint/APNS_SANDBOX/restappPA/32efd1e1-2db3-3882-b5a0-769271fb231a", token: "d30f88899cb7641efebd470efa2dcf90aca278a8af088fd679b77adb6931563b", latitude: 10, longitude: 10, radius: 10)
+Device.create(arn: "arn:aws:sns:us-west-2:692812027053:endpoint/APNS_SANDBOX/restappPA/0e01488f-6278-392f-a77b-acfe8902a6ac", token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104", latitude: 49.2812277842772, longitude: -122.956075, radius: 10)
+Device.create(arn: "arn:aws:sns:us-west-2:692812027053:endpoint/APNS_SANDBOX/restappPA/32efd1e1-2db3-3882-b5a0-769271fb231a", token: "10ee0a25a2395ff173363ef44ee0cbdcd81e19d5f1a4d451d2cfe2409db6e7fb", latitude: 49.2812277842772, longitude: -122.956075, radius: 10)
 
-Soul.create(soulType: "testSoulType1", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 1, token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6", device_id: 1)
-Soul.create(soulType: "testSoulType2", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 2, token: "d30f88899cb7641efebd470efa2dcf90aca278a8af088fd679b77adb6931563b", device_id: 2)
-Soul.create(soulType: "testSoulType3", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 3, token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6", device_id: 1)
-Soul.create(soulType: "testSoulType4", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 4, token: "d30f88899cb7641efebd470efa2dcf90aca278a8af088fd679b77adb6931563b", device_id: 2)
-Soul.create(soulType: "testSoulType5", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 5, token: "95d025d6bc4a7a773da2d19148cde93912e9ba4d8f92bb77483ab46693cdc5c6", device_id: 1)
+Soul.create(soulType: "testSoulType1", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 1, token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104", device_id: 1)
+Soul.create(soulType: "testSoulType2", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 2, token: "10ee0a25a2395ff173363ef44ee0cbdcd81e19d5f1a4d451d2cfe2409db6e7fb", device_id: 2)
+Soul.create(soulType: "testSoulType3", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 3, token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104", device_id: 1)
+Soul.create(soulType: "testSoulType4", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 4, token: "10ee0a25a2395ff173363ef44ee0cbdcd81e19d5f1a4d451d2cfe2409db6e7fb", device_id: 2)
+Soul.create(soulType: "testSoulType5", s3Key: "testS3Key", epoch: 1000000000, latitude: 10.0, longitude: 10.0, radius: 5, token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104", device_id: 1)
