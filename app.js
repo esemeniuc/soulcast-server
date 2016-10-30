@@ -14,7 +14,7 @@ process.argv.forEach(function (val, index, array) {
     if (index == 2) {
         alertMessage = val
     } else if (index == 3) {
-        payloadJSON = val
+        payloadJSON = JSON.parse(val)
     } else if (index == 4) {
         deviceToken = val
     }
@@ -59,7 +59,7 @@ notification.sound = 'ping.aiff';
 notification.alert = alertMessage;
 
 // Send any extra payload data with the notification which will be accessible to your app in didReceiveRemoteNotification
-notification.payload = {id: 123};
+notification.payload = payloadJSON;
 
 // Actually send the notification
 apnProvider.send(notification, deviceToken).then( (result) => {

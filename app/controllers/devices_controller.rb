@@ -27,6 +27,11 @@ class DevicesController < ApplicationController
   def create
     @device = Device.new(device_params)
     @device.simulator #hax for june's simulator
+    if @device.valid? == false
+      puts "NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID" #probably because we have a duplicate
+      head :bad_request
+      return
+    end
 
     respond_to do |format|
       if @device.save
@@ -35,7 +40,7 @@ class DevicesController < ApplicationController
       else
         format.html { render :new }
         # format.json { render json: @device.errors, status: :unprocessable_entity }
-        format.json { render json: Device.find_by_token(@device.token)} #return json of matching token rather than show error
+        format.json { render json: Device.find_by_token(@device.token) } #return json of matching token rather than show error
       end
     end
   end
@@ -88,7 +93,7 @@ class DevicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def device_params
-      params.permit(:token, :longitude, :latitude, :radius, :arn) #hack for json double nesting, breaks edit page functionality
-      # params.require(:device).permit(:token, :longitude, :latitude, :radius, :arn)
+      # params.permit(:token, :longitude, :latitude, :radius, :arn) #hack for json double nesting, breaks edit page functionality
+      params.require(:device).permit(:token, :longitude, :latitude, :radius, :arn)
     end
 end

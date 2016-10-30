@@ -6,8 +6,8 @@ class Device < ApplicationRecord
   validates :radius, presence: true
 
   def simulator
-    if self.token == nil #for simulator, add june's token if we have none
-      self.token = Rails.application.secrets.juneToken #temp hack, beware
+    if self.token == ENV.fetch('simulatorToken') # for simulator, set our token to be june's token if we have have
+      self.token = ENV.fetch('juneToken') #temp hack, beware
     end
   end
 
@@ -34,8 +34,7 @@ class Device < ApplicationRecord
 
   def nearbyDeviceCount #returns the number of nearby device updated in the last week
     nearbyDevices = 0
-
-   otherRecentDevices.each do |device|
+    otherRecentDevices.each do |device|
       if reaches(device)
         nearbyDevices += 1
       end

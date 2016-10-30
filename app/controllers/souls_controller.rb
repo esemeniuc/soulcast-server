@@ -25,20 +25,14 @@ class SoulsController < ApplicationController
   # POST /souls
   # POST /souls.json
   def create
+    #binding.pry
     @soul = Soul.new(soul_params)
-    deviceMatchingToken = Device.find_by_token(@soul.token)
 
-    if deviceMatchingToken == nil
-        # render :nothing => true, :status => 405
-        # return
-        deviceMatchingToken = Device.find_by_token(Rails.application.secrets.juneToken) #temp hack to enable simulator
-        @soul.token = Rails.application.secrets.juneToken #enable use without any devices in db
+    if @soul.device == nil
+      @soul.device = Device.find_by_token(@soul.token)
     end
+    @soul.simulator #hax for june's simulator
 
-    #update device
-    deviceMatchingToken.update(latitude: @soul.latitude, longitude: @soul.longitude, radius: @soul.radius)
-
-    @soul.device_id = deviceMatchingToken.id
     respond_to do |format|
       if @soul.save
         format.html { redirect_to @soul, notice: 'Soul was successfully created.' }
