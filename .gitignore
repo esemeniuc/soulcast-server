@@ -50,3 +50,7 @@ bower.json
 
 # Ignore Byebug command history file.
 .byebug_history
+
+# other
+apns.p8
+node_modules/
