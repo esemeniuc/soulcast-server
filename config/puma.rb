@@ -99,7 +99,11 @@ state_path "tmp/pids/puma.state"
 # ("append") specifies whether the output is appended, the default is
 # "false".
 #
-stdout_redirect "log/stdout", "log/stderr"
+if ENV.fetch("RAILS_ENV") == "production"
+  stdout_redirect "log/stdout", "log/stderr", false
+end
+
+# stdout_redirect "log/stdout", "log/stderr"
 # stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr', true
 
 # Disable request logging.

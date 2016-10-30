@@ -50,6 +50,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #custom stuff down here
 gem 'aws-sdk', '~> 2'
 gem 'geocoder'
+gem 'pg'
 gem 'dotenv'
 gem 'dotenv-rails'
 gem 'node_task'
