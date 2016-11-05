@@ -4,10 +4,6 @@ RoR project for communicating with Soulcast mobile app
 ##How to get started
 Read the [tutorial](GETTINGSTARTED.md)
 
-Based on [June's Soulcast-server](https://github.com/kimjune01/Soulcast-server)
-
-Steps necessary to getting up and runnin:
-
 ###Ruby version
 2.3.0+
 
@@ -31,3 +27,5 @@ N/A yet
 
 ###Deployment instructions
 Read the [tutorial](GETTINGSTARTED.md)
+
+Based on [June's Soulcast-server](https://github.com/kimjune01/Soulcast-server)

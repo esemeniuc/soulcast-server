@@ -5,12 +5,6 @@ class Device < ApplicationRecord
   validates :longitude, presence: true
   validates :radius, presence: true
 
-  def simulator
-    if self.token == ENV.fetch('simulatorToken') # for simulator, set our token to be june's token if we have have
-      self.token = ENV.fetch('juneToken') #temp hack, beware
-    end
-  end
-
   def self.allRecentDevices
     return Device.where('updated_at > ?', 1.week.ago).order(:updated_at) #all devices accessed in the last week
   end

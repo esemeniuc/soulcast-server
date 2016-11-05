@@ -26,10 +26,9 @@ class DevicesController < ApplicationController
   # POST /devices.json
   def create
     @device = Device.new(device_params)
-    @device.simulator #hax for june's simulator
     if @device.valid? == false
       puts "NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID" #probably because we have a duplicate
-      head :bad_request
+      head :bad_request #http 400 code
       return
     end
 
@@ -39,7 +38,7 @@ class DevicesController < ApplicationController
         format.json { render :show, status: :created, location: @device }
       else
         format.html { render :new }
-        # format.json { render json: @device.errors, status: :unprocessable_entity }
+        #format.json { render json: @device.errors, status: :unprocessable_entity }
         format.json { render json: Device.find_by_token(@device.token) } #return json of matching token rather than show error
       end
     end
@@ -48,8 +47,6 @@ class DevicesController < ApplicationController
   # PATCH/PUT /devices/1
   # PATCH/PUT /devices/1.json
   def update
-    @device.simulator #hax for june's simulator
-
     respond_to do |format|
       if @device.update(device_params)
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }
@@ -72,7 +69,7 @@ class DevicesController < ApplicationController
   end
 
   # GET /nearby/SOME_ID_HERE.json
-  # GET /nearby/SOME_USELESS_ID_HERE.json?latitude=49.3&longitude=-122.9&radius=0.1
+  # GET /nearby/SOME_USELESS_ID_HERE.json?latitude=49.3&longitude=-122.9&radius=0.1&token=....
   def nearby
     if params[:latitude] && params[:longitude] && params[:radius] #check if we're getting no extra params
       #make temp device with random token
@@ -93,7 +90,6 @@ class DevicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def device_params
-      # params.permit(:token, :longitude, :latitude, :radius, :arn) #hack for json double nesting, breaks edit page functionality
-      params.require(:device).permit(:token, :longitude, :latitude, :radius, :arn)
+      params.require(:device).permit(:token, :latitude, :longitude, :radius, :arn)
     end
 end
