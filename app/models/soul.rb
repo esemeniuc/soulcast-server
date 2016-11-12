@@ -37,7 +37,6 @@ class Soul < ApplicationRecord
     devicesString = tokenArray.join(' ')
 
     execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + devicesString.shellescape
-    binding.pry
     system execString
 
   end
