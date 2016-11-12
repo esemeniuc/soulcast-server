@@ -9,7 +9,6 @@
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Radius</th>
-      <th>Arn</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -21,7 +20,6 @@
         <td><%= device.latitude %></td>
         <td><%= device.longitude %></td>
         <td><%= device.radius %></td>
-        <td><%= device.arn %></td>
         <td><%= link_to 'Show', device %></td>
         <td><%= link_to 'Edit', edit_device_path(device) %></td>
         <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' } %></td>
