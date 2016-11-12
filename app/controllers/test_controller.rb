@@ -3,6 +3,6 @@ class TestController < ApplicationController
   end
 
   def sendToEveryone
-    Soul.first.sendToEveryone;
+    Soul.last.sendToEveryone;
   end
 end
