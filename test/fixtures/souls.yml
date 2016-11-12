@@ -4,8 +4,8 @@ one:
   soulType: MyString
   s3Key: MyString
   epoch: 1
-  longitude: 1.5
   latitude: 1.5
+  longitude: 1.5
   radius: 1.5
   token: MyString
   device: one
@@ -14,8 +14,8 @@ two:
   soulType: MyString
   s3Key: MyString
   epoch: 1
-  longitude: 1.5
   latitude: 1.5
+  longitude: 1.5
   radius: 1.5
   token: MyString
   device: two

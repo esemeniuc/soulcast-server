@@ -5,11 +5,9 @@ one:
   latitude: 1.5
   longitude: 1.5
   radius: 1.5
-  arn: MyString
 
 two:
   token: MyString
   latitude: 1.5
   longitude: 1.5
   radius: 1.5
-  arn: MyString
