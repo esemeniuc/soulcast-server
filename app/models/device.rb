@@ -13,11 +13,10 @@ class Device < ApplicationRecord
     return Device.where('updated_at > ?', 1.week.ago).where.not(id: self.id).order(:updated_at) #only scan against device accessed in the last week
   end
 
-  def reaches(device)
-    #check if this device reaches another device
-    puts self.radius
-    puts "-----------"
-    puts device.radius
+  def reaches(device) # check if this device reaches another device
+
+    # debug print
+    puts 'Self radius: ' + self.radius.to_s + ' Device radius: ' + device.radius.to_s
     radiusBounds = [self.radius, device.radius].min
     distance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
     if distance < radiusBounds

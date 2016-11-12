@@ -2,8 +2,7 @@ class Soul < ApplicationRecord
   belongs_to :device
   before_save :sendToOthers #check for making this work better
 
-  def reaches(device)
-    #returns true if this soul reaches another device
+  def reaches(device) # returns true if this soul reaches another device
     mutualDistance = [self.radius, device.radius].min
     calculatedDistance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
     if calculatedDistance < mutualDistance # check if we're within bounds
@@ -62,7 +61,7 @@ class Soul < ApplicationRecord
   before_save do
     deviceInRangeCount = devicesWithinMutualRange.count
     if deviceInRangeCount > 0
-      puts deviceInRangeCount.to_s + ' devices within range--------------------------------'
+      puts 'Devices within range: ' + deviceInRangeCount.to_s
     end
   end
 end
