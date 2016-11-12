@@ -26,8 +26,8 @@ class DevicesController < ApplicationController
   # POST /devices.json
   def create
     @device = Device.new(device_params)
-    if @device.valid? == false
-      puts "NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID" #probably because we have a duplicate
+    if !(@device.valid?) #if not valid
+      puts 'NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID' #probably because we have a duplicate
       head :bad_request #http 400 code
       return
     end
@@ -74,7 +74,7 @@ class DevicesController < ApplicationController
     if params[:latitude] && params[:longitude] && params[:radius] #check if we're getting no extra params
       #make temp device with random token
       @device = Device.new(token: SecureRandom.hex, latitude: params[:latitude], longitude: params[:longitude], radius: params[:radius])
-    else
+    else #work off of id only
       set_device
     end
 
@@ -83,13 +83,13 @@ class DevicesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_device
-      @device = Device.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_device
+    @device = Device.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def device_params
-      params.require(:device).permit(:token, :latitude, :longitude, :radius, :arn)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def device_params
+    params.require(:device).permit(:token, :latitude, :longitude, :radius)
+  end
 end

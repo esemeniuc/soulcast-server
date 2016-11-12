@@ -25,13 +25,13 @@ class SoulsController < ApplicationController
   # POST /souls
   # POST /souls.json
   def create
-    #binding.pry
     @soul = Soul.new(soul_params)
 
-    if @soul.device == nil
+    @soul.simulator #hax for june's simulator, run first because we wont find token with 'AAAAAA...'
+
+    if @soul.device == nil # associate a device to our soul, not a hack
       @soul.device = Device.find_by_token(@soul.token)
     end
-    @soul.simulator #hax for june's simulator
 
     respond_to do |format|
       if @soul.save
@@ -76,7 +76,9 @@ class SoulsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def soul_params
-      params.require(:soul).permit(:soulType, :s3Key, :epoch, :longitude, :latitude, :radius, :token)
+      params.require(:soul).permit(:soulType, :s3Key, :epoch, :latitude, :longitude, :radius, :token)
       #### note the lack of :device_id as well (we dont need it)
+      #default
+      #params.require(:soul).permit(:soulType, :s3Key, :epoch, :latitude, :longitude, :radius, :device_id)
     end
 end
