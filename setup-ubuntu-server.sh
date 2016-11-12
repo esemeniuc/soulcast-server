@@ -31,9 +31,9 @@ sudo service nginx start
 
 ###install postgres #libpq-dev for pg gem
 sudo apt-get install postgresql libpq-dev
-sudo -u postgres createuser -s soulcast-prod
+sudo -u postgres createuser -s soulcast
 sudo -u postgres psql
-echo "\password soulcast-dev\nsoulcast-dev\nsoulcast-dev\n\q\n"
+echo "\password soulcast\nsoulcastpass\nsoulcastpass\n\q\n"
 
 ###this installs RVM and Rails
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
