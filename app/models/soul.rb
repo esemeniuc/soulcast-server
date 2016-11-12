@@ -1,12 +1,12 @@
 class Soul < ApplicationRecord
   belongs_to :device
-  before_save :sendToOthers
+  before_save :sendToOthers #check for making this work better
 
   def reaches(device)
-    #check if this soul reaches another device
-    radiusBounds = [self.radius, device.radius].min
-    distance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
-    if distance < radiusBounds
+    #returns true if this soul reaches another device
+    mutualDistance = [self.radius, device.radius].min
+    calculatedDistance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
+    if calculatedDistance < mutualDistance # check if we're within bounds
       return true
     end
     return false
@@ -19,23 +19,27 @@ class Soul < ApplicationRecord
       if reaches(device)
         devicesInRange.append(device)
       end
-
     end
 
     return devicesInRange
   end
 
   def broadcast(devices)
-
+    #test from rails console with Soul.last.sendToOthers
     alertMessage = 'Incoming Soul'
-
     jsonObject = {'soulObject': self}.to_json
 
+    # turns all device tokens into a string that is space sperated
+    tokenArray = [] # placeholder for all tokens only
     devices.each do |currentDevice|
-      deviceToken = currentDevice.token
-      execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + deviceToken
-      system execString
+      tokenArray.append(currentDevice.token)
     end
+    devicesString = tokenArray.join(' ')
+
+    execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + devicesString.shellescape
+    binding.pry
+    system execString
+
   end
 
   def sendToEveryone #send to all users
@@ -57,9 +61,9 @@ class Soul < ApplicationRecord
   end
 
   before_save do
-    deviceCount = devicesWithinMutualRange.count
-    if deviceCount > 0
-      puts deviceCount.to_s + ' devices within range--------------------------------'
+    deviceInRangeCount = devicesWithinMutualRange.count
+    if deviceInRangeCount > 0
+      puts deviceInRangeCount.to_s + ' devices within range--------------------------------'
     end
   end
 end

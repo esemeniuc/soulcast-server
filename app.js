@@ -1,32 +1,47 @@
-//example command
-//exec 'node app.js "alertMessage" "{\"id\":123}"'
-//bash
-//node app.js "alertMessage" "{\"id\":123}"
-var badgeCount = 9
-var alertMessage = "Incoming Soul"
-var payloadJSON = {}
-// Enter the device token from the Xcode console
-var deviceToken = "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104"
-// console.log("before foreach " + deviceToken)
+//purpose: send messages via APNS
+//Examples:
 
-process.argv.forEach(function (val, index, array) {
-    console.log(index + ': ' + val);
-    if (index == 2) {
-        alertMessage = val
-    } else if (index == 3) {
-        payloadJSON = JSON.parse(val)
-    } else if (index == 4) {
-        deviceToken = val
-    }
-});
+//Command from ruby:
+//system 'node app.js "alertMessage" "{\"id\":123}" "aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb 5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104"'
 
-// console.log("after " + deviceToken)
-//
-// console.log(alertMessage)
-// console.log(payloadJSON)
+//Command from bash
+//nodejs app.js "Incoming Soul" '{"soulObject":{"id":null,"soulType":null,"s3Key":"1478379996","epoch":1478379996,"longitude":-122.91424100294,"latitude":49.27776454089607,"radius":0.01559111972229993,"token":"aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb","device_id":3,"created_at":null,"updated_at":null}}' "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104 aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb"
+
+"use strict"; //strict mode
+
+//call should have 5 parameters.
+//0 execuatable name (nodejs)
+//1 js file to execute with nodejs
+//2 notification message that user sees
+var alertMessage = process.argv[2];
+//3 soulobject in json
+var payloadJSON = JSON.parse(process.argv[3]);
+//4 tokens string to send to
+var deviceTokens = process.argv[4].split(" "); //split on spaces
 
 
+//print out what was executed
+for(var i = 0; i < process.argv.length; i++)
+{
+    console.log(i + ': ' + process.argv[i]);
+}
 
+//enable assertions
+const assert = require('assert');
+
+//sanity check
+assert(process.argv.length == 5, "Number of parameters do not match 5");
+assert(process.argv[4].length == (64 * deviceTokens.length) + (deviceTokens.length - 1), "Token length is incorrect");
+
+assert(typeof payloadJSON.soulObject === 'object');
+assert(typeof payloadJSON.soulObject.s3Key === 'string');
+assert(typeof payloadJSON.soulObject.longitude === 'number');
+assert(typeof payloadJSON.soulObject.latitude === 'number');
+assert(typeof payloadJSON.soulObject.radius === 'number');
+assert(typeof payloadJSON.soulObject.token === 'string');
+assert(typeof payloadJSON.soulObject.device_id === 'number');
+
+//start apns stuff
 var apn = require('apn');
 
 // Set up apn with the APNs Auth Key
@@ -50,7 +65,7 @@ notification.topic = 'ml.soulcast.app';
 notification.expiry = Math.floor(Date.now() / 1000) + 3600;
 
 // Set app badge indicator
-notification.badge = badgeCount;
+notification.badge = 1;
 
 // Play ping.aiff sound when the notification is received
 notification.sound = 'ping.aiff';
@@ -62,11 +77,13 @@ notification.alert = alertMessage;
 notification.payload = payloadJSON;
 
 // Actually send the notification
-apnProvider.send(notification, deviceToken).then( (result) => {
+apnProvider.send(notification, deviceTokens).then( result => {
     // Check the result for any failed devices
     console.log(result);
-    // console.error("something")
-    process.exit()
+//    process.exit()
 });
 
-
+// For one-shot notification tasks you may wish to shutdown the connection
+// after everything is sent, but only call shutdown if you need your
+// application to terminate.
+apnProvider.shutdown();
