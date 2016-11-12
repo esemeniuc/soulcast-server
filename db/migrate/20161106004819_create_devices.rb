@@ -5,11 +5,9 @@ class CreateDevices < ActiveRecord::Migration[5.0]
       t.float :latitude
       t.float :longitude
       t.float :radius
-      t.string :arn
 
       t.timestamps
     end
     add_index :devices, :token, unique: true
-    add_index :devices, :arn, unique: true
   end
 end

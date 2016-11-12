@@ -4,8 +4,8 @@ class CreateSouls < ActiveRecord::Migration[5.0]
       t.string :soulType
       t.string :s3Key
       t.integer :epoch
-      t.float :longitude
       t.float :latitude
+      t.float :longitude
       t.float :radius
       t.string :token
       t.references :device, foreign_key: true
