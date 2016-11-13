@@ -23,8 +23,7 @@ class Soul < ApplicationRecord
     return devicesInRange
   end
 
-  def broadcast(devices)
-    #test from rails console with Soul.last.sendToOthers
+  def broadcast(devices) # test from rails console with Soul.last.sendToOthers
     alertMessage = 'Incoming Soul'
     jsonObject = {'soulObject': self}.to_json
 

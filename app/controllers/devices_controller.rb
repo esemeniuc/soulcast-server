@@ -71,8 +71,8 @@ class DevicesController < ApplicationController
   # GET /nearby/SOME_ID_HERE.json
   # GET /nearby/SOME_USELESS_ID_HERE.json?latitude=49.3&longitude=-122.9&radius=0.1&token=....
   def nearby
-    if params[:latitude] && params[:longitude] && params[:radius] #check if we're getting no extra params
-      #make temp device with random token
+    if params[:latitude] && params[:longitude] && params[:radius] #check if we're getting extra params
+      # make temp device with random token
       @device = Device.new(token: SecureRandom.hex, latitude: params[:latitude], longitude: params[:longitude], radius: params[:radius])
     else #work off of id only
       set_device
@@ -85,7 +85,14 @@ class DevicesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_device
-    @device = Device.find(params[:id])
+    # default, but we don't use it because Device.find throws an exception
+    #@device = Device.find(params[:id])
+
+    @device = Device.find_by_id(params[:id])
+
+    if @device == nil || @device.token != params[:token]
+      @device = Device.find_by_token(params[:token])
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
