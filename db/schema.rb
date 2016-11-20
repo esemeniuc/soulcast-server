@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20161119231633) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.index ["device_id"], name: "index_blocks_on_device_id", using: :btree
+    t.index ["token", "blockedToken"], name: "index_blocks_on_token_and_blockedToken", unique: true, using: :btree
   end
 
   create_table "devices", force: :cascade do |t|

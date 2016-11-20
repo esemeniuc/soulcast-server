@@ -1,5 +1,11 @@
 class Soul < ApplicationRecord
   belongs_to :device
+  validates :s3Key, presence: true
+  validates :epoch, presence: true
+  validates :latitude, presence: true
+  validates :longitude, presence: true
+  validates :radius, presence: true
+  validates :token, presence: true
   before_save :sendToOthers #check for making this work better
 
   def reaches(device) # returns true if this soul reaches another device
@@ -11,10 +17,31 @@ class Soul < ApplicationRecord
     return false
   end
 
-  def devicesWithinMutualRange #returns recent devices in the mutual radius
+  def devicesWithinMutualRangeAndNotBlocked
+    allDevices = devicesWithinMutualRange
+    broadcaster = self.token #string
+    devicesToRemove = Device.joins(:blocks).where(blocks: {blockedToken: broadcaster}).to_a # array of tokens of people who dont want to hear broadcaster
+
+    result = allDevices - devicesToRemove
+    return result
+  end
+
+  def tokensWithinMutualRange #returns array of recent device tokens in the mutual radius
+    tokensInRange = []
+
+    self.device.otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device to other devices radius
+      if reaches(device)
+        tokensInRange.append(device.token)
+      end
+    end
+
+    return tokensInRange
+  end
+
+  def devicesWithinMutualRange #returns array of recent devices in the mutual radius
     devicesInRange = []
 
-    self.device.otherRecentDevices.each do |device| #FIXME to use soul radius, currently using device to other devices radius
+    self.device.otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device to other devices radius
       if reaches(device)
         devicesInRange.append(device)
       end
@@ -48,7 +75,7 @@ class Soul < ApplicationRecord
   end
 
   def sendToOthers #send to other users
-    broadcast(devicesWithinMutualRange)
+    broadcast(devicesWithinMutualRangeAndNotBlocked)
   end
 
   def simulator

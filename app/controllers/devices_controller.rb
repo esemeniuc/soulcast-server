@@ -85,14 +85,25 @@ class DevicesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_device
-    # default, but we don't use it because Device.find throws an exception
-    #@device = Device.find(params[:id])
+    # alternate
+    # avoid throwing an exception
+    # begin
+    #   @device = Device.find(params[:id])
+    #   if @device.token != params[:token]
+    #     @device = Device.find_by_token(params[:token])
+    #   end
+    # rescue ActiveRecord::RecordNotFound
+    #   if params[:token] != nil
+    #     @device = Device.find_by_token(params[:token])
+    #   end
+    # end
 
     @device = Device.find_by_id(params[:id])
-
-    if @device == nil || @device.token != params[:token]
+    #params[:token] == nil means we are browsing the page and removing it will make errors
+    if params[:token] != nil && (@device == nil || @device.token != params[:token])
       @device = Device.find_by_token(params[:token])
     end
+
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

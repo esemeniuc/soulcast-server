@@ -8,5 +8,6 @@ class CreateBlocks < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+    add_index :blocks, [:token, :blockedToken], unique: true
   end
 end
