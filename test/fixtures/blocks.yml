@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  token: MyString
+  blockedToken: MyString
+  device: one
+  blocked_device_id: 1
+
+two:
+  token: MyString
+  blockedToken: MyString
+  device: two
+  blocked_device_id: 1

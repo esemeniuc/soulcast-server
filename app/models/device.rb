@@ -1,5 +1,6 @@
 class Device < ApplicationRecord
   has_many :souls
+  has_many :blocks
   validates :token, presence: true, uniqueness: true
   validates :latitude, presence: true
   validates :longitude, presence: true

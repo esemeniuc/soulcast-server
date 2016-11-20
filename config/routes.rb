@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :blocks
   resources :souls
   resources :devices
   root 'website#index' #for production mode, show the homepage

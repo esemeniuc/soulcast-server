@@ -1,6 +1,6 @@
 class DevicesController < ApplicationController
   before_action :set_device, only: [:show, :edit, :update, :destroy]
-  skip_before_action :verify_authenticity_token, only: [:create, :update] #for dev only, disables authenticity checking on create
+  skip_before_action :verify_authenticity_token, only: [:create, :update] #for dev only, disables authenticity checking on create/update
 
   # GET /devices
   # GET /devices.json

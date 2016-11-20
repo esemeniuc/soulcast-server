@@ -14,7 +14,7 @@ class Soul < ApplicationRecord
   def devicesWithinMutualRange #returns recent devices in the mutual radius
     devicesInRange = []
 
-    self.device.otherRecentDevices.each do |device|
+    self.device.otherRecentDevices.each do |device| #FIXME to use soul radius, currently using device to other devices radius
       if reaches(device)
         devicesInRange.append(device)
       end
@@ -27,7 +27,7 @@ class Soul < ApplicationRecord
     alertMessage = 'Incoming Soul'
     jsonObject = {'soulObject': self}.to_json
 
-    # turns all device tokens into a string that is space sperated
+    # turns all device tokens into a string that is space separated
     tokenArray = [] # placeholder for all tokens only
     devices.each do |currentDevice|
       tokenArray.append(currentDevice.token)
