@@ -1,5 +1,6 @@
 class Soul < ApplicationRecord
   belongs_to :device
+  has_many :histories
   validates :s3Key, presence: true
   validates :epoch, presence: true
   validates :latitude, presence: true

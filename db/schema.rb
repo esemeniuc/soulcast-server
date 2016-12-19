@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161119231633) do
+ActiveRecord::Schema.define(version: 20161219192928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,15 @@ ActiveRecord::Schema.define(version: 20161119231633) do
     t.index ["token"], name: "index_devices_on_token", unique: true, using: :btree
   end
 
+  create_table "histories", force: :cascade do |t|
+    t.integer  "soul_id"
+    t.integer  "device_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_histories_on_device_id", using: :btree
+    t.index ["soul_id"], name: "index_histories_on_soul_id", using: :btree
+  end
+
   create_table "souls", force: :cascade do |t|
     t.string   "soulType"
     t.string   "s3Key"
@@ -51,5 +60,7 @@ ActiveRecord::Schema.define(version: 20161119231633) do
   end
 
   add_foreign_key "blocks", "devices"
+  add_foreign_key "histories", "devices"
+  add_foreign_key "histories", "souls"
   add_foreign_key "souls", "devices"
 end

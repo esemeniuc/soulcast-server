@@ -1,5 +1,5 @@
 class HistoriesController < ApplicationController
-  before_action :set_history, only: [:show, :edit, :update, :destroy]
+  before_action :set_history, only: [:show, :edit, :update, :destroy, :device_history]
 
   # GET /histories
   # GET /histories.json
@@ -59,6 +59,13 @@ class HistoriesController < ApplicationController
       format.html { redirect_to histories_url, notice: 'History was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # GET /history/1
+  # GET /history/1.json
+  def device_history
+    # binding.pry
+    render json: History.get_history_by_history_obj(@history)
   end
 
   private
