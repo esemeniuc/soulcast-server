@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :histories
   resources :blocks
   resources :souls
   resources :devices

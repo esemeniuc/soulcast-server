@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Soul:</strong>
+  <%= @history.soul %>
+</p>
+
+<p>
+  <strong>Device:</strong>
+  <%= @history.device %>
+</p>
+
+<%= link_to 'Edit', edit_history_path(@history) %> |
+<%= link_to 'Back', histories_path %>
