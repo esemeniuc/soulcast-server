@@ -4,15 +4,16 @@ Rails.application.routes.draw do
   resources :blocks
   resources :souls
   resources :devices
-  root 'website#index' #for production mode, show the homepage
 
-  get   'test',       to: 'test#index'
-  post  'test',       to: 'test#sendToEveryone'
+  # actual stuff
+  root  'website#index' # show the homepage in production mode
+  get   'nearby/:id',   to: 'devices#nearby' # returns how many devices nearby
+  get   'history/:id',  to: 'histories#device_history'
 
-  get   'nearby/:id', to: 'devices#nearby'
-  get   'history/:id', to: 'histories#device_history'
-
-  post  'echo',       to: 'echo#reply'
+  # test stuff
+  get   'test',         to: 'test#index'
+  post  'test',         to: 'test#sendToEveryone'
+  post  'echo',         to: 'echo#reply'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 

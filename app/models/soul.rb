@@ -1,48 +1,33 @@
 class Soul < ApplicationRecord
   belongs_to :device
   has_many :histories
-  validates :s3Key, presence: true
-  validates :epoch, presence: true
-  validates :latitude, presence: true
-  validates :longitude, presence: true
-  validates :radius, presence: true
-  validates :token, presence: true
-  before_save :sendToOthers #check for making this work better
+  validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, presence: true
+  after_save :sendToOthers, :status_output
 
   def reaches(device) # returns true if this soul reaches another device
     mutualDistance = [self.radius, device.radius].min
     calculatedDistance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
+    puts "calculated distance = " + calculatedDistance.to_s
     if calculatedDistance < mutualDistance # check if we're within bounds
       return true
     end
     return false
   end
 
-  def devicesWithinMutualRangeAndNotBlocked
+  def devicesWithinMutualRangeAndNotBlocked # returns an array of all devices that are in the mutual radius and not blocked
     allDevices = devicesWithinMutualRange
-    broadcaster = self.token #string
+    puts "********************" + allDevices.size.to_s
+    broadcaster = self.token # this is a string
     devicesToRemove = Device.joins(:blocks).where(blocks: {blockedToken: broadcaster}).to_a # array of tokens of people who dont want to hear broadcaster
 
     result = allDevices - devicesToRemove
     return result
   end
 
-  def tokensWithinMutualRange #returns array of recent device tokens in the mutual radius
-    tokensInRange = []
-
-    self.device.otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device to other devices radius
-      if reaches(device)
-        tokensInRange.append(device.token)
-      end
-    end
-
-    return tokensInRange
-  end
-
-  def devicesWithinMutualRange #returns array of recent devices in the mutual radius
+  def devicesWithinMutualRange # returns an array of recent devices in the mutual radius
     devicesInRange = []
 
-    self.device.otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device to other devices radius
+    self.device.otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device-device radius
       if reaches(device)
         devicesInRange.append(device)
       end
@@ -51,20 +36,29 @@ class Soul < ApplicationRecord
     return devicesInRange
   end
 
-  def broadcast(devices) # test from rails console with Soul.last.sendToOthers
-    alertMessage = 'Incoming Soul'
-    jsonObject = {'soulObject': self}.to_json
+  def generateJSONString(devices)
+    # if devices.length > 0
+      alertMessage = 'Incoming Soul'
+      jsonObject = {'soulObject': self}.to_json
 
-    # turns all device tokens into a string that is space separated
-    tokenArray = [] # placeholder for all tokens only
-    devices.each do |currentDevice|
-      tokenArray.append(currentDevice.token)
-    end
-    devicesString = tokenArray.join(' ')
+      # turns all device tokens into a string that is space separated
+      tokenArray = [] # placeholder for all tokens only
+      devices.each do |currentDevice|
+        tokenArray.append(currentDevice.token)
+      end
+      devicesString = tokenArray.join(' ')
 
-    execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + devicesString.shellescape
+      # final nodejs string
+      execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + devicesString.shellescape
+      return execString
+    # end
+  end
+
+  def broadcast(devices)
+    # test from rails console with Soul.last.sendToOthers
+    execString = generateJSONString(devices)
     system execString
-
+    make_history(devices) #save the history of who we sent to
   end
 
   def sendToEveryone #send to all users
@@ -85,10 +79,15 @@ class Soul < ApplicationRecord
     end
   end
 
-  before_save do
+  def status_output
     deviceInRangeCount = devicesWithinMutualRange.count
     if deviceInRangeCount > 0
-      puts 'Devices within range: ' + deviceInRangeCount.to_s
+      puts 'Devices within range (incl blocked): ' + deviceInRangeCount.to_s
     end
   end
+
+  def make_history(devices)# generates the history upon saving a soul
+    History.make_history(self, devices)
+  end
+
 end

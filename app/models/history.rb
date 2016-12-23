@@ -10,4 +10,17 @@ class History < ApplicationRecord
     return Soul.where(id: History.where(device: history_object.device_id).where('created_at >= ?', 2.days.ago).pluck(:soul_id))
     #equiv to SELECT * FROM souls IN (matching soul_ids)
   end
+
+  def self.make_history(inputSoul, inputDevices)
+    puts "#################################################Make history******************"
+    puts "devices = " + inputDevices.length.to_s
+    inputDevices.each do |currentDevice|
+      tempHistoryObject = History.new(soul: inputSoul, device: currentDevice)
+      #binding.pry
+      tempHistoryObject.save
+
+      # tempHistoryObject = History.create(soul: inputSoul, device: currentDevice)
+
+    end
+  end
 end

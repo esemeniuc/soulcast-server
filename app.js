@@ -31,7 +31,7 @@ const assert = require('assert');
 
 //sanity check
 assert(process.argv.length == 5, "Number of parameters do not match 5");
-assert(process.argv[4].length == (64 * deviceTokens.length) + (deviceTokens.length - 1), "Token length is incorrect");
+assert(process.argv[4].length == (64 * deviceTokens.length) + (deviceTokens.length - 1), "Token length is incorrect"); //FIXME: try with 1 token only
 
 assert(typeof payloadJSON.soulObject === 'object');
 assert(typeof payloadJSON.soulObject.s3Key === 'string');
