@@ -19,13 +19,10 @@ class Device < ApplicationRecord
     # debug print
     puts 'Self radius: ' + self.radius.to_s + "\tDevice radius: " + device.radius.to_s
 
-    radiusBounds = [self.radius, device.radius].min
+    minRadius = [self.radius, device.radius].min
+    radiusInKM = minRadius * 111.2 #conversion factor for degrees latitude to km
     distance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
-    if distance < radiusBounds
-      return true
-    end
-
-    return false
+    return (distance < radiusInKM)
   end
 
   def nearbyDeviceCount #returns the number of nearby device updated in the last week
