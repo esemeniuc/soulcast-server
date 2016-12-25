@@ -27,10 +27,6 @@ class BlocksController < ApplicationController
   def create
     @block = Block.new(block_params)
 
-    #load in vars
-    @block.device = Device.find_by_token!(@block.token)
-    @block.blocked_device_id = Device.find_by_token!(@block.blockedToken).id
-
     respond_to do |format|
       if @block.save
         format.html { redirect_to @block, notice: 'Block was successfully created.' }

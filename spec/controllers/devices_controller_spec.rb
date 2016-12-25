@@ -30,7 +30,7 @@ RSpec.describe DevicesController, type: :controller do
 
   after(:each) do
     puts 'before: ' + Device.all.count.to_s
-    Device.delete_all
+    # Device.delete_all #database_cleaner handles this
     puts 'after: ' + Device.all.count.to_s
   end
 

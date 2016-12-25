@@ -37,7 +37,7 @@ class Soul < ApplicationRecord
   end
 
   def generateJSONString(devices)
-    # if devices.length > 0
+    if devices.length > 0
       alertMessage = 'Incoming Soul'
       jsonObject = {'soulObject': self}.to_json
 
@@ -51,14 +51,18 @@ class Soul < ApplicationRecord
       # final nodejs string
       execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + devicesString.shellescape
       return execString
-    # end
+    else
+      return nil
+    end
   end
 
   def broadcast(devices)
     # test from rails console with Soul.last.sendToOthers
     execString = generateJSONString(devices)
-    system execString
-    make_history(devices) #save the history of who we sent to
+    if execString != nil #no devices to send to
+      system execString
+      make_history(devices) #save the history of who we sent to
+    end
   end
 
   def sendToEveryone #send to all users
