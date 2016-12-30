@@ -5,10 +5,10 @@
 <table>
   <thead>
     <tr>
-      <th>Token</th>
-      <th>Blockedtoken</th>
-      <th>Device</th>
-      <th>Blocked device</th>
+      <th>Blocker token</th>
+      <th>Blockee token</th>
+      <th>Blocker</th>
+      <th>Blockee</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,10 +16,10 @@
   <tbody>
     <% @blocks.each do |block| %>
       <tr>
-        <td><%= block.token %></td>
-        <td><%= block.blockedToken %></td>
-        <td><%= block.device %></td>
-        <td><%= block.blocked_device_id %></td>
+        <td><%= block.blocker_token %></td>
+        <td><%= block.blockee_token %></td>
+        <td><%= block.blocker_id %></td>
+        <td><%= block.blockee_id %></td>
         <td><%= link_to 'Show', block %></td>
         <td><%= link_to 'Edit', edit_block_path(block) %></td>
         <td><%= link_to 'Destroy', block, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -10,20 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161219192928) do
+ActiveRecord::Schema.define(version: 20161229215006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "blocks", force: :cascade do |t|
-    t.string   "token"
-    t.string   "blockedToken"
-    t.integer  "device_id"
-    t.integer  "blocked_device_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.index ["device_id"], name: "index_blocks_on_device_id", using: :btree
-    t.index ["token", "blockedToken"], name: "index_blocks_on_token_and_blockedToken", unique: true, using: :btree
+    t.string   "blocker_token"
+    t.string   "blockee_token"
+    t.integer  "blocker_id"
+    t.integer  "blockee_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["blockee_id"], name: "index_blocks_on_blockee_id", using: :btree
+    t.index ["blocker_id", "blockee_id"], name: "index_blocks_on_blocker_id_and_blockee_id", unique: true, using: :btree
+    t.index ["blocker_id"], name: "index_blocks_on_blocker_id", using: :btree
   end
 
   create_table "devices", force: :cascade do |t|
@@ -59,7 +60,6 @@ ActiveRecord::Schema.define(version: 20161219192928) do
     t.index ["device_id"], name: "index_souls_on_device_id", using: :btree
   end
 
-  add_foreign_key "blocks", "devices"
   add_foreign_key "histories", "devices"
   add_foreign_key "histories", "souls"
   add_foreign_key "souls", "devices"

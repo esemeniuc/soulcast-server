@@ -12,23 +12,23 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :token %>
-    <%= f.text_field :token %>
+    <%= f.label :blocker_token %>
+    <%= f.text_field :blocker_token %>
   </div>
 
   <div class="field">
-    <%= f.label :blockedToken %>
-    <%= f.text_field :blockedToken %>
+    <%= f.label :blockee_token %>
+    <%= f.text_field :blockee_token %>
   </div>
 
   <div class="field">
-    <%= f.label :device_id %>
-    <%= f.text_field :device_id %>
+    <%= f.label :blocker_id %>
+    <%= f.number_field :blocker_id %>
   </div>
 
   <div class="field">
-    <%= f.label :blocked_device_id %>
-    <%= f.number_field :blocked_device_id %>
+    <%= f.label :blockee_id %>
+    <%= f.number_field :blockee_id %>
   </div>
 
   <div class="actions">

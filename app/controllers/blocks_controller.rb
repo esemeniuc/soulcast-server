@@ -2,6 +2,7 @@ class BlocksController < ApplicationController
   before_action :set_block, only: [:show, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token, only: [:create, :update] #for dev only, disables authenticity checking on create/update
 
+
   # GET /blocks
   # GET /blocks.json
   def index
@@ -70,6 +71,6 @@ class BlocksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def block_params
-      params.require(:block).permit(:token, :blockedToken)
+      params.require(:block).permit(:blocker_token, :blockee_token)
     end
 end

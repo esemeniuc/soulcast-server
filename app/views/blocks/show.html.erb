@@ -1,23 +1,23 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Token:</strong>
-  <%= @block.token %>
+  <strong>Blocker token:</strong>
+  <%= @block.blocker_token %>
 </p>
 
 <p>
-  <strong>Blockedtoken:</strong>
-  <%= @block.blockedToken %>
+  <strong>Blockee token:</strong>
+  <%= @block.blockee_token %>
 </p>
 
 <p>
-  <strong>Device:</strong>
-  <%= @block.device %>
+  <strong>Blocker:</strong>
+  <%= @block.blocker_id %>
 </p>
 
 <p>
-  <strong>Blocked device:</strong>
-  <%= @block.blocked_device_id %>
+  <strong>Blockee:</strong>
+  <%= @block.blockee_id %>
 </p>
 
 <%= link_to 'Edit', edit_block_path(@block) %> |
