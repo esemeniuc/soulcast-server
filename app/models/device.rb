@@ -1,6 +1,6 @@
 class Device < ApplicationRecord
   has_many :souls
-  has_many :blocks
+  # has_many :blocks
   has_many :histories
   # has_one :history
   validates :token, presence: true, uniqueness: true
@@ -10,6 +10,10 @@ class Device < ApplicationRecord
 
   def self.allRecentDevices
     return Device.where('updated_at > ?', 1.week.ago).order(:updated_at) #all devices updated in the last week
+  end
+
+  def blocked?(input_device)
+    return Block.where(blocker_id: self.id, blockee_id: input_device.id).exists?
   end
 
   def otherRecentDevices
