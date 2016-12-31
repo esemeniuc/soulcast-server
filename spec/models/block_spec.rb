@@ -45,6 +45,11 @@ RSpec.describe Block, type: :model do
         expect(Block.all.count).to be 0
       end
 
+      it "should not save the block with 1 bad token" do
+        expect{Block.create(blocker_token: @dev1.token, blockee_token: "YYY")}.to raise_error(ActiveRecord::RecordNotFound)
+        expect(Block.all.count).to be 0
+      end
+
       it "should not save the block with 2 bad tokens" do
         expect{Block.create(blocker_token: "ZZZ", blockee_token: "YYY")}.to raise_error(ActiveRecord::RecordNotFound)
         expect(Block.all.count).to be 0
