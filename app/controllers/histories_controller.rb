@@ -10,6 +10,7 @@ class HistoriesController < ApplicationController
   # GET /histories/1
   # GET /histories/1.json
   def show
+    
   end
 
   # GET /histories/new
@@ -61,11 +62,10 @@ class HistoriesController < ApplicationController
     end
   end
 
-  # GET /history/1
-  # GET /history/1.json
+  # GET /device_history/1
+  # GET /device_history/1.json
   def device_history
-    # binding.pry
-    render json: History.get_history_by_history_obj(@history)
+    render json: History.get_history_by_device_id(params[:id])
   end
 
   private

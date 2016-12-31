@@ -14,3 +14,4 @@ Soul.create(soulType: "testSoulType2", s3Key: "EDOyQ3xQjq624MTgMKqHgNFgjiUbVfv39
 Soul.create(soulType: "testSoulType3", s3Key: "IqqmKXwFCY30RheztvN06A4PU4m09caRCB6IdWROZ68UMwhKhVJumk1VbtqJKaN", epoch: 1000000000, latitude: 49.2812277842772, longitude: -122.956075, radius: 3, token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104", device_id: 1)
 Soul.create(soulType: "testSoulType4", s3Key: "1482718872", epoch: 1000000000, latitude: 49.2812277842772, longitude: -122.956075, radius: 4, token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad", device_id: 2)
 Soul.create(soulType: "testSoulType5", s3Key: "1482708918", epoch: 1000000000, latitude: 49.2812277842772, longitude: -122.956075, radius: 5, token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104", device_id: 1)
+

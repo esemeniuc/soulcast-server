@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # actual stuff
   root  'website#index' # show the homepage in production mode
   get   'nearby/:id',   to: 'devices#nearby' # returns how many devices nearby
-  get   'history/:id',  to: 'histories#device_history'
+  get   'device_history/:id',  to: 'histories#device_history'
 
   # test stuff
   get   'test',         to: 'test#index'
