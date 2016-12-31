@@ -13,12 +13,9 @@ class Block < ApplicationRecord
   end
 
   def make_relations
-    puts ("******************************************************")
-    # binding.pry
     self.blocker_id = Device.find_by_token!(self.blocker_token).id
     self.blockee_id = Device.find_by_token!(self.blockee_token).id
-    puts "blocker_id = " + self.blocker_id.to_s + "blockee_id = " + self.blockee_id.to_s
-    puts ("-----------------------------------------------------")
+    puts "blocker_id = " + self.blocker_id.to_s + ", blockee_id = " + self.blockee_id.to_s
   end
 
 end

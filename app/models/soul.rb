@@ -28,6 +28,7 @@ class Soul < ApplicationRecord
 
       # final nodejs string
       execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + devicesString.shellescape
+      # puts execString
       return execString
     else
       return nil
@@ -37,7 +38,7 @@ class Soul < ApplicationRecord
   def broadcast(devices)
     # test from rails console with Soul.last.sendToOthers
     execString = generateJSONString(devices)
-    if execString != nil #no devices to send to
+    if execString != nil # no devices to send to
       system execString
       make_history(devices) #save the history of who we sent to
     end

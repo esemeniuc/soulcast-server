@@ -10,6 +10,10 @@ class Device < ApplicationRecord
     return Device.where('updated_at > ?', 1.week.ago).order(:updated_at) #all devices updated in the last week
   end
 
+  def otherRecentDevices
+    return Device.where('updated_at > ?', 1.week.ago).where.not(id: self.id).order(:updated_at) #all devices except the caller updated in the last week
+  end
+
   def blocked?(input_device)
     return Block.where(blocker_id: self.id, blockee_id: input_device.id).exists?
   end
@@ -18,11 +22,7 @@ class Device < ApplicationRecord
     return !blocked?(input_device)
   end
 
-  def otherRecentDevices
-    return Device.where('updated_at > ?', 1.week.ago).where.not(id: self.id).order(:updated_at) #all devices except the caller updated in the last week
-  end
-
-  def reaches(device) # check if this device reaches another device
+  def reaches?(device) # check if this device reaches another device
     # debug print
     puts 'Self radius: ' + self.radius.to_s + "\tDevice radius: " + device.radius.to_s
 
@@ -48,7 +48,7 @@ class Device < ApplicationRecord
     devicesInRange = []
 
     otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device-device radius
-      if reaches(device)
+      if reaches?(device)
         devicesInRange.append(device)
       end
     end
