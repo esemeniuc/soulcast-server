@@ -8,26 +8,6 @@ RSpec.describe History, type: :model do
                           longitude: -100,
                           radius: 20.0)
 
-    @dev2 = Device.create(token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad",
-                          latitude: 50,
-                          longitude: -100,
-                          radius: 20.0)
-
-    @dev3 = Device.create(token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                          latitude: 25,
-                          longitude: -100,
-                          radius: 20.0)
-
-    @dev4 = Device.create(token: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-                          latitude: 75,
-                          longitude: -100,
-                          radius: 20.0)
-
-    @dev5 = Device.create(token: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                          latitude: 60,
-                          longitude: -100,
-                          radius: 20.0)
-
     @soul1 = Soul.new(soulType: "testType1",
                          s3Key: 10000000,
                          epoch: Time.now.to_i,
@@ -39,12 +19,48 @@ RSpec.describe History, type: :model do
   end
 
   context "test make_history" do
-    xit "should add no history records for no input devices" do
-      History.make_history([], @soul1)
+    it "should add no history records for no input devices" do
+      @soul1.save
       expect(History.all.count).to be 0
     end
 
-    it "should add history records for no input devices" do
+    it "should add history records for 1 input devices" do
+      @dev2 = Device.create(token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad",
+                            latitude: 50,
+                            longitude: -100,
+                            radius: 20.0)
+      @soul1.save
+      expect(History.all.count).to be 1
+      expect(History.where(device_id: @dev2.id).count).to be 1
+    end
+
+    it "should add history records for 4 input devices" do
+      @dev2 = Device.create(token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad",
+                            latitude: 50,
+                            longitude: -100,
+                            radius: 20.0)
+
+      @dev3 = Device.create(token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                            latitude: 25,
+                            longitude: -100,
+                            radius: 20.0)
+
+      @dev4 = Device.create(token: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                            latitude: 75,
+                            longitude: -100,
+                            radius: 20.0)
+
+      @dev5 = Device.create(token: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                            latitude: 60,
+                            longitude: -100,
+                            radius: 20.0)
+
+      @soul1.save
+      expect(History.all.count).to be 2
+      expect(History.where(device_id: @dev2.id).count).to be 1
+      expect(History.where(device_id: @dev3.id).count).to be 0
+      expect(History.where(device_id: @dev4.id).count).to be 0
+      expect(History.where(device_id: @dev5.id).count).to be 1
 
     end
   end
