@@ -64,7 +64,7 @@ RSpec.describe Block, type: :model do
         Block.create(blocker_token: @dev2.token, blockee_token: @dev1.token)
         @soul1 = Soul.create(soulType: "testType1",
                             s3Key: 10000000,
-                            epoch: 1000000,
+                            epoch: Time.now.to_i,
                             latitude: 50,
                             longitude: -100,
                             radius: 20,

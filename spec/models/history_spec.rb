@@ -30,7 +30,7 @@ RSpec.describe History, type: :model do
 
     @soul1 = Soul.new(soulType: "testType1",
                          s3Key: 10000000,
-                         epoch: 1000000,
+                         epoch: Time.now.to_i,
                          latitude: 50,
                          longitude: -100,
                          radius: 20,
