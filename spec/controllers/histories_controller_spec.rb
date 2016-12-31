@@ -1,13 +1,10 @@
 require 'rails_helper'
 
-def get_souls(history_array)
-  history_array.map{|obj| obj.soul}
-end
-
 RSpec.describe HistoriesController, type: :controller do
 
   #create 2 devices
   before(:each) do
+    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                           latitude: 50,
                           longitude: -100,
@@ -17,43 +14,60 @@ RSpec.describe HistoriesController, type: :controller do
                           latitude: 50,
                           longitude: -100,
                           radius: 20.0)
+
+    @soul = Soul.new(soulType: "testType1",
+                     s3Key: 10000000,
+                     epoch: 1000000,
+                     latitude: 50,
+                     longitude: -100,
+                     radius: 20,
+                     token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
+                     device_id: @dev1.id)
   end
 
   #add souls from 1 originating device to the history of the second device
   context "when no blocks are involved" do
     it "should send a soul from dev1 to dev2 and be in dev2's history" do
       # expect to see soul from dev1 in history of dev2
-      @dev1.save
-      soul = Soul.create(soulType: "testType1",
-                          s3Key: 10000000,
-                          epoch: 1000000,
-                          latitude: 50,
-                          longitude: -100,
-                          radius: 20,
-                          token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
-                          device_id: @dev1.id)
-
-      expect(@dev2.histories.find{|el| el.soul_id == soul.id}).not_to be_nil
+      @soul.save
+      expect(@dev2.histories.find{|el| el.soul_id == @soul.id}).not_to be_nil
     end
   end
 
-  context "when dev1 is blocked by dev2" do
-    it "should send a soul from dev1 to dev2 and not be in dev2's history" do
+  context "dev1 is blocked by dev2, dev1 sends a soul to all nearby and not blocked" do
+    it "should have no history for dev2" do
       # expect to see soul from dev1 in history of dev2
-      @dev1.save
-      @dev2.save
-      block = Block.create(device_id: @dev2.id, blocked_device_id: @dev1.id)
-      puts Block.all.inspect
-      soul = Soul.create(soulType: "testType1",
-                           s3Key: 10000000,
-                           epoch: 1000000,
-                           latitude: 50,
-                           longitude: -100,
-                           radius: 20,
-                           token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
-                           device_id: @dev1.id)
+      Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
+      @soul.save #needed because we want to block before sending
+      expect(@dev2.histories.find{|el| el.soul_id == @soul.id}).to be_nil
+    end
+  end
 
-      expect(@dev2.histories.find{|el| el.soul_id == soul.id}).to be_nil
+  context 'when a device has NOT received any souls,' do
+    it 'then NO souls are in its history' do
+      expect(@dev1.histories.count).to be 0
+    end
+  end
+  context 'when a device has received one soul,' do
+    it 'should have one soul in its history'do
+      expect(@dev1.histories.count).to be 1
+    end
+  end
+  context 'when a device has received two souls,' do
+    it 'then two souls are in its history'do
+      expect(@dev1.histories.count).to be 2
+    end
+  end
+  context 'when two devices have each received a soul,' do
+    it 'then one soul should be in both devices history'do
+      expect(@dev1.histories.count).to be 1
+      expect(@dev2.histories.count).to be 1
+    end
+  end
+  context 'when two devices have each received two souls,' do
+    it 'then two souls should be in both devices history'do
+      expect(@dev1.histories.count).to be 2
+      expect(@dev2.histories.count).to be 2
     end
   end
 

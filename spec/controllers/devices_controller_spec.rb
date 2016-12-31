@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe DevicesController, type: :controller do
   before(:each) do
+    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                          latitude: 50,
                          longitude: -100,
@@ -26,12 +27,6 @@ RSpec.describe DevicesController, type: :controller do
                          latitude: 60,
                          longitude: -100,
                          radius: 20.0)
-  end
-
-  after(:each) do
-    puts 'before: ' + Device.all.count.to_s
-    # Device.delete_all #database_cleaner handles this
-    puts 'after: ' + Device.all.count.to_s
   end
 
   it "should have accurate reaches" do
