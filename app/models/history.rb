@@ -7,7 +7,7 @@ class History < ApplicationRecord
   end
 
   def self.make_history(inputSoul, inputDevices)
-    puts "made history for "+ inputDevices.count.to_s + " devices (incl blocked)"
+    puts "made history for " + inputDevices.count.to_s + " devices (incl blocked)"
 
     inputDevices.each do |currentDevice|
       if currentDevice.not_blocked?(inputSoul.device)
