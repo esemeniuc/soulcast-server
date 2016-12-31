@@ -54,10 +54,10 @@ RSpec.describe Block, type: :model do
   end
 
   context "blocking tests" do
-    context "dev1 blocks dev2, both are nearby" do
-      it "should allow dev1 to send to dev5" do
-        Block.create(blocker_token: @dev1.token, blockee_token: @dev2.token)
-        soul1 = Soul.create(soulType: "testType1",
+    context "dev2 blocks dev1, both are nearby" do
+      before(:each) do
+        Block.create(blocker_token: @dev2.token, blockee_token: @dev1.token)
+        @soul1 = Soul.create(soulType: "testType1",
                             s3Key: 10000000,
                             epoch: 1000000,
                             latitude: 50,
@@ -65,8 +65,14 @@ RSpec.describe Block, type: :model do
                             radius: 20,
                             token: @dev1.token,
                             device_id: @dev1.id)
+      end
 
+      it "should allow dev5 to receive from dev1" do
         expect(@dev5.histories.count).to be 1
+      end
+
+      it "should not allow dev2 to receive from dev1" do
+        expect(@dev2.histories.count).to be 0
       end
     end
   end
