@@ -3,10 +3,8 @@ class Device < ApplicationRecord
   # has_many :blocks
   has_many :histories
   # has_one :history
-  validates :token, presence: true, uniqueness: true
-  validates :latitude, presence: true
-  validates :longitude, presence: true
-  validates :radius, presence: true
+  validates :token, :latitude, :longitude, :radius, presence: true
+  validates :token, uniqueness: true
 
   def self.allRecentDevices
     return Device.where('updated_at > ?', 1.week.ago).order(:updated_at) #all devices updated in the last week
@@ -34,15 +32,32 @@ class Device < ApplicationRecord
     return (distance < radiusInKM)
   end
 
-  def nearbyDeviceCount #returns the number of nearby device updated in the last week
-    nearbyDevices = 0
-    otherRecentDevices.each do |device|
+  def devicesWithinMutualRangeAndNotBlocked # returns an array of all devices that are in the mutual radius and not blocked
+    allDevices = devicesWithinMutualRange
+    puts "********************" + allDevices.size.to_s
+    # broadcaster = self.token # this is a string
+    # devicesToRemove = Device.joins(:blocks).where(blocks: {blockedToken: broadcaster}).to_a # array of tokens of people who dont want to hear broadcaster
+
+    broadcaster_id = self.id # this is an int
+    devicesToRemove = Device.where(id: Block.where(blockee_id: broadcaster_id).pluck(:blockee_id)) #inner query gets all ids that blocked the broadcaster
+    result = allDevices - devicesToRemove
+    return result
+  end
+
+  def devicesWithinMutualRange # returns an array of recent devices in the mutual radius
+    devicesInRange = []
+
+    otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device-device radius
       if reaches(device)
-        nearbyDevices += 1
+        devicesInRange.append(device)
       end
     end
 
-    return nearbyDevices
+    return devicesInRange
+  end
+
+  def nearbyDeviceCount #returns the number of non blocked nearby device updated in the last week
+    return devicesWithinMutualRangeAndNotBlocked.count
   end
 
 end

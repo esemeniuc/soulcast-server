@@ -2,41 +2,16 @@ class Soul < ApplicationRecord
   belongs_to :device
   has_many :histories
   # has_one :history, through: :device
-  validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, presence: true
+  validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, :device_id, presence: true
+  before_validation :get_device
   after_save :sendToOthers, :status_output
 
-  def reaches(device) # returns true if this soul reaches another device
-    mutualDistance = [self.radius, device.radius].min
-    calculatedDistance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
-    puts "calculated distance = " + calculatedDistance.to_s
-    if calculatedDistance < mutualDistance # check if we're within bounds
-      return true
+  def get_device
+    self.simulator #hax for june's simulator, run first because we wont find token with 'AAAAAA...'
+
+    if self.device == nil # associate a device to our soul, not a hack
+      self.device = Device.find_by_token(self.token)
     end
-    return false
-  end
-
-  def devicesWithinMutualRangeAndNotBlocked # returns an array of all devices that are in the mutual radius and not blocked
-    allDevices = devicesWithinMutualRange
-    puts "********************" + allDevices.size.to_s
-    # broadcaster = self.token # this is a string
-    # devicesToRemove = Device.joins(:blocks).where(blocks: {blockedToken: broadcaster}).to_a # array of tokens of people who dont want to hear broadcaster
-
-    broadcaster_id = self.device_id # this is an int
-    devicesToRemove = Device.where(id: Block.where(blockee_id: broadcaster_id).pluck(:blockee_id)) #inner query gets all ids that blocked the broadcaster
-    result = allDevices - devicesToRemove
-    return result
-  end
-
-  def devicesWithinMutualRange # returns an array of recent devices in the mutual radius
-    devicesInRange = []
-
-    self.device.otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device-device radius
-      if reaches(device)
-        devicesInRange.append(device)
-      end
-    end
-
-    return devicesInRange
   end
 
   def generateJSONString(devices)
@@ -68,6 +43,10 @@ class Soul < ApplicationRecord
     end
   end
 
+  def make_history(devices)# generates the history upon saving a soul
+    History.make_history(self, devices)
+  end
+
   def sendToEveryone #send to all users
     broadcast(Device.all.to_ary) #send to everything
   end
@@ -77,24 +56,20 @@ class Soul < ApplicationRecord
   end
 
   def sendToOthers #send to other users
-    broadcast(devicesWithinMutualRangeAndNotBlocked)
+    broadcast(self.device.devicesWithinMutualRangeAndNotBlocked)
   end
 
-  def simulator
-    if self.token == ENV.fetch('simulatorToken') # for simulator, set our token to be june's token if we have have
+  def simulator #sends a soul to everyone from the simulation
+    if self.token == ENV.fetch('simulatorToken') # for simulator, set our token to be june's token if found
       self.sendToEveryone
     end
   end
 
   def status_output
-    deviceInRangeCount = devicesWithinMutualRange.count
+    deviceInRangeCount = self.device.devicesWithinMutualRange.count
     if deviceInRangeCount > 0
       puts 'Devices within range (incl blocked): ' + deviceInRangeCount.to_s
     end
-  end
-
-  def make_history(devices)# generates the history upon saving a soul
-    History.make_history(self, devices)
   end
 
 end

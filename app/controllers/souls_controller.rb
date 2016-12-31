@@ -27,12 +27,6 @@ class SoulsController < ApplicationController
   def create
     @soul = Soul.new(soul_params)
 
-    @soul.simulator #hax for june's simulator, run first because we wont find token with 'AAAAAA...'
-
-    if @soul.device == nil # associate a device to our soul, not a hack
-      @soul.device = Device.find_by_token(@soul.token)
-    end
-
     respond_to do |format|
       if @soul.save
         format.html { redirect_to @soul, notice: 'Soul was successfully created.' }
