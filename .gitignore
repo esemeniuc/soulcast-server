@@ -54,4 +54,6 @@ bower.json
 
 # other
 apns.p8
+
+npm-debug.log
 node_modules/
