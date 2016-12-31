@@ -14,13 +14,11 @@ class History < ApplicationRecord
   def self.make_history(inputSoul, inputDevices)
     puts "##########################################Make history******************"
     puts "devices = " + inputDevices.length.to_s
-    inputDevices.each do |currentDevice|
-      if !currentDevice.blocked?(inputSoul.device)
-        tempHistoryObject = History.new(soul: inputSoul, device: currentDevice)
-        tempHistoryObject.save
-        #alt # tempHistoryObject = History.create(soul: inputSoul, device: currentDevice)
-      end
 
+    inputDevices.each do |currentDevice|
+      if currentDevice.not_blocked?(inputSoul.device)
+        History.create(soul: inputSoul, device: currentDevice)
+      end
     end
   end
 end

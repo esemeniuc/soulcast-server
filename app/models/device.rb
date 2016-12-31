@@ -16,6 +16,10 @@ class Device < ApplicationRecord
     return Block.where(blocker_id: self.id, blockee_id: input_device.id).exists?
   end
 
+  def not_blocked?(input_device)
+    return !blocked?(input_device)
+  end
+
   def otherRecentDevices
     return Device.where('updated_at > ?', 1.week.ago).where.not(id: self.id).order(:updated_at) #all devices except the caller updated in the last week
   end
