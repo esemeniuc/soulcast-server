@@ -29,14 +29,6 @@ RSpec.describe DevicesController, type: :controller do
                          radius: 20.0)
   end
 
-  it "should have accurate reaches" do
-    expect(@dev1.reaches(@dev2)).to be true
-    expect(@dev1.reaches(@dev5)).to be true
-    expect(@dev1.reaches(@dev3)).to be false
-    expect(@dev1.reaches(@dev4)).to be false
-    expect(@dev1.nearbyDeviceCount).to be 2
-  end
-
   context "valid device input" do
     it "should be able to register and receive response that it was successful" do
       post :create, params: {device: {token: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
