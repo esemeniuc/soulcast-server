@@ -34,7 +34,7 @@ RSpec.describe Soul, type: :model do
 
     context "with valid input" do
       it "should save a soul to the database with device_id" do
-        @soul1 = Soul.create(soulType: "testType1",
+        soul1 = Soul.create(soulType: "testType1",
                           s3Key: 10000000,
                           epoch: 1000000,
                           latitude: 50,
@@ -47,7 +47,7 @@ RSpec.describe Soul, type: :model do
       end
 
       it "should save a soul to the database without device_id" do
-        @soul1 = Soul.create(soulType: "testType1",
+        soul1 = Soul.create(soulType: "testType1",
                              s3Key: 10000000,
                              epoch: 1000000,
                              latitude: 50,
@@ -62,7 +62,7 @@ RSpec.describe Soul, type: :model do
 
     context "with invalid input" do
       it "should not save a soul to the database with nil token" do
-        @soul1 = Soul.create(soulType: "testType1",
+        soul1 = Soul.create(soulType: "testType1",
                              s3Key: 10000000,
                              epoch: 1000000,
                              latitude: 50,
@@ -74,7 +74,7 @@ RSpec.describe Soul, type: :model do
       end
 
       it "should not save a soul to the database with token not in devices" do
-        @soul1 = Soul.create(soulType: "testType1",
+        soul1 = Soul.create(soulType: "testType1",
                              s3Key: 10000000,
                              epoch: 1000000,
                              latitude: 50,
@@ -87,8 +87,41 @@ RSpec.describe Soul, type: :model do
     end
   end
 
-  it "should have devicesWithinMutualRange"
+  context "generate JSON String tests" do
 
-  xit "shoul generate a valid JSON String"
+    before(:each) do
+      @soul1 = Soul.new(soulType: "testType1",
+                        s3Key: 10000000,
+                        epoch: 1000000,
+                        latitude: 50,
+                        longitude: -100,
+                        radius: 20,
+                        token: @dev1.token,
+                        device_id: @dev1.id)
+    end
+    context "1 or more devices" do
+      it "should generate a valid JSON String with 1 device" do
+        testString = @soul1.generateJSONString([@dev2])
+        expect(testString).not_to be nil
+        expect(testString.split[-1]).to eq @dev2.token #check what tokens the soul is sent to
+      end
 
+      it "should generate a valid JSON String with 3 devices" do
+        testString = @soul1.generateJSONString([@dev2, @dev3, @dev4])
+        splitString = testString.split
+        @soul1.broadcast([@dev2, @dev3, @dev4])
+        expect(testString).not_to be nil
+        expect(splitString[-1]).to eq @dev4.token #check what tokens the soul is sent to
+        expect(splitString[-2]).to eq @dev3.token + '\\' #weird bug
+        expect(splitString[-3]).to eq @dev2.token + '\\' #weird bug
+      end
+    end
+
+    context "no devices" do
+      it "should return a nil string" do
+        testString = @soul1.generateJSONString([])
+        expect(testString).to be nil
+      end
+    end
+  end
 end
