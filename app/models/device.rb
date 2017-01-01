@@ -24,7 +24,7 @@ class Device < ApplicationRecord
 
   def reaches?(device) # check if this device reaches another device
     # debug print
-    puts 'Self radius: ' + self.radius.to_s + "\tDevice radius: " + device.radius.to_s
+    # puts 'Self radius: ' + self.radius.to_s + "\tDevice radius: " + device.radius.to_s
 
     minRadius = [self.radius, device.radius].min
     radiusInKM = minRadius * 111.2 #conversion factor for degrees latitude to km
@@ -34,13 +34,11 @@ class Device < ApplicationRecord
 
   def devicesWithinMutualRangeAndNotBlocked # returns an array of all devices that are in the mutual radius and not blocked
     allDevices = devicesWithinMutualRange
-    puts "********************" + allDevices.size.to_s
-    # broadcaster = self.token # this is a string
-    # devicesToRemove = Device.joins(:blocks).where(blocks: {blockedToken: broadcaster}).to_a # array of tokens of people who dont want to hear broadcaster
-
     broadcaster_id = self.id # this is an int
     devicesToRemove = Device.where(id: Block.where(blockee_id: broadcaster_id).pluck(:blockee_id)) #inner query gets all ids that blocked the broadcaster
     result = allDevices - devicesToRemove
+
+    puts "All other devices within mutual range: " + allDevices.count.to_s + ", All non blocked: " + result.count.to_s
     return result
   end
 

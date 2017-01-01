@@ -4,7 +4,7 @@ class Soul < ApplicationRecord
   # has_one :history, through: :device
   validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, :device_id, presence: true
   before_validation :get_device
-  after_save :sendToOthers, :status_output
+  after_save :updateDeviceLocation, :sendToOthers, :status_output
 
   def get_device
     self.simulator #hax for june's simulator, run first because we wont find token with 'AAAAAA...'
@@ -12,6 +12,10 @@ class Soul < ApplicationRecord
     if self.device == nil # associate a device to our soul, not a hack
       self.device = Device.find_by_token(self.token)
     end
+  end
+
+  def updateDeviceLocation
+    self.device.update(latitude: self.latitude, longitude: self.longitude, radius: self.radius)
   end
 
   def generateJSONString(devices)
