@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe HistoriesController, type: :controller do
-
-  #create 2 devices
   before(:all) do
     DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
@@ -12,6 +10,26 @@ RSpec.describe HistoriesController, type: :controller do
 
     @dev2 = Device.create(token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad",
                           latitude: 50,
+                          longitude: -100,
+                          radius: 20.0)
+
+    @dev3 = Device.create(token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          latitude: 25,
+                          longitude: -100,
+                          radius: 20.0)
+
+    @dev4 = Device.create(token: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                          latitude: 75,
+                          longitude: -100,
+                          radius: 20.0)
+
+    @dev5 = Device.create(token: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                          latitude: 60,
+                          longitude: -100,
+                          radius: 20.0)
+
+    @dev6 = Device.create(token: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+                          latitude: 40,
                           longitude: -100,
                           radius: 20.0)
   end
@@ -93,23 +111,9 @@ RSpec.describe HistoriesController, type: :controller do
                      device_id: castingDevice.id)
       expect(receivingDevice.histories.count).to be 0
     end
-
   end
 
   context "one device blocking another" do
-    before(:each) do
-    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
-    @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
-                          latitude: 50,
-                          longitude: -100,
-                          radius: 20.0)
-
-    @dev2 = Device.create(token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad",
-                          latitude: 50,
-                          longitude: -100,
-                          radius: 20.0)
-    end
-
     it 'causes history to exclude their soul' do
       soul = Soul.create(soulType: "testType1",
                      s3Key: 10000000,
@@ -129,7 +133,44 @@ RSpec.describe HistoriesController, type: :controller do
     it "should have no history for dev2" do
       # expect to see soul from dev1 in history of dev2
       Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
-      
+      expect(@dev2.histories.count).to be 0
+    end
+  end
+
+  context "blocking after sending a soul" do
+    # dev1 sends a soul to all nearby, dev1 is later blocked by dev2 and dev5
+    # dev1 is reachable by dev2, dev5, and dev6
+    before(:all) do
+      @soul = Soul.create(soulType: "testType1",
+                         s3Key: 10000000,
+                         epoch: 1000000,
+                         latitude: 50,
+                         longitude: -100,
+                         radius: 20,
+                         token: @dev1.token,
+                         device_id: @dev1.id)
+    end
+    it "should have no history for dev2" do
+      Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
+      expect(@dev2.histories.count).to be 0
+    end
+
+    it "should have no history for dev5" do
+      Block.create(blocker_id: @dev5.id, blockee_id: @dev1.id)
+      expect(@dev5.histories.count).to be 0
+    end
+
+    it "should have history for dev6" do
+      expect(@dev2.histories.count).to be 1
+    end
+
+    it "should have no history for dev3 (not reachable)" do
+      expect(@dev3.histories.count).to be 0
+    end
+
+    it "should have no history for dev4 which is not reachable, but also later blocked" do
+      Block.create(blocker_id: @dev4.id, blockee_id: @dev1.id)
+      expect(@dev4.histories.count).to be 0
     end
   end
 
