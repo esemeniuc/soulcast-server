@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe HistoriesController, type: :controller do
 
   #create 2 devices
-  before(:each) do
+  before(:all) do
     DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                           latitude: 50,
@@ -94,6 +94,35 @@ RSpec.describe HistoriesController, type: :controller do
       expect(receivingDevice.histories.count).to be 0
     end
 
+  end
+
+  context "one device blocking another" do
+    before(:each) do
+    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+    @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
+                          latitude: 50,
+                          longitude: -100,
+                          radius: 20.0)
+
+    @dev2 = Device.create(token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad",
+                          latitude: 50,
+                          longitude: -100,
+                          radius: 20.0)
+    end
+
+    it 'causes history to exclude their soul' do
+      soul = Soul.create(soulType: "testType1",
+                     s3Key: 10000000,
+                     epoch: 1000000,
+                     latitude: 50,
+                     longitude: -100,
+                     radius: 20,
+                     token: @dev2.token,
+                     device_id: @dev2.id)
+      @dev1.block(@dev2)
+      histories = History.find_by(@dev1.id)
+      expect(histories.count).to be 0
+    end
   end
 
   context "dev1 is blocked by dev2, dev1 sends a soul to all nearby and not blocked" do

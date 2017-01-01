@@ -58,8 +58,8 @@ RSpec.describe Block, type: :model do
 
   end
 
-  context "blocking tests" do
-    context "dev2 blocks dev1, both are nearby" do
+  context "devices blocking each other" do
+    context "after dev2 blocks dev1 when they are nearby" do
       before(:each) do
         Block.create(blocker_token: @dev2.token, blockee_token: @dev1.token)
         @soul1 = Soul.create(soulType: "testType1",
@@ -72,7 +72,7 @@ RSpec.describe Block, type: :model do
                             device_id: @dev1.id)
       end
 
-      it "should allow dev5 to receive from dev1" do
+      it "should allow another nearby device to receive from dev1" do
         expect(@dev5.histories.count).to be 1
       end
 
