@@ -58,6 +58,21 @@ RSpec.describe Soul, type: :model do
         expect(Soul.first.device.id).to be 1
         expect(Soul.all.count).to be 1
       end
+
+      it "should update the device location when saving" do
+        soul1 = Soul.create(soulType: "testType1",
+                            s3Key: 10000000,
+                            epoch: 1000000,
+                            latitude: 55,
+                            longitude: -111,
+                            radius: 22,
+                            token: @dev1.token)
+
+        expect(Device.find(@dev1.id).latitude).to eq soul1.latitude
+        expect(Device.find(@dev1.id).longitude).to eq soul1.longitude
+        expect(Device.find(@dev1.id).radius).to eq soul1.radius
+      end
+
     end
 
     context "with invalid input" do
@@ -83,6 +98,30 @@ RSpec.describe Soul, type: :model do
                              token: "not a token")
 
         expect(Soul.all.count).to be 0
+      end
+
+      it "should not save a soul to the database with no s3key" do
+        soul1 = Soul.create(soulType: "testType1",
+                            epoch: 1000000,
+                            latitude: 50,
+                            longitude: -100,
+                            radius: 20,
+                            token: @dev1.token)
+
+        expect(Soul.all.count).to be 0
+      end
+
+      it "should not update the device without s3key" do
+        soul1 = Soul.create(soulType: "testType1",
+                            epoch: 1000000,
+                            latitude: 55,
+                            longitude: -111,
+                            radius: 22,
+                            token: @dev1.token)
+
+        expect(Device.find(@dev1.id).latitude).to eq 50
+        expect(Device.find(@dev1.id).longitude).to eq -100
+        expect(Device.find(@dev1.id).radius).to eq 20
       end
     end
   end
