@@ -58,13 +58,14 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller' #for better_errors
   gem 'meta_request' #for chrome rails panel
-  gem 'pry'  #Add pry for easy variable access
-  gem 'pry-rails'
-  gem 'pry-byebug'
+
 end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.5'
+  gem 'pry'  #Add pry for easy variable access
+  gem 'pry-rails'
+  gem 'pry-byebug'
 end
 
 group :test do
