@@ -52,19 +52,19 @@ RSpec.describe SoulsController, type: :controller do
 		end
 	end
 	context 'Nearby' do
-		xit 'two devices are within mutual radius' do
-			# expect(device1.nearby)=1
-			# expect(device2.nearby)=1
+		it 'two devices are within mutual radius' do
+			expect(device1.nearby).to be 1
+			expect(device2.nearby).to be 1
 		end
-		xit 'three devices are within mutual radius' do
-			# expect(device1.nearby)=2
-			# expect(device2.nearby)=2
-			# expect(device2.nearby)=2
+		it 'three devices are within mutual radius' do
+			expect(device1.nearby).to be 2
+			expect(device2.nearby).to be 2
+			expect(device5.nearby).to be 2
 		end
-		xit 'No three devices are within mutual radius' do
-			# expect(device1.nearby)=0
-			# expect(device2.nearby)=0
-			# expect(device2.nearby)=0
+		it 'No three devices are within mutual radius' do
+			expect(device2.nearby).to be 0
+			expect(device3.nearby).to be 0
+			expect(device4.nearby).to be 0
 		end
 		xit 'One device are within mutual radius' do
 			# expect(device1.nearby)=0
