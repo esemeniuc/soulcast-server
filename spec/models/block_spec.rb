@@ -79,7 +79,29 @@ RSpec.describe Block, type: :model do
       it "should not allow dev2 to receive from dev1" do
         expect(@dev2.histories.count).to be 0
       end
-    end
-  end
 
+      context "dev4 also blocks dev1, but isn't nearby" do
+        it "should still not allow dev4 to receive from dev1" do
+          expect(@dev4.histories.count).to be 0
+        end
+      end
+     end
+
+    context "dev 2 and dev5 block dev1, and both dev2 and dev5 are nearby" do
+      it "should not allow dev5 to receive from dev1" do
+        Block.create(blocker_token: @dev5.token, blockee_token: @dev1.token)
+        Block.create(blocker_token: @dev2.token, blockee_token: @dev1.token)
+        @soul1 = Soul.create(soulType: "testType1",
+                             s3Key: 10000000,
+                             epoch: Time.now.to_i,
+                             latitude: 50,
+                             longitude: -100,
+                             radius: 20,
+                             token: @dev1.token,
+                             device_id: @dev1.id)
+        expect(@dev5.histories.count).to be 0
+      end
+    end
+
+  end
 end
