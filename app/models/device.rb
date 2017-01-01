@@ -58,4 +58,9 @@ class Device < ApplicationRecord
     return devicesWithinMutualRangeAndNotBlocked.count
   end
 
+  def block (blockee)
+    #make a new block object
+    Block.create(blocker_id: self.id, blockee_id: blockee.id)
+  end
+
 end

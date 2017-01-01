@@ -2,7 +2,7 @@ class History < ApplicationRecord
   belongs_to :soul
   belongs_to :device
 
-  def self.get_history_by_device_id (device_id)
+  def self.find_by (device_id)
     Soul.where(id: History.where(device: device_id).pluck(:soul_id))
   end
 

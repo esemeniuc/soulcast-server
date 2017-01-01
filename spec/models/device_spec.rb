@@ -126,6 +126,21 @@ RSpec.describe Device, type: :model do
     end
   end
 
+  it 'blocks other devices when asked' do
+    testDevice1 = Device.create(token: "testDevice1token",
+                            latitude: 49.2812277842772,
+                            longitude: -122.956075,
+                            radius: 20.0)
+    testDevice2 = Device.create(token: "testdevice2token",
+                            latitude: 49.2812277842772,
+                            longitude: -122.956075,
+                            radius: 20.0)
+    testDevice1.block(testDevice2)
+    lastBlock = Block.last
+    expect(lastBlock.blocker_id).to be testDevice1.id
+    expect(lastBlock.blockee_id).to be testDevice2.id
+  end
+
 end
 
 

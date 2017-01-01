@@ -65,7 +65,7 @@ class HistoriesController < ApplicationController
   # GET /device_history/1
   # GET /device_history/1.json
   def device_history
-    render json: History.get_history_by_device_id(params[:id])
+    render json: History.find_by(params[:id])
   end
 
   private
