@@ -30,16 +30,15 @@ RSpec.describe SoulsController, type: :controller do
   end
 
 	context 'does end to end transmission' do
-		before(:all) do
-			# @device1 = Device.new(long, lat, rad ...)
-			# @device2 = Device.new(long, lat, rad ...)
-		end
-		xit 'when casting a soul within mutual radius of another' do
-			# device1.radius = ...
-			# device2.radius = ...
-			# someSoul = Soul.new(device: device1, ...)
-			# someSoul.save!
-			# expect(device2.whatever).to_be not_nil ...
+		it 'when casting a soul within mutual radius of another' do
+			@soul1 = Soul.create(soulType: "testType1",
+				s3Key: 10000000,
+				epoch: 1000000,
+				latitude: @dev1.latitude,
+				longitude: @dev1.longitude,
+				radius: @dev1.radius,
+				token: @dev1.token
+			expect(@dev2.histories.count).to be 1
 		end
 		xit 'when casting a soul NOT within mutual radius of another' do
 
