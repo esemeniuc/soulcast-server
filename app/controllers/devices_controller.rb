@@ -26,11 +26,6 @@ class DevicesController < ApplicationController
   # POST /devices.json
   def create
     @device = Device.new(device_params)
-    if !(@device.valid?) #if not valid
-      puts 'NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID NOTVALID' #probably because we have a duplicate
-      head :bad_request #http 400 code
-      return
-    end
 
     respond_to do |format|
       if @device.save
@@ -38,8 +33,7 @@ class DevicesController < ApplicationController
         format.json { render :show, status: :created, location: @device }
       else
         format.html { render :new }
-        #format.json { render json: @device.errors, status: :unprocessable_entity }
-        format.json { render json: Device.find_by_token(@device.token) } #return json of matching token rather than show error
+        format.json { head :unprocessable_entity } #return json of matching token rather than show error
       end
     end
   end
@@ -85,6 +79,8 @@ class DevicesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_device
+    # @device = Device.find(params[:id]) #default
+
     # alternate
     # avoid throwing an exception
     # begin
