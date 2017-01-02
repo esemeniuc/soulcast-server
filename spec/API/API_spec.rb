@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "API management", :type => :request do
+RSpec.describe "API call", :type => :request do
 
-  it "creates a new device" do
+  xit "creates a new device" do
     post "/devices"
     expect(response).to render_template(:new)
 
@@ -15,37 +15,52 @@ RSpec.describe "API management", :type => :request do
     expect(response.body).to include("Widget was successfully created.")
   end
 
-  it "updates device location" do
+  xit "updates device location" do
     patch "/devices/{id}"
     expect(response).to_not render_template(:show)
   end
 
   it "creates new soul" do
-    post "/souls"
-    expect(response).to_not render_template(:show)
+    post "/souls", 
+      params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:100, longitude:100, radius:20, 
+        token:"12345asdfg" } }
+    expect(response).to have_http_status(200)
   end
 
-  it "get nearby devices" do
+  it "doesn't create a soul without an s3 key" do
+    post "/souls", 
+      params: { soul: {
+        soulType: "RSpecTestSoul", 
+        epoch:123456789, 
+        latitude:100, longitude:100, radius:20, 
+        token:"12345asdfg" } }
+    expect(response).to have_http_status(422)
+  end
+
+  xit "gets nearby devices" do
     get "/nearby"
     expect(response).to_not render_template(:show)
   end
 
-  it "improves" do
+  xit "improves" do
     post "/improves"
     expect(response).to_not render_template(:show)
   end
 
-  it "blocks" do
+  xit "blocks" do
     post "/blocks"
     expect(response).to_not render_template(:show)
   end
 
-  it "echo" do
+  xit "echo" do
     post "/echo"
     expect(response).to_not render_template(:show)
   end
 
-  it "returns the history of the device id" do
+  xit "returns the history of the device id" do
     get "/history/{id}"
     expect(response).to_not render_template(:show)
   end
