@@ -1,37 +1,65 @@
 require "rails_helper"
 
 RSpec.describe "API call", :type => :request do
-
-  xit "creates a new device" do
-    post "/devices"
-    expect(response).to render_template(:new)
-
-    post "/widgets", :widget => {:name => "My Widget"}
-
-    expect(response).to redirect_to(assigns(:widget))
-    follow_redirect!
-
-    expect(response).to render_template(:show)
-    expect(response.body).to include("Widget was successfully created.")
+  before(:each) do
+      DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+  end
+  it "creates a new device" do
+    post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"12345asdfgqwerty" } }
+    expect(response).to have_http_status(201) 
   end
 
-  xit "updates device location" do
-    patch "/devices/{id}"
-    expect(response).to_not render_template(:show)
+  it "doesn't create a new device without a device token" do
+    post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20 } 
+      }
+    expect(response).to have_http_status(422)
+  end
+
+  it "updates device location" do
+    post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"12345asdfgqwerty" } }
+
+    device_id = JSON.parse(response.body)["id"]
+    patch "/devices/#{device_id}.json",
+      params: { device: { latitude: 10,
+                          longitude: 10,
+                          radius: 10,
+                          token: "12345asdfgqwerty"
+                        } }
+    expect(response).to have_http_status(200)
   end
 
   it "creates new soul" do
-    post "/souls", 
+    post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"12345asdfgqwerty" } }
+    post "/souls.json", 
       params: { soul: {
         soulType: "RSpecTestSoul", 
         s3Key: 12345, epoch:123456789, 
         latitude:100, longitude:100, radius:20, 
-        token:"12345asdfg" } }
-    expect(response).to have_http_status(200)
+        token:"12345asdfgqwerty" } }
+    expect(response).to have_http_status(201)
   end
 
   it "doesn't create a soul without an s3 key" do
-    post "/souls", 
+    post "/souls.json", 
       params: { soul: {
         soulType: "RSpecTestSoul", 
         epoch:123456789, 
@@ -40,9 +68,34 @@ RSpec.describe "API call", :type => :request do
     expect(response).to have_http_status(422)
   end
 
-  xit "gets nearby devices" do
-    get "/nearby"
-    expect(response).to_not render_template(:show)
+  it "gets nearby devices" do
+    post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"AAAAAAAA" } }
+    post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:105, 
+        radius:20, 
+        token:"BBBBBBBB" } }
+    post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:110, 
+        radius:20, 
+        token:"CCCCCCCC" } }
+
+    get "/nearby", params: { latitude:100, 
+                             longitude:100, 
+                             radius:20, 
+                             token:"AAAAAAAA" }
+    # binding.pry
+    nearby_count = JSON.parse(response.body)["nearby"]
+    
+    expect(nearby_count).to be 2
   end
 
   xit "improves" do

@@ -62,18 +62,27 @@ class DevicesController < ApplicationController
     end
   end
 
-  # GET /nearby/SOME_ID_HERE.json
-  # GET /nearby/SOME_USELESS_ID_HERE.json?latitude=49.3&longitude=-122.9&radius=0.1&token=....
+  # GET /nearby/?latitude=49.3&longitude=-122.9&radius=0.1&token=SSSSSSSS
   def nearby
-    if params[:latitude] && params[:longitude] && params[:radius] #check if we're getting extra params
-      # make temp device with random token
-      @device = Device.new(token: SecureRandom.hex, latitude: params[:latitude], longitude: params[:longitude], radius: params[:radius])
-    else #work off of id only
-      set_device
+    if validParams?(params)
+      render json: deviceCount(params)
+    else
+      render json: badRequest, status: :unprocessable_entity
     end
+  end
 
-    jsonReturn = {nearby: @device.nearbyDeviceCount}
-    render json: jsonReturn
+  def validParams?(params)
+     return params[:latitude] && params[:longitude] && params[:radius] && params[:token] #check if we're getting extra params
+  end
+
+  def deviceCount(params)
+    @device = Device.find_by_token(params[:token])
+    @device.update(latitude: params[:latitude], longitude: params[:longitude], radius: params[:radius])
+    {nearby: @device.nearbyDeviceCount} 
+  end
+
+  def badRequest
+    {message: "whatever"}     
   end
 
   private
