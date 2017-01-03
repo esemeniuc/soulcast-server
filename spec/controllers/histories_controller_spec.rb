@@ -33,7 +33,7 @@ RSpec.describe HistoriesController, type: :controller do
                           longitude: -100,
                           radius: 20.0)
   end
-
+  
   #add souls from 1 originating device to the history of the second device
   context "when no blocks are involved" do
     it "has no history when no souls are casted" do

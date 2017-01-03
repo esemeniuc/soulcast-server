@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Device, type: :model do
-
+  before(:all) do
+    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+  end
   context "device validity tests" do
     it "should be valid with good input" do
       testDevice = Device.new(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
