@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Improves</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Soultype</th>
+      <th>S3key</th>
+      <th>Epoch</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Radius</th>
+      <th>Token</th>
+      <th>Device</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @improves.each do |improve| %>
+      <tr>
+        <td><%= improve.soulType %></td>
+        <td><%= improve.s3Key %></td>
+        <td><%= improve.epoch %></td>
+        <td><%= improve.latitude %></td>
+        <td><%= improve.longitude %></td>
+        <td><%= improve.radius %></td>
+        <td><%= improve.token %></td>
+        <td><%= improve.device %></td>
+        <td><%= link_to 'Show', improve %></td>
+        <td><%= link_to 'Edit', edit_improve_path(improve) %></td>
+        <td><%= link_to 'Destroy', improve, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Improve', new_improve_path %>

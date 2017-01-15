@@ -1,0 +1,1 @@
+json.partial! "improves/improve", improve: @improve

@@ -1,0 +1,57 @@
+<%= form_for(improve) do |f| %>
+  <% if improve.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(improve.errors.count, "error") %> prohibited this improve from being saved:</h2>
+
+      <ul>
+      <% improve.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :soulType %>
+    <%= f.text_field :soulType %>
+  </div>
+
+  <div class="field">
+    <%= f.label :s3Key %>
+    <%= f.text_field :s3Key %>
+  </div>
+
+  <div class="field">
+    <%= f.label :epoch %>
+    <%= f.number_field :epoch %>
+  </div>
+
+  <div class="field">
+    <%= f.label :latitude %>
+    <%= f.text_field :latitude %>
+  </div>
+
+  <div class="field">
+    <%= f.label :longitude %>
+    <%= f.text_field :longitude %>
+  </div>
+
+  <div class="field">
+    <%= f.label :radius %>
+    <%= f.text_field :radius %>
+  </div>
+
+  <div class="field">
+    <%= f.label :token %>
+    <%= f.text_field :token %>
+  </div>
+
+  <div class="field">
+    <%= f.label :device_id %>
+    <%= f.text_field :device_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

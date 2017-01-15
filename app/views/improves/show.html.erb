@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Soultype:</strong>
+  <%= @improve.soulType %>
+</p>
+
+<p>
+  <strong>S3key:</strong>
+  <%= @improve.s3Key %>
+</p>
+
+<p>
+  <strong>Epoch:</strong>
+  <%= @improve.epoch %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @improve.latitude %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @improve.longitude %>
+</p>
+
+<p>
+  <strong>Radius:</strong>
+  <%= @improve.radius %>
+</p>
+
+<p>
+  <strong>Token:</strong>
+  <%= @improve.token %>
+</p>
+
+<p>
+  <strong>Device:</strong>
+  <%= @improve.device %>
+</p>
+
+<%= link_to 'Edit', edit_improve_path(@improve) %> |
+<%= link_to 'Back', improves_path %>

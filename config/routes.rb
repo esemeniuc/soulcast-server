@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :improves
   resources :blocks
   resources :histories
   resources :souls
