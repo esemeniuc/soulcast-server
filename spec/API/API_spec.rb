@@ -98,9 +98,14 @@ RSpec.describe "API call", :type => :request do
     expect(nearby_count).to be 2
   end
 
-  xit "improves" do
-    post "/improves"
-    expect(response).to_not render_template(:show)
+  it "improves" do
+    post "/improves.json"
+          params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:100, longitude:100, radius:20, 
+        token:"12345asdfgqwerty" } }
+    expect(response).to have_http_status(201)
   end
 
   xit "blocks" do
