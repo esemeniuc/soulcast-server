@@ -11,6 +11,8 @@ RSpec.describe "API call", :type => :request do
         radius:20, 
         token:"token1" } }
 
+      expect_id_token1 = JSON.parse(response.body)["id"]
+
       post "/devices.json", 
       params: { device: {
         latitude:100, 
@@ -137,12 +139,22 @@ RSpec.describe "API call", :type => :request do
     end
 
   xit "echo" do
-    post "/echo"
-    expect(response).to_not render_template(:show)
+    post "/echo.json",
+        params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345,
+        epoch:123456789,
+        latitude:100,
+        longitude:100,
+        radius:20,
+        token:"12345asdfgqwerty" } }
+    expect_token = JSON.parse(response.body)["token"]
+    expect(expect_token).to be "12345asdfgqwerty"
   end
 
   xit "returns the history of the device id" do
-    get "/history/{id}"
-    expect(response).to_not render_template(:show)
+    get "/history/{expect_id_token1}.json",
+    expect_token = JSON.parse(response.body)["token"]
+    expect(expect_token).to_not "token1"
   end
 end
