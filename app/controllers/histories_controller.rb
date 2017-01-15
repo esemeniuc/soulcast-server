@@ -1,5 +1,5 @@
 class HistoriesController < ApplicationController
-  before_action :set_history, only: [:show, :edit, :update, :destroy, :device_history]
+  before_action :set_history, only: [:show, :edit, :update, :destroy]
 
   # GET /histories
   # GET /histories.json

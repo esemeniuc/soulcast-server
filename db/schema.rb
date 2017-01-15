@@ -73,7 +73,13 @@ ActiveRecord::Schema.define(version: 20170115222333) do
     t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_souls_on_device_id", using: :btree
   end
-  
+
+  create_table "souls_evils", force: :cascade do |t|
+    t.string   "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "histories", "devices"
   add_foreign_key "histories", "souls"
   add_foreign_key "improves", "devices"

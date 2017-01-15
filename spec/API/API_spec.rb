@@ -141,7 +141,7 @@ RSpec.describe "API call", :type => :request do
     expect(response).to have_http_status(201)
   end
 
-  xit "echo" do
+  it "echo" do
     post "/echo.json",
         params: { soul: {
         soulType: "RSpecTestSoul", 
@@ -155,9 +155,40 @@ RSpec.describe "API call", :type => :request do
     expect(expect_token).to be "12345asdfgqwerty"
   end
 
-  xit "returns the history of the device id" do
-    get "/history/{expect_id_token1}.json",
-    expect_token = JSON.parse(response.body)["token"]
-    expect(expect_token).to_not "token1"
+  context "a blocks b, b sends out a soul" do
+    it "should not have b's soul in a's history" do
+      post "/devices.json",
+           params: { device: {
+               latitude:100,
+               longitude:100,
+               radius:20,
+               token:"AAAAAAAA" } }
+
+      dev1id = JSON.parse(response.body)["id"]
+      post "/devices.json",
+           params: { device: {
+               latitude:100,
+               longitude:100,
+               radius:20,
+               token:"BBBBBBBB" } }
+      post "/blocks.json",
+        params: { block: {
+          blocker_token: "AAAAAAAA",
+          blockee_token: "BBBBBBBB"
+        } }
+      post "/souls.json",
+          params: { soul: {
+          soulType: "RSpecTestSoul", 
+          s3Key: 12345,
+          epoch:123456789,
+          latitude:100,
+          longitude:100,
+          radius:20,
+          token:"BBBBBBBB" } }
+      # binding.pry
+      get "/device_history/#{dev1id}.json"
+      soulHistoryArray = JSON.parse(response.body)
+      expect(soulHistoryArray.size).to be 0
+    end
   end
 end
