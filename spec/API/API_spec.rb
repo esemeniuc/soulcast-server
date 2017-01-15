@@ -3,7 +3,25 @@ require "rails_helper"
 RSpec.describe "API call", :type => :request do
   before(:each) do
       DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+
+      post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"token1" } }
+
+      expect_id_token1 = JSON.parse(response.body)["id"]
+
+      post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"token2" } }  
   end
+
+
   it "creates a new device" do
     post "/devices.json", 
       params: { device: {
@@ -111,18 +129,32 @@ RSpec.describe "API call", :type => :request do
     expect(response).to have_http_status(201)
   end
 
-  xit "blocks" do
-    post "/blocks"
-    expect(response).to_not render_template(:show)
-  end
+  it "blocks" do
+    post "/blocks.json",
+      params: { 
+        blocker_token: "token1", 
+        blockee_token: "token2"
+      }
+    expect(response).to have_http_status(201)
+    end
 
   xit "echo" do
-    post "/echo"
-    expect(response).to_not render_template(:show)
+    post "/echo.json",
+        params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345,
+        epoch:123456789,
+        latitude:100,
+        longitude:100,
+        radius:20,
+        token:"12345asdfgqwerty" } }
+    expect_token = JSON.parse(response.body)["token"]
+    expect(expect_token).to be "12345asdfgqwerty"
   end
 
   xit "returns the history of the device id" do
-    get "/history/{id}"
-    expect(response).to_not render_template(:show)
+    get "/history/{expect_id_token1}.json",
+    expect_token = JSON.parse(response.body)["token"]
+    expect(expect_token).to_not "token1"
   end
 end
