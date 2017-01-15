@@ -141,16 +141,14 @@ RSpec.describe "API call", :type => :request do
     expect(response).to have_http_status(201)
   end
 
-  it "echo" do
-    post "/echo.json",
-        params: { soul: {
-        soulType: "RSpecTestSoul", 
-        s3Key: 12345,
-        epoch:123456789,
-        latitude:100,
-        longitude:100,
-        radius:20,
+  xit "echo" do
+    post "/echo.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
         token:"12345asdfgqwerty" } }
+    binding.pry
     expect_token = JSON.parse(response.body)["token"]
     expect(expect_token).to be "12345asdfgqwerty"
   end
