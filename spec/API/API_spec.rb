@@ -3,7 +3,23 @@ require "rails_helper"
 RSpec.describe "API call", :type => :request do
   before(:each) do
       DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+
+      post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"token1" } }
+
+      post "/devices.json", 
+      params: { device: {
+        latitude:100, 
+        longitude:100, 
+        radius:20, 
+        token:"token2" } }  
   end
+
+
   it "creates a new device" do
     post "/devices.json", 
       params: { device: {
@@ -111,10 +127,14 @@ RSpec.describe "API call", :type => :request do
     expect(response).to have_http_status(201)
   end
 
-  xit "blocks" do
-    post "/blocks"
-    expect(response).to_not render_template(:show)
-  end
+  it "blocks" do
+    post "/blocks.json",
+      params: { 
+        blocker_token: "token1", 
+        blockee_token: "token2"
+      }
+    expect(response).to have_http_status(201)
+    end
 
   xit "echo" do
     post "/echo"
