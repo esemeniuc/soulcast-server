@@ -52,22 +52,15 @@ RSpec.describe SoulsController, type: :controller do
 		end
 	end
 	context 'Nearby' do #FIXME: tests are not passing because test expectations are wrong
-		xit 'two devices are within mutual radius' do
-			expect(@dev1.nearbyDeviceCount).to be 1
-			expect(@dev2.nearbyDeviceCount).to be 1
-		end
-		xit 'three devices are within mutual radius' do
+		it 'three devices are within mutual radius' do
 			expect(@dev1.nearbyDeviceCount).to be 2
 			expect(@dev2.nearbyDeviceCount).to be 2
-			expect(@dev5.nearbyDeviceCount).to be 2
+			expect(@dev5.nearbyDeviceCount).to be 3
 		end
-		xit 'No three devices are within mutual radius' do
-			expect(@dev2.nearbyDeviceCount).to be 0
+		it 'No three devices are within mutual radius' do
+			expect(@dev2.nearbyDeviceCount).to be 2
 			expect(@dev3.nearbyDeviceCount).to be 0
-			expect(@dev4.nearbyDeviceCount).to be 0
-		end
-		xit 'One device are within mutual radius' do
-			# expect(@dev1.nearby)=0
+			expect(@dev4.nearbyDeviceCount).to be 1
 		end
 	end
 end
