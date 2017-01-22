@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Block, type: :model do
-  before(:each) do
+  before(:example) do
     DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                           latitude: 50,
@@ -82,12 +82,13 @@ RSpec.describe Block, type: :model do
 
       context "dev4 also blocks dev1, but isn't nearby" do
         it "should still not allow dev4 to receive from dev1" do
+          Block.create(blocker_token: @dev4.token, blockee_token: @dev1.token)
           expect(@dev4.histories.count).to be 0
         end
       end
-     end
+    end
 
-    context "dev 2 and dev5 block dev1, and both dev2 and dev5 are nearby" do
+    context "dev2 and dev5 block dev1, and both dev2 and dev5 are nearby" do
       it "should not allow dev5 to receive from dev1" do
         Block.create(blocker_token: @dev5.token, blockee_token: @dev1.token)
         Block.create(blocker_token: @dev2.token, blockee_token: @dev1.token)
@@ -103,5 +104,45 @@ RSpec.describe Block, type: :model do
       end
     end
 
+    context "dev1 has dev2 and dev5 nearby" do
+      context "dev1 blocks dev2" do
+        before(:each) do
+          Block.create(blocker_token: @dev1.token, blockee_token: @dev2.token)
+        end
+
+        it "should show that dev1 has dev5 nearby only because dev2 is blocked" do
+          # binding.pry
+          expect(@dev1.nearbyDeviceCount).to be 1
+          expect(@dev1.reaches?(@dev2)).to be false
+          expect(@dev1.reaches?(@dev5)).to be true
+        end
+
+        it "should show that dev2 has dev5 nearby only" do
+          expect(@dev2.nearbyDeviceCount).to be 1
+          expect(@dev2.reaches?(@dev1)).to be false
+          expect(@dev2.reaches?(@dev5)).to be true
+        end
+
+        it "should show that dev5 has dev1, dev2, and dev4 nearby" do
+          expect(@dev5.nearbyDeviceCount).to be 3
+          expect(@dev5.reaches?(@dev1)).to be true
+          expect(@dev5.reaches?(@dev2)).to be true
+          expect(@dev5.reaches?(@dev4)).to be true
+        end
+
+        it "should send a soul to dev5 only" do
+          @soul1 = Soul.create(soulType: "testType1",
+                               s3Key: 10000000,
+                               epoch: Time.now.to_i,
+                               latitude: 50,
+                               longitude: -100,
+                               radius: 20,
+                               token: @dev1.token,
+                               device_id: @dev1.id)
+          expect(@dev2.histories.count).to be 0
+          expect(@dev5.histories.count).to be 1
+        end
+      end
+    end
   end
 end

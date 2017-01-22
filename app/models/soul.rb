@@ -61,7 +61,7 @@ class Soul < ApplicationRecord
   end
 
   def sendToOthers #send to other users
-    broadcast(self.device.devicesWithinMutualRangeAndNotBlocked)
+    broadcast(self.device.broadcastableDevices) #devices within mutual range and not blocked
   end
 
   def simulator #sends a soul to everyone from the simulation
