@@ -8,9 +8,7 @@ RSpec.describe "improves/edit", type: :view do
       :epoch => 1,
       :latitude => 1.5,
       :longitude => 1.5,
-      :radius => 1.5,
-      :token => "MyString",
-      :device => nil
+      :radius => 1.5
     ))
   end
 
@@ -30,10 +28,6 @@ RSpec.describe "improves/edit", type: :view do
       assert_select "input#improve_longitude[name=?]", "improve[longitude]"
 
       assert_select "input#improve_radius[name=?]", "improve[radius]"
-
-      assert_select "input#improve_token[name=?]", "improve[token]"
-
-      assert_select "input#improve_device_id[name=?]", "improve[device_id]"
     end
   end
 end

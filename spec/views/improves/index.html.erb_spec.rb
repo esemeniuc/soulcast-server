@@ -9,9 +9,7 @@ RSpec.describe "improves/index", type: :view do
         :epoch => 2,
         :latitude => 3.5,
         :longitude => 4.5,
-        :radius => 5.5,
-        :token => "Token",
-        :device => nil
+        :radius => 5.5
       ),
       Improve.create!(
         :soulType => "Soul Type",
@@ -19,9 +17,7 @@ RSpec.describe "improves/index", type: :view do
         :epoch => 2,
         :latitude => 3.5,
         :longitude => 4.5,
-        :radius => 5.5,
-        :token => "Token",
-        :device => nil
+        :radius => 5.5
       )
     ])
   end
@@ -34,7 +30,5 @@ RSpec.describe "improves/index", type: :view do
     assert_select "tr>td", :text => 3.5.to_s, :count => 2
     assert_select "tr>td", :text => 4.5.to_s, :count => 2
     assert_select "tr>td", :text => 5.5.to_s, :count => 2
-    assert_select "tr>td", :text => "Token".to_s, :count => 2
-    assert_select "tr>td", :text => nil.to_s, :count => 2
   end
 end

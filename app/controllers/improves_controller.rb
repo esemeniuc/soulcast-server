@@ -1,8 +1,7 @@
 class ImprovesController < ApplicationController
   before_action :set_improve, only: [:show, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token, only: [:create, :update] #for dev only, disables authenticity checking on create/update
-
-
+  
   # GET /improves
   # GET /improves.json
   def index
@@ -71,6 +70,6 @@ class ImprovesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def improve_params
-      params.require(:improve).permit(:soulType, :s3Key, :epoch, :latitude, :longitude, :radius, :token)
+      params.require(:improve).permit(:soulType, :s3Key, :epoch, :latitude, :longitude, :radius)
     end
 end

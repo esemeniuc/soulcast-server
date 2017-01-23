@@ -8,9 +8,7 @@ RSpec.describe "improves/show", type: :view do
       :epoch => 2,
       :latitude => 3.5,
       :longitude => 4.5,
-      :radius => 5.5,
-      :token => "Token",
-      :device => nil
+      :radius => 5.5
     ))
   end
 
@@ -22,7 +20,5 @@ RSpec.describe "improves/show", type: :view do
     expect(rendered).to match(/3.5/)
     expect(rendered).to match(/4.5/)
     expect(rendered).to match(/5.5/)
-    expect(rendered).to match(/Token/)
-    expect(rendered).to match(//)
   end
 end

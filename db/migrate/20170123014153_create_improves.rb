@@ -7,8 +7,6 @@ class CreateImproves < ActiveRecord::Migration[5.0]
       t.float :latitude
       t.float :longitude
       t.float :radius
-      t.string :token
-      t.references :device, foreign_key: true
 
       t.timestamps
     end

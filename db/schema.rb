@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170115222333) do
+ActiveRecord::Schema.define(version: 20170123014153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,11 +53,8 @@ ActiveRecord::Schema.define(version: 20170115222333) do
     t.float    "latitude"
     t.float    "longitude"
     t.float    "radius"
-    t.string   "token"
-    t.integer  "device_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["device_id"], name: "index_improves_on_device_id", using: :btree
   end
 
   create_table "souls", force: :cascade do |t|
@@ -82,6 +79,5 @@ ActiveRecord::Schema.define(version: 20170115222333) do
 
   add_foreign_key "histories", "devices"
   add_foreign_key "histories", "souls"
-  add_foreign_key "improves", "devices"
   add_foreign_key "souls", "devices"
 end
