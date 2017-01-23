@@ -6,12 +6,14 @@ RSpec.describe "Acceptance Test", :type => :request do
   end
 
   context 'cast soul Acceptance test' do
+    before(:each) do
     post "/devices.json", 
         params: { device: {
         latitude:100, 
         longitude:100, 
         radius:20, 
         token:"12345asdfgqwerty" } }
+    end
 
     it "registers device" do
       expect(response).to have_http_status(201) 
@@ -19,7 +21,7 @@ RSpec.describe "Acceptance Test", :type => :request do
 
     it "receives id" do
       device_id = JSON.parse(response.body)["id"]
-      expect(device_id).to be 100
+      expect(device_id).to be 1
     end
 
     it "sends soul" do
@@ -37,6 +39,7 @@ RSpec.describe "Acceptance Test", :type => :request do
   end
 
   context 'nearby Acceptance Test' do
+    before(:each) do
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                           latitude: 50,
                           longitude: -100,
@@ -46,6 +49,7 @@ RSpec.describe "Acceptance Test", :type => :request do
                           longitude: -100,
                           radius: 20.0)
     device_id = JSON.parse(response.body)["id"]
+    end
 
     xit "send soul when others out of range" do
       post "/souls.json", 
