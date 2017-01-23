@@ -41,8 +41,8 @@ RSpec.describe Device, type: :model do
                      longitude: -122.956075,
                      radius: 20.0)
 
-      expect(a.reaches?(b)).to be true
-      expect(b.reaches?(a)).to be true
+      expect(a.in_mutual_radius?(b)).to be true
+      expect(b.in_mutual_radius?(a)).to be true
     end
 
     #test case 1
@@ -57,8 +57,8 @@ RSpec.describe Device, type: :model do
                        longitude: -100,
                        radius: 10.0)
 
-        expect(a.reaches?(b)).to be false
-        expect(b.reaches?(a)).to be false
+        expect(a.in_mutual_radius?(b)).to be false
+        expect(b.in_mutual_radius?(a)).to be false
       end
     end
   end
@@ -95,15 +95,15 @@ RSpec.describe Device, type: :model do
 
     context "dev1 should reach dev2 and vice versa" do
       it "should reach each other" do
-        expect(@dev1.reaches?(@dev2)).to be true
-        expect(@dev2.reaches?(@dev1)).to be true
+        expect(@dev1.in_mutual_radius?(@dev2)).to be true
+        expect(@dev2.in_mutual_radius?(@dev1)).to be true
       end
     end
 
     context "dev1 should reach dev5 and vice versa" do
       it "should reach each other" do
-        expect(@dev1.reaches?(@dev5)).to be true
-        expect(@dev5.reaches?(@dev1)).to be true
+        expect(@dev1.in_mutual_radius?(@dev5)).to be true
+        expect(@dev5.in_mutual_radius?(@dev1)).to be true
       end
     end
 
@@ -115,15 +115,15 @@ RSpec.describe Device, type: :model do
 
     context "dev1 is not near dev3" do
       it "should not reach test device" do
-        expect(@dev1.reaches?(@dev3)).to be false
-        expect(@dev3.reaches?(@dev1)).to be false
+        expect(@dev1.in_mutual_radius?(@dev3)).to be false
+        expect(@dev3.in_mutual_radius?(@dev1)).to be false
       end
     end
 
     context "dev1 is not near dev4" do
       it "should not reach test device" do
-        expect(@dev1.reaches?(@dev4)).to be false
-        expect(@dev4.reaches?(@dev1)).to be false
+        expect(@dev1.in_mutual_radius?(@dev4)).to be false
+        expect(@dev4.in_mutual_radius?(@dev1)).to be false
       end
     end
   end

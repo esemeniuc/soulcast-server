@@ -123,14 +123,15 @@ RSpec.describe HistoriesController, type: :controller do
                      radius: 20,
                      token: @dev2.token,
                      device_id: @dev2.id)
+      # binding.pry
+      expect(@dev1.histories.count).to be 1
       @dev1.block(@dev2)
-      histories = History.find_by(@dev1.id)
-      expect(histories.count).to be 0
+      expect(@dev1.histories.count).to be 0
     end
   end
 
   context "dev1 is blocked by dev2, dev1 sends a soul to all nearby and not blocked" do
-    it "should have no history for dev2" do
+    it "should have no history for dev2 yet" do
       # expect to see soul from dev1 in history of dev2
       Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
       expect(@dev2.histories.count).to be 0
@@ -151,11 +152,13 @@ RSpec.describe HistoriesController, type: :controller do
                          device_id: @dev1.id)
     end
     it "should have no history for dev2" do
+      expect(@dev2.histories.count).to be 1
       Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
       expect(@dev2.histories.count).to be 0
     end
 
     it "should have no history for dev5" do
+      expect(@dev5.histories.count).to be 1
       Block.create(blocker_id: @dev5.id, blockee_id: @dev1.id)
       expect(@dev5.histories.count).to be 0
     end
