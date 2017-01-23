@@ -6,22 +6,38 @@ RSpec.describe "Acceptance Test", :type => :request do
   end
 
   context 'cast soul Acceptance test' do
-    it "registers device" do
-      post "/devices.json", 
+    before(:each) do
+    post "/devices.json", 
         params: { device: {
         latitude:100, 
         longitude:100, 
         radius:20, 
         token:"12345asdfgqwerty" } }
+<<<<<<< HEAD
       expect(response).to have_http_status(201)
       expect_token = JSON.parse(response.body)["token"]
 
+=======
     end
 
-    xit "receives id" do
+    it "registers device" do
+      expect(response).to have_http_status(201) 
+>>>>>>> driftodev
     end
 
-    xit "sends soul" do
+    it "receives id" do
+      device_id = JSON.parse(response.body)["id"]
+      expect(device_id).to be 1
+    end
+
+    it "sends soul" do
+      post "/souls.json", 
+      params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:100, longitude:100, radius:20, 
+        token:"12345asdfgqwerty" } }
+      expect(response).to have_http_status(201)
     end
 
     xit "receives confirmation" do
@@ -29,13 +45,42 @@ RSpec.describe "Acceptance Test", :type => :request do
   end
 
   context 'nearby Acceptance Test' do
+    before(:each) do
+    @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
+                          latitude: 50,
+                          longitude: -100,
+                          radius: 20.0)
+    @dev3 = Device.create(token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          latitude: 25,
+                          longitude: -100,
+                          radius: 20.0)
+    device_id = JSON.parse(response.body)["id"]
+    end
+
     xit "send soul when others out of range" do
+      post "/souls.json", 
+      params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:100, longitude:100, radius:20, 
+        token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" } }
     end
+
     xit "check it is not received" do
+      expect(@dev3.histories.count).to be 0
     end
+
     xit "others move into range" do
+      patch "/devices/#{device_id}.json",
+        params: { device: { latitude: 30,
+                          longitude: -100,
+                          radius: 20.0,
+                          token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                        } }
     end
+
     xit "send soul and check indeed received" do
+      expect(@dev3.histories.count).to be 0
     end
   end
 
