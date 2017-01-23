@@ -175,6 +175,10 @@ RSpec.describe HistoriesController, type: :controller do
       Block.create(blocker_id: @dev4.id, blockee_id: @dev1.id)
       expect(@dev4.histories.count).to be 0
     end
+
+    xit "should not make history for self" do
+
+    end
   end
 
 end
