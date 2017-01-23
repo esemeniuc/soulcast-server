@@ -7,8 +7,6 @@ class Soul < ApplicationRecord
   after_save :updateDeviceLocation, :sendToOthers, :status_output
 
   def get_device
-    self.simulator #hax for june's simulator, run first because we wont find token with 'AAAAAA...'
-
     if self.device == nil # associate a device to our soul, not a hack
       self.device = Device.find_by_token(self.token)
     end
@@ -62,12 +60,6 @@ class Soul < ApplicationRecord
 
   def sendToOthers #send to other users
     broadcast(self.device.broadcastableDevices) #devices within mutual range and not blocked
-  end
-
-  def simulator #sends a soul to everyone from the simulation
-    if self.token == ENV.fetch('simulatorToken') # for simulator, set our token to be june's token if found
-      self.sendToEveryone
-    end
   end
 
   def status_output
