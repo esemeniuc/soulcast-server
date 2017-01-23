@@ -13,16 +13,11 @@ RSpec.describe "Acceptance Test", :type => :request do
         longitude:100, 
         radius:20, 
         token:"12345asdfgqwerty" } }
-<<<<<<< HEAD
-      expect(response).to have_http_status(201)
-      expect_token = JSON.parse(response.body)["token"]
-
-=======
-    end
+      end
 
     it "registers device" do
-      expect(response).to have_http_status(201) 
->>>>>>> driftodev
+      expect(response).to have_http_status(201)
+      expect_token = JSON.parse(response.body)["token"]
     end
 
     it "receives id" do
