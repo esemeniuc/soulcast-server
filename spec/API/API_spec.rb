@@ -1,4 +1,4 @@
-  require "rails_helper"
+require "rails_helper"
 
 RSpec.describe "API call", :type => :request do
   before(:each) do
@@ -154,7 +154,7 @@ RSpec.describe "API call", :type => :request do
   end
 
   context "a blocks b, b sends out a soul" do
-    it "should not have b's soul in a's history" do
+    it "should not have b's soul in a's history or call node" do
       post "/devices.json",
            params: { device: {
                latitude:100,
@@ -169,11 +169,14 @@ RSpec.describe "API call", :type => :request do
                longitude:100,
                radius:20,
                token:"BBBBBBBB" } }
+
       post "/blocks.json",
         params: { block: {
           blocker_token: "AAAAAAAA",
           blockee_token: "BBBBBBBB"
         } }
+
+      # binding.pry
       post "/souls.json",
           params: { soul: {
           soulType: "RSpecTestSoul", 
@@ -183,7 +186,7 @@ RSpec.describe "API call", :type => :request do
           longitude:100,
           radius:20,
           token:"BBBBBBBB" } }
-      # binding.pry
+
       get "/device_history/#{dev1id}.json"
       soulHistoryArray = JSON.parse(response.body)
       expect(soulHistoryArray.size).to be 0

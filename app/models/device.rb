@@ -6,23 +6,27 @@ class Device < ApplicationRecord
   validates :token, :latitude, :longitude, :radius, presence: true
   validates :token, uniqueness: true
 
-  def self.allRecentDevices
-    return Device.where('updated_at > ?', 1.week.ago).order(:updated_at) #all devices updated in the last week
+  def is_blocking?(input_device) #does this device block input_device?
+    return Block.where(blocker_id: self.id, blockee_id: input_device.id).exists?
   end
 
-  def otherRecentDevices
-    return Device.where('updated_at > ?', 1.week.ago).where.not(id: self.id).order(:updated_at) #all devices except the caller updated in the last week
+  def is_blocked_by?(input_device) #is this device blocked by input_device?
+    return Block.where(blocker_id: input_device.id, blockee_id: self.id).exists?
   end
 
   def blocked?(input_device)
-    return Block.where(blocker_id: self.id, blockee_id: input_device.id).exists?
+    if self.is_blocking?(input_device) || self.is_blocked_by?(input_device)
+      return true
+    end
+
+    return false
   end
 
   def not_blocked?(input_device)
     return !blocked?(input_device)
   end
 
-  def reaches?(device) # check if this device reaches another device
+  def in_mutual_radius?(device) # check if this device is in the mutual radius another device
     # debug print
     # puts 'Self radius: ' + self.radius.to_s + "\tDevice radius: " + device.radius.to_s
 
@@ -32,21 +36,23 @@ class Device < ApplicationRecord
     return (distance < radiusInKM)
   end
 
-  def devicesWithinMutualRangeAndNotBlocked # returns an array of all devices that are in the mutual radius and not blocked
-    allDevices = devicesWithinMutualRange
-    broadcaster_id = self.id # this is an int
-    devicesToRemove = Device.where(id: Block.where(blockee_id: broadcaster_id).pluck(:blockee_id)) #inner query gets all ids that blocked the broadcaster
-    result = allDevices - devicesToRemove
-
-    puts "All other devices within mutual range: " + allDevices.count.to_s + ", All non blocked: " + result.count.to_s
-    return result
+  def reaches?(input_device) #check if a soul sent from this device can be transmitted to another device
+    return in_mutual_radius?(input_device) && not_blocked?(input_device)
   end
 
-  def devicesWithinMutualRange # returns an array of recent devices in the mutual radius
+  def self.allRecentDevices
+    return Device.where('updated_at > ?', 1.week.ago).order(:updated_at) #all devices updated in the last week
+  end
+
+  def otherRecentDevices
+    return Device.where('updated_at > ?', 1.week.ago).where.not(id: self.id).order(:updated_at) #all devices except the caller updated in the last week
+  end
+
+  def devicesWithinMutualRange # returns an array of recent devices in the mutual radius including blocked devices
     devicesInRange = []
 
-    otherRecentDevices.each do |device| # FIXME to use soul radius, currently using device-device radius
-      if reaches?(device)
+    otherRecentDevices.each do |device|
+      if in_mutual_radius?(device)
         devicesInRange.append(device)
       end
     end
@@ -54,8 +60,22 @@ class Device < ApplicationRecord
     return devicesInRange
   end
 
-  def nearbyDeviceCount #returns the number of non blocked nearby device updated in the last week
-    return devicesWithinMutualRangeAndNotBlocked.count
+  # returns an array of all devices in mutual radius that did not block the sender and the sender did no block
+  def broadcastableDevices
+    allDevices = devicesWithinMutualRange
+    devicesBlockingSender = Block.where(blockee_id: self.id).pluck(:blocker_id)
+    devicesBlockedBySender = Block.where(blocker_id: self.id).pluck(:blockee_id)
+    deviceIDsToRemove = devicesBlockingSender | devicesBlockedBySender
+
+    devicesToRemove = Device.where(id: deviceIDsToRemove) #inner query gets all ids that blocked the broadcaster
+    result = allDevices - devicesToRemove
+
+    puts allDevices.count.to_s + " other devices within mutual range, " + result.count.to_s + " other devices that are not blocked"
+    return result
+  end
+
+  def nearbyDeviceCount #returns the number nearby devices non blocked updated in the last week
+    return broadcastableDevices.count
   end
 
   def block (blockee)
