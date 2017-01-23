@@ -6,17 +6,19 @@ RSpec.describe "Acceptance Test", :type => :request do
   end
 
   context 'cast soul Acceptance test' do
-    it "registers device" do
-      post "/devices.json", 
+    post "/devices.json", 
         params: { device: {
         latitude:100, 
         longitude:100, 
         radius:20, 
         token:"12345asdfgqwerty" } }
+
+    it "registers device" do
       expect(response).to have_http_status(201) 
     end
 
-    xit "receives id" do
+    it "receives id" do
+      
     end
 
     xit "sends soul" do
