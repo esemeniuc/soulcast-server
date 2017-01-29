@@ -35,6 +35,13 @@ sudo -u postgres createuser -s soulcast
 sudo -u postgres psql
 echo "\password soulcast\nsoulcastpass\nsoulcastpass\n\q\n"
 
+###for apple users
+brew install postgresql nodejs
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+createuser -s soulcast
+psql -d postgres
+npm install apn
+
 ###this installs RVM and Rails
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
