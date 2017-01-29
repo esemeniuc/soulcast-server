@@ -5,14 +5,19 @@ RSpec.describe "Acceptance Test", :type => :request do
       DatabaseCleaner.clean_with(:truncation, reset_ids: true)
   end
 
-  context 'cast soul Acceptance test' do
+#TODO: make it cast to another device...
+  context 'cast soul' do
+    @castingToken = "12345asdfgqwerty"
     before(:each) do
-    post "/devices.json", 
-        params: { device: {
-        latitude:100, 
-        longitude:100, 
-        radius:20, 
-        token:"12345asdfgqwerty" } }
+      post "/devices.json", 
+          params: { device: {
+          latitude:100, 
+          longitude:100, 
+          radius:20, 
+          token: @castingToken} }
+
+      #TODO: make another device...
+
     end
 
     it "registers device" do
@@ -31,12 +36,13 @@ RSpec.describe "Acceptance Test", :type => :request do
         soulType: "RSpecTestSoul", 
         s3Key: 12345, epoch:123456789, 
         latitude:100, longitude:100, radius:20, 
-        token:"12345asdfgqwerty" } }
+        token: @castingToken } }
       expect(response).to have_http_status(201)
+      #TODO: check node script receipt
     end
   end
-
-  context 'nearby Acceptance Test' do
+#TODO: rename...
+  context 'nearby device 3' do
     before(:each) do
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                           latitude: 50,
@@ -48,7 +54,7 @@ RSpec.describe "Acceptance Test", :type => :request do
                           radius: 20.0)
     end
 
-    it "send soul when others out of range and check it is not received" do
+    it "does not receive soul when out of range" do
       post "/souls.json", 
       params: { soul: {
         soulType: "RSpecTestSoul", 
@@ -56,10 +62,11 @@ RSpec.describe "Acceptance Test", :type => :request do
         latitude:100, longitude:100, radius:20, 
         token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" 
         } }
-      expect(@dev3.histories.count).to be 0
+      #expect(@dev3.histories.count).to be 0
     end
 
-    it "device3 move into range and now send soul and check indeed received" do
+#TODO: rename
+    it "can listen to soul only when in range" do
       post "/souls.json", 
       params: { soul: {
         soulType: "RSpecTestSoul", 

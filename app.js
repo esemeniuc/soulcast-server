@@ -19,13 +19,6 @@ var payloadJSON = JSON.parse(process.argv[3]);
 //4 tokens string to send to
 var deviceTokens = process.argv[4].split(" "); //split on spaces
 
-
-//print out what was executed
-for(var i = 0; i < process.argv.length; i++)
-{
-    console.log(i + ': ' + process.argv[i]);
-}
-
 //enable assertions
 const assert = require('assert');
 
