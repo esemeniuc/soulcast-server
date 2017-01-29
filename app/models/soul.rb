@@ -1,9 +1,9 @@
 class Soul < ApplicationRecord
   belongs_to :device
-  has_many :histories
+  has_many :histories, dependent: :destroy
   # has_one :history, through: :device
-  validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, :device_id, presence: true
   before_validation :get_device
+  validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, :device_id, presence: true
   after_save :updateDeviceLocation, :sendToOthers, :status_output
 
   def get_device
