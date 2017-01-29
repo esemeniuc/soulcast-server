@@ -13,7 +13,7 @@ RSpec.describe "Acceptance Test", :type => :request do
         longitude:100, 
         radius:20, 
         token:"12345asdfgqwerty" } }
-      end
+    end
 
     it "registers device" do
       expect(response).to have_http_status(201)
@@ -25,7 +25,7 @@ RSpec.describe "Acceptance Test", :type => :request do
       expect(device_id).to be 1
     end
 
-    it "sends soul" do
+    it "sends soul and receives confirmation" do
       post "/souls.json", 
       params: { soul: {
         soulType: "RSpecTestSoul", 
@@ -33,9 +33,6 @@ RSpec.describe "Acceptance Test", :type => :request do
         latitude:100, longitude:100, radius:20, 
         token:"12345asdfgqwerty" } }
       expect(response).to have_http_status(201)
-    end
-
-    xit "receives confirmation" do
     end
   end
 
@@ -49,33 +46,42 @@ RSpec.describe "Acceptance Test", :type => :request do
                           latitude: 25,
                           longitude: -100,
                           radius: 20.0)
-    device_id = JSON.parse(response.body)["id"]
     end
 
-    xit "send soul when others out of range" do
+    it "send soul when others out of range and check it is not received" do
       post "/souls.json", 
       params: { soul: {
         soulType: "RSpecTestSoul", 
         s3Key: 12345, epoch:123456789, 
         latitude:100, longitude:100, radius:20, 
-        token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" } }
-    end
-
-    xit "check it is not received" do
+        token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" 
+        } }
       expect(@dev3.histories.count).to be 0
     end
 
-    xit "others move into range" do
-      patch "/devices/#{device_id}.json",
+    it "device3 move into range and now send soul and check indeed received" do
+      post "/souls.json", 
+      params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:100, longitude:100, radius:20, 
+        token:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
+        } }
+      device3_id = JSON.parse(response.body)["id"]
+      patch "/devices/#{device3_id}.json",
         params: { device: { latitude: 30,
                           longitude: -100,
                           radius: 20.0,
                           token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                         } }
-    end
-
-    xit "send soul and check indeed received" do
-      expect(@dev3.histories.count).to be 0
+      post "/souls.json", 
+      params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:100, longitude:100, radius:20, 
+        token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" 
+        } }
+      expect(@dev3.histories.count).to be 1
     end
   end
 
