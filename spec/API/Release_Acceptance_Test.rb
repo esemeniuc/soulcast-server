@@ -86,21 +86,73 @@ RSpec.describe "Acceptance Test", :type => :request do
   end
 
   context 'blocking Acceptance Test' do
-    xit "1 sends a soul to another" do
+    before(:each) do
+      @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
+                          latitude: 50,
+                          longitude: -100,
+                          radius: 20.0)
+      @dev3 = Device.create(token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          latitude: 30,
+                          longitude: -100,
+                          radius: 20.0)
     end
 
-    xit "receiver has bad soul in history" do
+    it "dev1 sends a soul, dev3 block dev1, and check nearby" do
+      get "/nearby", params: { latitude:100, 
+                             longitude:100, 
+                             radius:20, 
+                             token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" }
+      dev1nearby_count = JSON.parse(response.body)["nearby"]
+      expect(dev1nearby_count).to be 1
+      get "/nearby", params: { latitude:100, 
+                             longitude:100, 
+                             radius:20, 
+                             token:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }
+      dev3nearby_count = JSON.parse(response.body)["nearby"]
+      expect(dev3nearby_count).to be 1
+      post "/souls.json", 
+        params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:50, longitude:-100, radius:20, 
+        token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" 
+      } }
+      post "/blocks.json",
+      params: { block: {
+        blocker_token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        blockee_token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104"
+      } }
+      get "/nearby", params: { latitude:100, 
+                             longitude:100, 
+                             radius:20, 
+                             token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" }
+      dev1nearby_count = JSON.parse(response.body)["nearby"]
+      expect(dev1nearby_count).to be 0
+      get "/nearby", params: { latitude:100, 
+                             longitude:100, 
+                             radius:20, 
+                             token:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }
+      dev3nearby_count = JSON.parse(response.body)["nearby"]
+      expect(dev3nearby_count).to be 0
     end
 
-    xit "block bad sender" do
+    it "retry send soul and check indeed not received " do
+      post "/blocks.json",
+        params: { block: {
+        blocker_token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        blockee_token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104"
+      } }
+      post "/souls.json", 
+        params: { soul: {
+        soulType: "RSpecTestSoul", 
+        s3Key: 12345, epoch:123456789, 
+        latitude:50, longitude:-100, radius:20, 
+        token:"5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104" 
+      } }
+      expect(@dev3.histories.count).to be 0
     end
-    xit "check whether nearby works on both sides" do
-    end
-    xit "retry send soul" do
-    end
+
     xit "check node script no push notif was sent" do
-    end
-    xit "send soul and check indeed received" do
     end
   end
 end
