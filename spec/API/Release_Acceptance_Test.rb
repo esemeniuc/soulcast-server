@@ -5,6 +5,14 @@ RSpec.describe "Acceptance Test", :type => :request do
       DatabaseCleaner.clean_with(:truncation, reset_ids: true)
   end
 
+  xit "when blocking, history removal must be mutual" do
+
+  end
+
+  xit "2 to 1 nearby test" do
+
+  end
+
 #TODO: make it cast to another device...
   context 'cast soul' do
     @castingToken = "12345asdfgqwerty"
