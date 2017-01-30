@@ -33,7 +33,8 @@ class DevicesController < ApplicationController
         format.json { render :show, status: :created, location: @device }
       else
         format.html { render :new }
-        format.json { head :unprocessable_entity } #return json of matching token rather than show error
+        #format.json { render json: @device.errors, status: :unprocessable_entity }
+        format.json { render json: Device.find_by_token(@device.token) } #return json of matching token rather than show error
       end
     end
   end
@@ -103,12 +104,15 @@ class DevicesController < ApplicationController
     #   end
     # end
 
-    @device = Device.find_by_id(params[:id])
-    #params[:token] == nil means we are browsing the page and removing it will make errors
-    if params[:token] != nil && (@device == nil || @device.token != params[:token])
-      @device = Device.find_by_token(params[:token])
-    end
+    ##alt for using existing id
+    # @device = Device.find_by_id(params[:id])
+    # #params[:token] == nil means we are browsing the page and removing it will make errors
+    # if params[:token] != nil && (@device == nil || @device.token != params[:token])
+    #   @device = Device.find_by_token(params[:token])
+    # end
 
+    #stock
+    @device = Device.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
