@@ -186,30 +186,29 @@ RSpec.describe HistoriesController, type: :controller do
     # they are all reachable
     # dev2 later blocks dev1, so should show 0 histories for both
 
-    before(:all) do
-      @soul1 = Soul.create(soulType: "testType1",
-                         s3Key: 10000000,
-                         epoch: 1000000,
-                         latitude: 50,
-                         longitude: -100,
-                         radius: 20,
-                         token: @dev1.token,
-                         device_id: @dev1.id)
-      @soul2 = Soul.create(soulType: "testType1",
-                         s3Key: 10000000,
-                         epoch: 1000000,
-                         latitude: 50,
-                         longitude: -100,
-                         radius: 20,
-                         token: @dev2.token,
-                         device_id: @dev2.id)
-    end
     it "should have no history for dev2, no history for dev1" do
-      expect(@dev2.histories.count).to be 1
-      expect(@dev1.histories.count).to be 1
+      soul1 = Soul.create(soulType: "testType1",
+                     s3Key: 10000000,
+                     epoch: 1000000,
+                     latitude: 50,
+                     longitude: -100,
+                     radius: 20,
+                     token: @dev1.token,
+                     device_id: @dev1.id)
+      soul2 = Soul.create(soulType: "testType1",
+                     s3Key: 10000000,
+                     epoch: 1000001,
+                     latitude: 50,
+                     longitude: -100,
+                     radius: 20,
+                     token: @dev2.token,
+                     device_id: @dev2.id)
+
+      expect(@dev2.histories.count).to eq(1)
+      expect(@dev1.histories.count).to eq(1)
       Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
-      expect(@dev2.histories.count).to be 0
-      expect(@dev1.histories.count).to be 0
+      expect(@dev2.histories.count).to eq(0)
+      expect(@dev1.histories.count).to eq(0)
     end
 
     
