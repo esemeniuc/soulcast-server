@@ -211,7 +211,6 @@ RSpec.describe HistoriesController, type: :controller do
       expect(@dev1.histories.count).to eq(0)
     end
 
-    
   end
 
 end
