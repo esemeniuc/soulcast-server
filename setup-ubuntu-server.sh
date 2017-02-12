@@ -16,7 +16,7 @@ sudo apt-get install curl
 ###install nodejs (required for rails)
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
-sudo npm install apn dotenv
+sudo npm install -s apn dotenv
 
 ###install and setup nginx
 sudo add-apt-repository ppa:nginx/stable
@@ -35,12 +35,18 @@ sudo -u postgres createuser -s soulcast
 sudo -u postgres psql
 echo "\password soulcast\nsoulcastpass\nsoulcastpass\n\q\n"
 
-###for apple users
+#for arch
+sudo pacman -S postgresql
+sudo -u postgres -i
+initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+systemctl start postgresql.service
+
+#for apple users
 brew install postgresql nodejs
 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
 createuser -s soulcast
 psql -d postgres
-npm install apn
+npm install -s apn
 
 ###this installs RVM and Rails
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3

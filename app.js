@@ -5,7 +5,7 @@
 //system 'node app.js "alertMessage" "{\"id\":123}" "aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb 5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104"'
 
 //Command from bash
-//nodejs app.js "Incoming Soul" '{"soulObject":{"id":null,"soulType":null,"s3Key":"1478379996","epoch":1478379996,"longitude":-122.91424100294,"latitude":49.27776454089607,"radius":0.01559111972229993,"token":"aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb","device_id":3,"created_at":null,"updated_at":null}}' "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104 aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb"
+//node app.js "Incoming Soul" '{"soulObject":{"id":null,"soulType":null,"s3Key":"1478379996","epoch":1478379996,"longitude":-122.91424100294,"latitude":49.27776454089607,"radius":0.01559111972229993,"token":"aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb","device_id":3,"created_at":null,"updated_at":null}}' "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104 aad30922df1f4ebe9a393e6cc8671b67543c5fbbea53da10789c1b7b347aa6cb"
 
 "use strict"; //strict mode
 
@@ -80,10 +80,10 @@ apnProvider.send(notification, deviceTokens).then(function(result)
 {
     // Check the result for any failed devices
     console.log(result);
-//    process.exit()
+    process.exit(result.sent.length); //return how many devices were successfully sent to`
 });
 
 // For one-shot notification tasks you may wish to shutdown the connection
 // after everything is sent, but only call shutdown if you need your
 // application to terminate.
-apnProvider.shutdown();
+// apnProvider.shutdown();
