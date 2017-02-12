@@ -50,7 +50,7 @@ var apnProvider = new apn.Provider({
         keyId: 'VK2F43FXVB', // The Key ID of the p8 file (available at https://developer.apple.com/account/ios/certificate/key)
         teamId: '59SVXWFZ98' // The Team ID of your Apple Developer Account (available at https://developer.apple.com/account/#/membership/)
     },
-    production: false // Set to true if sending a notification to a production iOS app
+    production: true // Set to true if sending a notification to a production iOS app
 });
 
 
@@ -80,7 +80,7 @@ apnProvider.send(notification, deviceTokens).then(function(result)
 {
     // Check the result for any failed devices
     console.log(result);
-    process.exit(result.sent.length); //return how many devices were successfully sent to`
+    process.exit(result.sent.length); //return how many devices were successfully sent to
 });
 
 // For one-shot notification tasks you may wish to shutdown the connection

@@ -24,10 +24,23 @@ sudo apt-get update
 sudo apt-get install nginx-light
 
 sudo wget $nginx_config -O /etc/nginx/sites-available/soulcast.ml.conf
-
 sudo ln -s /etc/nginx/sites-available/soulcast.ml.conf /etc/nginx/sites-enabled/soulcast.ml.conf
 sudo rm /etc/nginx/sites-enabled/default
+
+###add ssl support
+wget https://raw.githubusercontent.com/lukas2511/dehydrated/master/dehydrated
+chmod +x dehydrated
+mkdir /etc/dehydrated
+
+echo 'WELLKNOWN="/home/ubuntu/soulcast.ml/soulcast-server/public/.well-known/acme-challenge"
+CONTACT_EMAIL="admin@soulcast.ml"
+' > /etc/dehydrated/config
+
+echo "soulcast.ml" > /etc/dehydrated/domains.txt
+
+@monthly /usr/bin/letsencrypt.sh -c
 sudo service nginx start
+
 
 ###install postgres #libpq-dev for pg gem
 sudo apt-get install postgresql libpq-dev
@@ -37,8 +50,9 @@ echo "\password soulcast\nsoulcastpass\nsoulcastpass\n\q\n"
 
 #for arch
 sudo pacman -S postgresql
-sudo -u postgres -i
-initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+sudo -H -u postgres bash -c "initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'"
+#sudo -u postgres -i
+#initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
 systemctl start postgresql.service
 
 #for apple users
