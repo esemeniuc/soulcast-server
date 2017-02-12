@@ -1,7 +1,8 @@
 class Device < ApplicationRecord
-  has_many :souls, dependent: :destroy
+
   # has_many :blocks
   has_many :histories, dependent: :destroy
+  has_many :souls, dependent: :destroy
   # has_one :history
   validates :token, :latitude, :longitude, :radius, presence: true
   validates :token, uniqueness: true
