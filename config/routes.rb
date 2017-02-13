@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'static_pages/index'
+
+  get 'static_pages/eula'
+  
   resources :improves
   resources :blocks
   resources :histories
@@ -7,7 +11,7 @@ Rails.application.routes.draw do
   resources :devices
 
   # actual stuff
-  root  'website#index' # show the homepage in production mode
+  root  'static_pages#index' # show the homepage in production mode
   get   'nearby',   to: 'devices#nearby' # returns how many devices nearby
   get   'device_history/:id',  to: 'histories#device_history'
 
