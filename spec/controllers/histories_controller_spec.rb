@@ -141,7 +141,7 @@ RSpec.describe HistoriesController, type: :controller do
   context "blocking after sending a soul" do
     # dev1 sends a soul to all nearby, dev1 is later blocked by dev2 and dev5
     # dev1 is reachable by dev2, dev5, and dev6
-    before(:all) do
+    before(:each) do
       @soul = Soul.create(soulType: "testType1",
                          s3Key: 10000000,
                          epoch: 1000000,
@@ -179,6 +179,38 @@ RSpec.describe HistoriesController, type: :controller do
     xit "should not make history for self" do
 
     end
+  end
+
+  context "blocking after both devices send a soul" do
+    # dev1 sends a soul to all nearby, dev2 seconds a soul to all nearby
+    # they are all reachable
+    # dev2 later blocks dev1, so should show 0 histories for both
+
+    it "should have no history for dev2, no history for dev1" do
+      soul1 = Soul.create(soulType: "testType1",
+                     s3Key: 10000000,
+                     epoch: 1000000,
+                     latitude: 50,
+                     longitude: -100,
+                     radius: 20,
+                     token: @dev1.token,
+                     device_id: @dev1.id)
+      soul2 = Soul.create(soulType: "testType1",
+                     s3Key: 10000000,
+                     epoch: 1000001,
+                     latitude: 50,
+                     longitude: -100,
+                     radius: 20,
+                     token: @dev2.token,
+                     device_id: @dev2.id)
+      # binding.pry
+      expect(@dev2.histories.count).to eq(1)
+      expect(@dev1.histories.count).to eq(1)
+      Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
+      expect(@dev2.histories.count).to eq(0)
+      expect(@dev1.histories.count).to eq(0)
+    end
+
   end
 
 end
