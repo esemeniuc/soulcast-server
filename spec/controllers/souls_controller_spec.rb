@@ -27,6 +27,18 @@ RSpec.describe SoulsController, type: :controller do
 													latitude: 60,
 													longitude: -100,
 													radius: 20.0)
+		@dev6 = Device.create(token: "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+                          latitude: 49.277712,
+                          longitude: -122.914274,
+                          radius: 10.0)
+    	@dev7 = Device.create(token: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                          latitude: 49.277782,
+                          longitude: -122.915068,
+                          radius: 10.0)
+    	@dev8 = Device.create(token: "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+                          latitude: 41.643138,
+                          longitude: -121.699750,
+                          radius: 10.0)
   end
 
 	context 'does end to end transmission' do
@@ -61,6 +73,28 @@ RSpec.describe SoulsController, type: :controller do
 			expect(@dev2.nearbyDeviceCount).to be 2
 			expect(@dev3.nearbyDeviceCount).to be 0
 			expect(@dev4.nearbyDeviceCount).to be 1
+		end
+	end
+
+	context 'Nearby real lat long' do
+		it 'two devices are within mutual radius' do
+			expect(@dev6.nearbyDeviceCount).to be 1
+			expect(@dev7.nearbyDeviceCount).to be 1
+		end
+
+		it 'no devices mutual in dev8' do
+			expect(@dev8.nearbyDeviceCount).to be 0
+		end
+		it 'Cast a soul not within mutal radius of another' do
+			soul1 = Soul.create(soulType: "testType1",
+				s3Key: 10000000,
+				epoch: 1000000,
+				latitude: 49.277712,
+                longitude: -122.914274,
+				radius: 10,
+				token: @dev6.token)
+			expect(@dev7.histories.count).to be 1
+			expect(@dev8.histories.count).to be 0
 		end
 	end
 end

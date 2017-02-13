@@ -32,6 +32,7 @@ RSpec.describe HistoriesController, type: :controller do
                           latitude: 40,
                           longitude: -100,
                           radius: 20.0)
+
   end
   
   #add souls from 1 originating device to the history of the second device
