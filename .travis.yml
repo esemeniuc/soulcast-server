@@ -1,0 +1,18 @@
+language: ruby
+rvm:
+- 2.3.0
+- 2.4.0
+
+before_install:
+  - "rm ${BUNDLE_GEMFILE}.lock"
+  - "gem update --system"
+  - "gem update bundler"
+
+script:
+  - bin/rake db:setup
+  - bin/rake spec
+cache: bundler
+services:
+  - postgresql
+addons:
+  postgresql: "9.6"
