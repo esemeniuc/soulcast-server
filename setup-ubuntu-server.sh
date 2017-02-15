@@ -45,6 +45,7 @@ sudo service nginx start
 ###install postgres #libpq-dev for pg gem
 sudo apt-get install postgresql libpq-dev
 sudo -u postgres createuser -s soulcast
+#sudo -u postgres psql --command '\password postgres'
 sudo -u postgres psql
 echo "\password soulcast\nsoulcastpass\nsoulcastpass\n\q\n"
 

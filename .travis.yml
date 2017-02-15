@@ -9,6 +9,8 @@ before_install:
   - "gem update bundler"
 
 script:
+  - "sudo -u postgres createuser -s soulcast"
+  - sudo -u postgres psql -c "ALTER USER soulcast WITH PASSWORD 'soulcast';"
   - bin/rake db:setup
   - bin/rake spec
 cache: bundler
@@ -16,3 +18,6 @@ services:
   - postgresql
 addons:
   postgresql: "9.6"
+
+sudo: "required" #for 14.04
+dist: "trusty"
