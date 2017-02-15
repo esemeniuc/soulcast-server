@@ -9,6 +9,8 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
+
+# http://theflyingdeveloper.com/controller-specific-assets-with-rails-4/
 controllers = Dir['app/controllers/*.rb'].map {|f| File.basename(f, ".rb").chomp("_controller")} #used for custom css loading
 controllers.each do |controller|
   Rails.application.config.assets.precompile += ["#{controller}.js.coffee", "#{controller}.css"]
