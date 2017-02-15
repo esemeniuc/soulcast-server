@@ -4,6 +4,8 @@ rvm:
 - 2.4.0
 
 before_install:
+  - curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+  - sudo apt-get install -y nodejs
   - npm install apn
   - "rm ${BUNDLE_GEMFILE}.lock"
   - "gem update --system"
