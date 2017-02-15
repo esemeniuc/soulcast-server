@@ -4,6 +4,7 @@ rvm:
 - 2.4.0
 
 before_install:
+  - npm install apn
   - "rm ${BUNDLE_GEMFILE}.lock"
   - "gem update --system"
   - "gem update bundler"
