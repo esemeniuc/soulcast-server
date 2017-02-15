@@ -1,7 +1,12 @@
 language: ruby
-ruby:
+
+rvm:
 - 2.3.3
 - 2.4.0
+
+env:
+  - TRAVIS_RUBY_VERSION="2.4.0"
+  - TRAVIS_NODE_VERSION="6.9.1"
 
 before_install:
   - "rm ${BUNDLE_GEMFILE}.lock"
@@ -18,8 +23,10 @@ script:
   - bin/rake db:setup
   - bin/rake spec
 cache: bundler
+
 services:
   - postgresql
+
 addons:
   postgresql: "9.6"
 
