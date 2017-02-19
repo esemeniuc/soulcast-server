@@ -38,7 +38,7 @@ RSpec.describe SoulsController, type: :controller do
     	@dev8 = Device.create(token: "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
                           latitude: 41.643138,
                           longitude: -121.699750,
-                          radius: 10.0)
+                          radius: 5.0)
   end
 
 	context 'does end to end transmission' do

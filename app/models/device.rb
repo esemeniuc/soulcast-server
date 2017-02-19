@@ -32,8 +32,13 @@ class Device < ApplicationRecord
     # puts 'Self radius: ' + self.radius.to_s + "\tDevice radius: " + device.radius.to_s
 
     minRadius = [self.radius, device.radius].min
-    radiusInKM = minRadius * 111.2 #conversion factor for degrees latitude to km
+    # radiusInKM = minRadius * 111.2 #conversion factor for degrees latitude to km
+    minLat = [(self.latitude * Math::PI/180), (device.latitude * Math::PI/180)].min
+    # gets 1 degree for longitude for self latitude, multiply by minium acceptance radius
+    radiusInKM = 111.32 * Math.cos(minLat) * minRadius
     distance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
+    puts "Distance between two points (km): #{format('%.2f', distance)}"
+    puts "Acceptance radius distance (km): #{format('%.2f', radiusInKM)}"
     return (distance < radiusInKM)
   end
 
