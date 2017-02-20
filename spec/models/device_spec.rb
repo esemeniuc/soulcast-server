@@ -178,12 +178,12 @@ RSpec.describe Device, type: :model do
   end
 
     it "should correctly reach devices in range" do
-      #expect(@dev1.reaches?(@dev2)).to be true
-      #expect(@dev1.reaches?(@dev4)).to be true
+      expect(@dev1.reaches?(@dev2)).to be true
+      expect(@dev1.reaches?(@dev4)).to be true
     end
 
     it "should correctly not reach devices out of range" do
-      #expect(@dev1.reaches?(@dev3)).to be false
+      expect(@dev1.reaches?(@dev3)).to be false
       expect(@dev1.reaches?(@dev5)).to be false
     end
   end
