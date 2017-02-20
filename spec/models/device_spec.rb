@@ -143,6 +143,51 @@ RSpec.describe Device, type: :model do
     expect(lastBlock.blockee_id).to be testDevice2.id
   end
 
+
+  context "reaches devices based on real world conditions" do
+    before(:each) do
+
+      deltaLongitudeInRadius = 9
+      deltaLongitudeOutsideRadius = 11
+
+      #dev1 at SFU CSIL
+      @dev1 = Device.create(token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                            latitude: 49.2812277842772,
+                            longitude: -122.956075,
+                            radius: 10.0)
+      #in radius
+      @dev2 = Device.create(token: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                            latitude: 49.2812277842772 - deltaLongitudeInRadius,
+                            longitude: -122.956075,
+                            radius: 10.0)
+      #outside radius
+      @dev3 = Device.create(token: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                            latitude: 49.2812277842772 - deltaLongitudeOutsideRadius,
+                            longitude: -122.956075,
+                            radius: 10.0)
+      #in radius
+      @dev4 = Device.create(token: "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+                            latitude: 49.2812277842772,
+                            longitude: -122.956075 + deltaLongitudeInRadius,
+                            radius: 10.0)
+      #outside radius
+      @dev5 = Device.create(token: "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+                            latitude: 49.2812277842772,
+                            longitude: -122.956075 + deltaLongitudeOutsideRadius,
+                            radius: 10.0)
+  end
+
+    it "should correctly reach devices in range" do
+      #expect(@dev1.reaches?(@dev2)).to be true
+      #expect(@dev1.reaches?(@dev4)).to be true
+    end
+
+    it "should correctly not reach devices out of range" do
+      #expect(@dev1.reaches?(@dev3)).to be false
+      expect(@dev1.reaches?(@dev5)).to be false
+    end
+  end
+
 end
 
 
