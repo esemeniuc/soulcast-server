@@ -33,13 +33,14 @@ class Device < ApplicationRecord
 
     minRadius = [self.radius, device.radius].min
     # radiusInKM = minRadius * 111.2 #conversion factor for degrees latitude to km
-    minLat = [(self.latitude * Math::PI/180), (device.latitude * Math::PI/180)].min
-    # gets 1 degree for longitude for self latitude, multiply by minium acceptance radius
-    radiusInKM = 111.32 * Math.cos(minLat) * minRadius
-    distance = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [device.latitude, device.longitude], :units => :km)
-    puts "Distance between two points (km): #{format('%.2f', distance)}"
-    puts "Acceptance radius distance (km): #{format('%.2f', radiusInKM)}"
-    return (distance < radiusInKM)
+    deltaLat = self.latitude - device.latitude
+    deltaLon = self.longitude - device.longitude
+
+    distanceInDeg = (deltaLat * deltaLat + deltaLon * deltaLon) ** 0.5 #pythag hypotenuse
+
+    puts "Distance between two points (degrees): #{format('%.2f', distanceInDeg)}"
+    puts "Acceptance radius distance (degrees): #{format('%.2f', minRadius)}"
+    return (distanceInDeg < minRadius)
   end
 
   def reaches?(input_device) #check if a soul sent from this device can be transmitted to another device
