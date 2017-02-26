@@ -32,7 +32,7 @@ class Device < ApplicationRecord
     # puts 'Self radius: ' + self.radius.to_s + "\tDevice radius: " + device.radius.to_s
 
     minRadius = [self.radius, device.radius].min
-    # radiusInKM = minRadius * 111.2 #conversion factor for degrees latitude to km
+
     deltaLat = self.latitude - device.latitude
     deltaLon = self.longitude - device.longitude
 
