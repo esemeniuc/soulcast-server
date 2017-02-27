@@ -25,6 +25,15 @@ var deviceTokens = process.argv[4].split(" "); //split on spaces
 //     console.log(i + ': ' + process.argv[i]);
 // }
 
+//get dev or production mode (true is production, false is dev mode)
+require('dotenv').config();
+var jsEnv = process.env['JS_ENV'];
+var envMode = true; //assume production mode by default
+if(jsEnv == 'development')
+{
+    envMode = false;
+}
+
 //enable assertions
 const assert = require('assert');
 
@@ -50,7 +59,7 @@ var apnProvider = new apn.Provider({
         keyId: 'VK2F43FXVB', // The Key ID of the p8 file (available at https://developer.apple.com/account/ios/certificate/key)
         teamId: '59SVXWFZ98' // The Team ID of your Apple Developer Account (available at https://developer.apple.com/account/#/membership/)
     },
-    production: true // Set to true if sending a notification to a production iOS app
+    production: jsEnv // Set to true if sending a notification to a production iOS app
 });
 
 
