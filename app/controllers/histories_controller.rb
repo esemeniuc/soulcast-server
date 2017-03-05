@@ -65,6 +65,11 @@ class HistoriesController < ApplicationController
   # GET /device_history/1
   # GET /device_history/1.json
   def device_history
+
+    if (params[:id] == -1) 
+      render json: History.last(10)
+      return
+    end
     render json: History.souls_by_device_id(params[:id])
   end
 

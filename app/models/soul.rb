@@ -1,3 +1,4 @@
+require 'fcm_helper'
 class Soul < ApplicationRecord
   belongs_to :device
   has_many :histories, dependent: :destroy
