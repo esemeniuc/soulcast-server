@@ -1,6 +1,6 @@
 require 'fcm'
 
-module fcmHelper
+module FcmHelper
 
 	fcm = FCM.new("my_api_key")
 
@@ -12,7 +12,5 @@ module fcmHelper
 		response = fcm.send(reg_ids, data)
 		return response
 	end
-
-
 
 end

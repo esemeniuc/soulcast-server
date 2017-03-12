@@ -1,4 +1,5 @@
 require 'fcm_helper'
+
 class Soul < ApplicationRecord
   belongs_to :device
   has_many :histories, dependent: :destroy
@@ -36,6 +37,22 @@ class Soul < ApplicationRecord
     else
       return nil
     end
+  end
+
+  def generateAndroidbroadcast(devices)
+    ## figure out devices that are android, filter
+
+    ## get registration ids of devices
+    ## build data package
+    registrationID = []
+    data = {data: {'soulObject': self}.to_json}
+    # devices.each do |currentDevice|
+    #   if currentDevice is android
+    #     registrationID.append(andrdoid id)
+    #   end
+    # end
+    fcmHelper.sendNotificationFCM(registrationID, data)
+
   end
 
   def broadcast(devices)
