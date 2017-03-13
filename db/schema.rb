@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20170123014153) do
     t.float    "latitude"
     t.float    "longitude"
     t.float    "radius"
+    t.string   "os"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_devices_on_token", unique: true, using: :btree
