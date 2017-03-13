@@ -32,7 +32,8 @@ RSpec.describe Device, type: :model do
 
   context "device validity tests" do
     it "should be valid with good input" do
-      expect(@dev1).to.be.valid
+      # binding.pry
+      expect(@dev1).to be_valid
     end
 
     it "should not be valid when missing a token" do
@@ -41,20 +42,20 @@ RSpec.describe Device, type: :model do
                               longitude: -122.956075,
                               radius: 20.0,
                               os: "ios")
-      expect(testDevice).not.to.be.valid
+      expect(testDevice).not_to be_valid
     end
 
     it "should not be valid with a nil token" do
       @dev1.token = nil
-      expect(@dev1).not.to.be.valid
+      expect(@dev1).not_to be_valid
     end
   end
 
   context "device reaches tests with a, b" do
     #test case 4
     it "should return true if a and b are on the same place" do
-      expect(a.in_mutual_radius?(@dev1)).to be true
-      expect(b.in_mutual_radius?(@dev2)).to be true
+      expect(@dev1.in_mutual_radius?(@dev2)).to be true
+      expect(@dev2.in_mutual_radius?(@dev1)).to be true
     end
 
     #test case 1
