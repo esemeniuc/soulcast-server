@@ -1,4 +1,4 @@
-
+require "#{Rails.root}/lib/firebase_helper"
 class Soul < ApplicationRecord
   include FireBaseHelper
 
