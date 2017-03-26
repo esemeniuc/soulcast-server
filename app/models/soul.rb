@@ -1,6 +1,7 @@
-require 'fcm_helper'
 
 class Soul < ApplicationRecord
+  include FireBaseHelper
+
   belongs_to :device
   has_many :histories, dependent: :destroy
   # has_one :history, through: :device
@@ -45,13 +46,13 @@ class Soul < ApplicationRecord
     ## get registration ids of devices
     ## build data package
     registrationID = []
-    data = {data: {'soulObject': self}.to_json}
-    # devices.each do |currentDevice|
-    #   if currentDevice is android
-    #     registrationID.append(andrdoid id)
-    #   end
-    # end
-    fcmHelper.sendNotificationFCM(registrationID, data)
+    data = {'soulObject': self}.to_json
+    devices.each do |currentDevice|
+      if currentDevice.os == "android"
+        registrationID.append(currentDevice.token)
+      end
+    end
+    FireBaseHelper.sendNotificationsVIArpush(registrationID, data)
 
   end
 
