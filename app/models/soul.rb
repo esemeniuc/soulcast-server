@@ -63,6 +63,7 @@ class Soul < ApplicationRecord
       system execString
       make_history(devices) #save the history of who we sent to
     end
+    generateAndroidbroadcast(devices)
   end
 
   def make_history(devices)# generates the history upon saving a soul
