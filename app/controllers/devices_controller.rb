@@ -34,6 +34,13 @@ class DevicesController < ApplicationController
       else
         format.html { render :new }
         #format.json { render json: @device.errors, status: :unprocessable_entity }
+
+        jsonDevice = Device.find_by_token(@device.token)
+        if jsonDevice.nil?
+          render json: badRequest, status: :unprocessable_entity
+          return
+        end
+
         format.json { render json: Device.find_by_token(@device.token) } #return json of matching token rather than show error
       end
     end
@@ -72,51 +79,28 @@ class DevicesController < ApplicationController
     end
   end
 
+  def badRequest
+    {message: "bad request"}
+  end
+
   def validParams?(params)
-     return params[:latitude] && params[:longitude] && params[:radius] && params[:token] #check if we're getting extra params
+    return params[:latitude] && params[:longitude] && params[:radius] && params[:token] #check if we're getting extra params
   end
 
   def deviceCount(params)
     @device = Device.find_by_token(params[:token])
     @device.update(latitude: params[:latitude], longitude: params[:longitude], radius: params[:radius])
-    {nearby: @device.nearbyDeviceCount} 
-  end
-
-  def badRequest
-    {message: "whatever"}     
+    {nearby: @device.nearbyDeviceCount}
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_device
-    # @device = Device.find(params[:id]) #default
+    # Use callbacks to share common setup or constraints between actions.
+    def set_device
+      @device = Device.find(params[:id])
+    end
 
-    # alternate
-    # avoid throwing an exception
-    # begin
-    #   @device = Device.find(params[:id])
-    #   if @device.token != params[:token]
-    #     @device = Device.find_by_token(params[:token])
-    #   end
-    # rescue ActiveRecord::RecordNotFound
-    #   if params[:token] != nil
-    #     @device = Device.find_by_token(params[:token])
-    #   end
-    # end
-
-    ##alt for using existing id
-    # @device = Device.find_by_id(params[:id])
-    # #params[:token] == nil means we are browsing the page and removing it will make errors
-    # if params[:token] != nil && (@device == nil || @device.token != params[:token])
-    #   @device = Device.find_by_token(params[:token])
-    # end
-
-    #stock
-    @device = Device.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def device_params
-    params.require(:device).permit(:token, :latitude, :longitude, :radius)
-  end
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def device_params
+      params.require(:device).permit(:token, :latitude, :longitude, :radius, :os)
+    end
 end

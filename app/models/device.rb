@@ -4,8 +4,12 @@ class Device < ApplicationRecord
   has_many :histories, dependent: :destroy
   has_many :souls, dependent: :destroy
   # has_one :history
-  validates :token, :latitude, :longitude, :radius, presence: true
+  validates :token, :latitude, :longitude, :radius, :os, presence: true
   validates :token, uniqueness: true
+
+  #validate os enum
+  enum oses: [ :ios, :android ]
+  validates :os, inclusion: {in: Device.oses.keys}
 
   def is_blocking?(input_device) #does this device block input_device?
     return Block.where(blocker_id: self.id, blockee_id: input_device.id).exists?

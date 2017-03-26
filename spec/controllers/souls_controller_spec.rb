@@ -6,39 +6,32 @@ RSpec.describe SoulsController, type: :controller do
 		@dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
 													latitude: 50,
 													longitude: -100,
-													radius: 20.0)
+													radius: 20.0,
+													os: "ios")
 
 		@dev2 = Device.create(token: "30d89b9620d59f88350af570e7349472d8e02e54367f41825918e054fde792ad",
 													latitude: 50,
 													longitude: -100,
-													radius: 20.0)
+													radius: 20.0,
+													os: "ios")
 
 		@dev3 = Device.create(token: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 													latitude: 25,
 													longitude: -100,
-													radius: 20.0)
+													radius: 20.0,
+													os: "ios")
 
 		@dev4 = Device.create(token: "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 													latitude: 75,
 													longitude: -100,
-													radius: 20.0)
+													radius: 20.0,
+													os: "ios")
 
 		@dev5 = Device.create(token: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
 													latitude: 60,
 													longitude: -100,
-													radius: 20.0)
-		@dev6 = Device.create(token: "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
-                          latitude: 49.277712,
-                          longitude: -122.914274,
-                          radius: 10.0)
-    	@dev7 = Device.create(token: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                          latitude: 49.277782,
-                          longitude: -122.915068,
-                          radius: 10.0)
-    	@dev8 = Device.create(token: "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-                          latitude: 41.643138,
-                          longitude: -121.699750,
-                          radius: 5.0)
+													radius: 20.0,
+													os: "ios")
   end
 
 	context 'does end to end transmission' do

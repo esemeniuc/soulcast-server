@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :devices
   get 'static_pages/index'
 
   get 'static_pages/eula'
@@ -8,7 +9,6 @@ Rails.application.routes.draw do
   resources :blocks
   resources :histories
   resources :souls
-  resources :devices
 
   # actual stuff
   root  'static_pages#index' # show the homepage in production mode
