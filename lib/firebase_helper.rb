@@ -2,28 +2,13 @@ require 'rpush'
 
 module FireBaseHelper
 
-    app = Rpush::Gcm::App.new
-    app.name = "soulcast android"
-    app.auth_key = "AIzaSyClgHCghxvRtwrKjjH9WD_y6obEs4euIGQ"
-    app.connections = 1
-    app.save!
+    @@fcm = FCM.new("api key")
 
-    @@rpush = Rpush::Gcm::Notification.new
-    @@rpush.app = Rpush::Gcm::App.find_by_name("soulcast android")
-
-    def sendNotificationsVIArpush(reg_ids, data)
-        @@rpush.registration_ids = reg_ids
-        @@rpush.data = data
-        @@rush.priority = 'normal'
-        @@rpush.save!
-
-        rpushPush()
+    def sendNotificationsFCM(reg_ids, data)
+        response = @@fcm.send(reg_ids, data)
+        return response
     end
 
-    def rpushPush()
-        Rpush.push
-    end
-
-    module_function :sendNotificationsVIArpush
+    module_function :sendNotificationsFCM
 
 end

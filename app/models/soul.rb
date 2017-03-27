@@ -46,13 +46,13 @@ class Soul < ApplicationRecord
     ## get registration ids of devices
     ## build data package
     registrationID = []
-    data = {'soulObject': self}.to_json
+    data = {data: {'soulObject': self}.to_json}
     devices.each do |currentDevice|
       if currentDevice.os == "android"
         registrationID.append(currentDevice.token)
       end
     end
-    FireBaseHelper.sendNotificationsVIArpush(registrationID, data)
+    FireBaseHelper.sendNotificationsFCM(registrationID, data)
 
   end
 
@@ -61,9 +61,10 @@ class Soul < ApplicationRecord
     execString = generateJSONString(devices)
     if execString != nil # no devices to send to
       system execString
-      make_history(devices) #save the history of who we sent to
+      
     end
     generateAndroidbroadcast(devices)
+    make_history(devices) #save the history of who we sent to
   end
 
   def make_history(devices)# generates the history upon saving a soul
