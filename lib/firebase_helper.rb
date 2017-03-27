@@ -1,4 +1,4 @@
-require 'rpush'
+require 'fcm'
 
 module FireBaseHelper
 
