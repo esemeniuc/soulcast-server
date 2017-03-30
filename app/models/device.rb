@@ -42,7 +42,9 @@ class Device < ApplicationRecord
 
     distanceInDeg = (deltaLat * deltaLat + deltaLon * deltaLon) ** 0.5 #pythag hypotenuse
 
-    return distanceInDeg < minRadius
+    puts "Distance between two points (degrees): #{format('%.2f', distanceInDeg)}"
+    puts "Acceptance radius distance (degrees): #{format('%.2f', minRadius)}"
+    return (distanceInDeg < minRadius)
   end
 
   def reaches?(input_device) #check if a soul sent from this device can be transmitted to another device

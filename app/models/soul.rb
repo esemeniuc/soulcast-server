@@ -1,4 +1,7 @@
+require "#{Rails.root}/lib/firebase_helper"
 class Soul < ApplicationRecord
+  include FireBaseHelper
+
   belongs_to :device
   has_many :histories, dependent: :destroy
   # has_one :history, through: :device
@@ -37,13 +40,31 @@ class Soul < ApplicationRecord
     end
   end
 
+  def generateAndroidbroadcast(devices)
+    ## figure out devices that are android, filter
+
+    ## get registration ids of devices
+    ## build data package
+    registrationID = []
+    data = {data: {'soulObject': self}.to_json}
+    devices.each do |currentDevice|
+      if currentDevice.os == "android"
+        registrationID.append(currentDevice.token)
+      end
+    end
+    FireBaseHelper.sendNotificationsFCM(registrationID, data)
+
+  end
+
   def broadcast(devices)
     # test from rails console with Soul.last.sendToOthers
     execString = generateJSONString(devices)
     if execString != nil # no devices to send to
       system execString
-      make_history(devices) #save the history of who we sent to
+      
     end
+    generateAndroidbroadcast(devices)
+    make_history(devices) #save the history of who we sent to
   end
 
   def make_history(devices)# generates the history upon saving a soul

@@ -17,6 +17,11 @@ RSpec.describe Device, type: :model do
                        longitude: -122.956075,
                        radius: 20.0,
                        os: "ios")
+    @dev3 = Device.new(token:"dQb1nb_yE4A:APA91bEt5a-j61ufp09ImSVGrd9sXebq-uOHcdJ4TF6vTBgZO6scBVtPnewKP_TZb3LCxE_QF1M13HmC1rtqgg4Wo7Nm61JxDwmY-uBUlxLRBHnIC6NPoM9gS3bhUOU-UZKAnH2JxT4s",
+                       latitude: 49.2812277842772,
+                       longitude: -122.956075,
+                       radius: 20.0,
+                       os: "android")
   end
 
   it 'blocks other devices when asked' do
@@ -56,6 +61,10 @@ RSpec.describe Device, type: :model do
     it "should return true if a and b are on the same place" do
       expect(@dev1.in_mutual_radius?(@dev2)).to be true
       expect(@dev2.in_mutual_radius?(@dev1)).to be true
+      expect(@dev3.in_mutual_radius?(@dev1)).to be true
+      expect(@dev3.in_mutual_radius?(@dev2)).to be true
+      expect(@dev1.in_mutual_radius?(@dev3)).to be true
+      expect(@dev2.in_mutual_radius?(@dev3)).to be true
     end
 
     #test case 1
@@ -106,6 +115,13 @@ RSpec.describe Device, type: :model do
                             longitude: -100,
                             radius: 20.0,
                             os: "ios")
+
+      @dev6 = Device.create(token:"dQb1nb_yE4A:APA91bEt5a-j61ufp09ImSVGrd9sXebq-uOHcdJ4TF6vTBgZO6scBVtPnewKP_TZb3LCxE_QF1M13HmC1rtqgg4Wo7Nm61JxDwmY-uBUlxLRBHnIC6NPoM9gS3bhUOU-UZKAnH2JxT4s",
+                            latitude: 49.2812277842772,
+                            longitude: -100,
+                            radius: 20.0,
+                            os: "android")
+
     end
 
     context "dev1 should reach dev2 and vice versa" do
@@ -139,6 +155,13 @@ RSpec.describe Device, type: :model do
       it "should not reach test device" do
         expect(@dev1.in_mutual_radius?(@dev4)).to be false
         expect(@dev4.in_mutual_radius?(@dev1)).to be false
+      end
+    end
+
+    context "dev1 (ios) is near dev6 (android) and vice versa" do
+      it "should reach each other" do
+        expect(@dev1.in_mutual_radius?(@dev6)).to be true
+        expect(@dev6.in_mutual_radius?(@dev1)).to be true
       end
     end
   end

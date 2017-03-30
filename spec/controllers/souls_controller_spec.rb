@@ -32,6 +32,12 @@ RSpec.describe SoulsController, type: :controller do
 													longitude: -100,
 													radius: 20.0,
 													os: "ios")
+
+		@dev6 = Device.create(token:"dQb1nb_yE4A:APA91bEt5a-j61ufp09ImSVGrd9sXebq-uOHcdJ4TF6vTBgZO6scBVtPnewKP_TZb3LCxE_QF1M13HmC1rtqgg4Wo7Nm61JxDwmY-uBUlxLRBHnIC6NPoM9gS3bhUOU-UZKAnH2JxT4s",
+                            latitude: 50,
+                            longitude: -100,
+                            radius: 20.0,
+                            os: "android")
   end
 
 	context 'does end to end transmission' do
@@ -44,6 +50,7 @@ RSpec.describe SoulsController, type: :controller do
 				radius: 20,
 				token: @dev1.token)
 			expect(@dev2.histories.count).to be 1
+			expect(@dev6.histories.count).to be 1
 		end
 		it 'when casting a soul NOT within mutual radius of another' do
 			soul1 = Soul.create(soulType: "testType1",
@@ -57,15 +64,38 @@ RSpec.describe SoulsController, type: :controller do
 		end
 	end
 	context 'Nearby' do #FIXME: tests are not passing because test expectations are wrong
-		it 'three devices are within mutual radius' do
-			expect(@dev1.nearbyDeviceCount).to be 2
-			expect(@dev2.nearbyDeviceCount).to be 2
-			expect(@dev5.nearbyDeviceCount).to be 3
+		it 'four devices are within mutual radius' do
+			expect(@dev1.nearbyDeviceCount).to be 3
+			expect(@dev2.nearbyDeviceCount).to be 3
+			expect(@dev5.nearbyDeviceCount).to be 4
+			exepct(@dev6.nearbyDeviceCount).to be 3
 		end
 		it 'No three devices are within mutual radius' do
-			expect(@dev2.nearbyDeviceCount).to be 2
+			expect(@dev2.nearbyDeviceCount).to be 3
 			expect(@dev3.nearbyDeviceCount).to be 0
 			expect(@dev4.nearbyDeviceCount).to be 1
+		end
+	end
+
+	context 'Nearby real lat long' do
+		it 'two devices are within mutual radius' do
+			expect(@dev6.nearbyDeviceCount).to be 1
+			expect(@dev7.nearbyDeviceCount).to be 1
+		end
+
+		it 'no devices mutual in dev8' do
+			expect(@dev8.nearbyDeviceCount).to be 0
+		end
+		it 'Cast a soul not within mutal radius of another' do
+			soul1 = Soul.create(soulType: "testType1",
+				s3Key: 10000000,
+				epoch: 1000000,
+				latitude: 49.277712,
+                longitude: -122.914274,
+				radius: 10,
+				token: @dev6.token)
+			expect(@dev7.histories.count).to be 1
+			expect(@dev8.histories.count).to be 0
 		end
 	end
 end
