@@ -52,6 +52,18 @@ RSpec.describe SoulsController, type: :controller do
 			expect(@dev2.histories.count).to be 1
 			expect(@dev6.histories.count).to be 1
 		end
+		it 'when casting a soul within mutual radius of another' do
+			soul6 = Soul.create(soulType: "testType1",
+				s3Key: 10000000,
+				epoch: 1000000,
+				latitude: 50,
+				longitude: -100,
+				radius: 20,
+				token: @dev6.token)
+			expect(@dev1.histories.count).to be 1
+			expect(@dev2.histories.count).to be 1
+		end
+
 		it 'when casting a soul NOT within mutual radius of another' do
 			soul1 = Soul.create(soulType: "testType1",
 				s3Key: 10000000,

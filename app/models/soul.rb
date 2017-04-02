@@ -46,10 +46,10 @@ class Soul < ApplicationRecord
     payload = {data: {'soulObject': self}.to_json}
     devices.each do |currentDevice|
       if currentDevice.os == "android"
-        registrationID.append(currentDevice.token)
+        recipients.append(currentDevice.token)
       end
     end
-    FireBaseHelper.androidFCMPush(registrationID, data)
+    FireBaseHelper.androidFCMPush(recipients, payload)
 
   end
 
@@ -60,7 +60,7 @@ class Soul < ApplicationRecord
       system execString
       
     end
-    generateAndroidbroadcast(devices)
+    generateandroidBroadcast(devices)
     make_history(devices) #save the history of who we sent to
   end
 

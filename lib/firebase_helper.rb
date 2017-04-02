@@ -5,7 +5,7 @@ module FireBaseHelper
     @@fcm = FCM.new(ENV['FCMKEY'])
 
     def androidFCMPush(recipients, payload)
-        response = @@fcm.send(reg_ids, data)
+        response = @@fcm.send(recipients, payload)
         return response
     end
 
