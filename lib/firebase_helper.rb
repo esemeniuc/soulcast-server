@@ -2,13 +2,13 @@ require 'fcm'
 
 module FireBaseHelper
 
-    @@fcm = FCM.new("api key")
+    @@fcm = FCM.new(ENV['FCMKEY'])
 
-    def sendNotificationsFCM(reg_ids, data)
-        response = @@fcm.send(reg_ids, data)
+    def androidFCMPush(recipients, payload)
+        response = @@fcm.send(recipients, payload)
         return response
     end
 
-    module_function :sendNotificationsFCM
+    module_function :androidFCMPush
 
 end
