@@ -140,7 +140,7 @@ RSpec.describe Device, type: :model do
 
     context "dev1 is near dev2 and dev5" do
       it "should have a valid number of nearby devices" do
-        expect(@dev1.nearbyDeviceCount).to be 2
+        expect(@dev1.nearbyDeviceCount).to be 3
       end
     end
 

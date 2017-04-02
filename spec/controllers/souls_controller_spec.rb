@@ -68,7 +68,7 @@ RSpec.describe SoulsController, type: :controller do
 			expect(@dev1.nearbyDeviceCount).to be 3
 			expect(@dev2.nearbyDeviceCount).to be 3
 			expect(@dev5.nearbyDeviceCount).to be 4
-			exepct(@dev6.nearbyDeviceCount).to be 3
+			expect(@dev6.nearbyDeviceCount).to be 3
 		end
 		it 'No three devices are within mutual radius' do
 			expect(@dev2.nearbyDeviceCount).to be 3
@@ -77,14 +77,14 @@ RSpec.describe SoulsController, type: :controller do
 		end
 	end
 
-	context 'Nearby real lat long' do
+	context 'devices in mutual of dev6 (android)' do
 		it 'two devices are within mutual radius' do
-			expect(@dev6.nearbyDeviceCount).to be 1
-			expect(@dev7.nearbyDeviceCount).to be 1
+			expect(@dev6.nearbyDeviceCount).to be 3
+			# expect(@dev7.nearbyDeviceCount).to be 1
 		end
 
 		it 'no devices mutual in dev8' do
-			expect(@dev8.nearbyDeviceCount).to be 0
+			expect(@dev3.nearbyDeviceCount).to be 0
 		end
 		it 'Cast a soul not within mutal radius of another' do
 			soul1 = Soul.create(soulType: "testType1",
@@ -94,8 +94,8 @@ RSpec.describe SoulsController, type: :controller do
                 longitude: -122.914274,
 				radius: 10,
 				token: @dev6.token)
-			expect(@dev7.histories.count).to be 1
-			expect(@dev8.histories.count).to be 0
+			expect(@dev1.histories.count).to be 1
+			expect(@dev3.histories.count).to be 0
 		end
 	end
 end
