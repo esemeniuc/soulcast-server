@@ -41,9 +41,10 @@ class Soul < ApplicationRecord
   end
 
   def generateandroidBroadcast(devices)
-
+    puts "broadcasting to android devices via fcm"
     recipients = []
-    payload = {data: {'soulObject': self}.to_json}
+    soulobj = {'soulObject': {s3Key: self.s3Key, soulType: self.soulType}}.to_json
+    payload = {data: soulobj}
     devices.each do |currentDevice|
       if currentDevice.os == "android"
         recipients.append(currentDevice.token)
