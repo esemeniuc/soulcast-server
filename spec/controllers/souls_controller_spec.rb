@@ -106,7 +106,7 @@ RSpec.describe SoulsController, type: :controller do
                 longitude: -122.914274,
 				radius: 10,
 				token: @dev6.token)
-			expect(@dev1.histories.count).to be 1
+			expect(@dev1.histories.count).to be 0
 			expect(@dev3.histories.count).to be 0
 		end
 	end
