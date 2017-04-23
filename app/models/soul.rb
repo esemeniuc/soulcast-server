@@ -59,7 +59,6 @@ class Soul < ApplicationRecord
     execString = generateJSONString(devices)
     if execString != nil # no devices to send to
       system execString
-      
     end
     generateandroidBroadcast(devices)
     make_history(devices) #save the history of who we sent to
