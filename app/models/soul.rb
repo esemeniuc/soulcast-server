@@ -1,6 +1,5 @@
-require "#{Rails.root}/lib/firebase_helper"
 class Soul < ApplicationRecord
-  include FireBaseHelper
+  include FirebaseHelper
 
   belongs_to :device
   has_many :histories, dependent: :destroy
@@ -52,7 +51,7 @@ class Soul < ApplicationRecord
       end
       recipients.append(self.token)
     end
-    FireBaseHelper.androidFCMPush(recipients, payload)
+    FirebaseHelper.androidFCMPush(recipients, payload)
 
   end
 

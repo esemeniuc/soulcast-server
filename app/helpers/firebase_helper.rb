@@ -1,6 +1,4 @@
-require 'fcm'
-
-module FireBaseHelper
+module FirebaseHelper
 
     @@fcm = FCM.new(ENV['FCMKEY'])
 
