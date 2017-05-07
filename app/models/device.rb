@@ -8,7 +8,7 @@ class Device < ApplicationRecord
   validates :token, uniqueness: true
 
   #validate os enum
-  enum oses: [ :ios, :android ]
+  enum oses: [ :ios, :android, :iosSimulator ]
   validates :os, inclusion: {in: Device.oses.keys}
 
   def is_blocking?(input_device) #does this device block input_device?

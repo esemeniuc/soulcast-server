@@ -17,6 +17,13 @@ class Soul < ApplicationRecord
     self.device.update(latitude: self.latitude, longitude: self.longitude, radius: self.radius)
   end
 
+  def broadcastIos(iosDevices)
+    execString = generateJSONString(iosDevices)
+    if execString != nil # no devices to send to
+      system execString
+    end
+  end
+
   def generateJSONString(devices)
     if devices.length > 0
       alertMessage = 'Incoming Soul'
@@ -31,35 +38,44 @@ class Soul < ApplicationRecord
 
       # final nodejs string
       execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + devicesString.shellescape
-      # puts execString
       return execString
-    else
-      return nil
     end
+
+    return nil
   end
 
-  def generateAndroidBroadcast(devices)
-    puts "broadcasting to android devices via fcm"
-    recipients = []
+  def soulRouter(devices)
+    iosRecipients = devices.select do |currentDevice|
+      currentDevice.os == "ios"
+    end
+
+    androidRecipients = devices.select do |currentDevice|
+      currentDevice.os == "android"
+    end
+    return Hash(ios: iosRecipients, android: androidRecipients)
+  end
+
+
+  def broadcastAndroid(androidDevices)
+    puts('****************************IN ANDROID***********')
     soulobj = {'soulObject': {s3Key: self.s3Key, soulType: self.soulType}}
     payload = {data: soulobj}
-    devices.each do |currentDevice|
-      if currentDevice.os == "android"
-        recipients.append(currentDevice.token)
-      end
+    recipients = androidDevices.map do |elem|
+      elem.token
+    end
+
+    if self.device.os == "android"
       recipients.append(self.token)
     end
-    FirebaseHelper.androidFCMPush(recipients, payload)
 
+    FirebaseHelper.androidFCMPush(recipients, payload)
   end
 
   def broadcast(devices)
     # test from rails console with Soul.last.sendToOthers
-    execString = generateJSONString(devices)
-    if execString != nil # no devices to send to
-      system execString
-    end
-    generateAndroidBroadcast(devices)
+    routedSouls = soulRouter(devices)
+    broadcastIos(routedSouls[:ios])
+    broadcastAndroid(routedSouls[:android])
     make_history(devices) #save the history of who we sent to
   end
 
