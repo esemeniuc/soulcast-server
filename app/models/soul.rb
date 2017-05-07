@@ -7,6 +7,7 @@ class Soul < ApplicationRecord
   # has_one :history, through: :device
   before_validation :get_device
   validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, :device_id, presence: true
+  validates_length_of :epoch, maximum: 10
   after_save :updateDeviceLocation, :sendToOthers, :status_output
 
   def get_device

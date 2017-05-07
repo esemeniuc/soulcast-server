@@ -104,6 +104,17 @@ RSpec.describe Soul, type: :model do
 
         expect(Soul.all.count).to be 0
       end
+      
+      it "should not save soul with epoch longer than 10 digits" do
+        soul1 = Soul.create(soulType: "testType1",
+                            s3Key: 10000000,
+                            epoch: 1982471912415,
+                            latitude: 55,
+                            longitude: -111,
+                            radius: 22,
+                            token: @dev1.token)
+        expect(Soul.all.count).to be 0
+      end
 
       it "should not save a soul to the database with no s3key" do
         soul1 = Soul.create(soulType: "testType1",
