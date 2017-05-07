@@ -1,6 +1,4 @@
 class Soul < ApplicationRecord
-  include FirebaseHelper
-
   belongs_to :device
   has_many :histories, dependent: :destroy
   # has_one :history, through: :device
@@ -40,7 +38,7 @@ class Soul < ApplicationRecord
     end
   end
 
-  def generateandroidBroadcast(devices)
+  def generateAndroidBroadcast(devices)
     puts "broadcasting to android devices via fcm"
     recipients = []
     soulobj = {'soulObject': {s3Key: self.s3Key, soulType: self.soulType}}
@@ -61,7 +59,7 @@ class Soul < ApplicationRecord
     if execString != nil # no devices to send to
       system execString
     end
-    generateandroidBroadcast(devices)
+    generateAndroidBroadcast(devices)
     make_history(devices) #save the history of who we sent to
   end
 
