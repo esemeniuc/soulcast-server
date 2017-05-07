@@ -78,6 +78,13 @@ RSpec.describe Soul, type: :model do
         expect(Device.find(@dev1.id).radius).to eq soul1.radius
       end
 
+      it "should android push to Eric's device" do
+        recipient = ['cokb_316jF4:APA91bG0lBda5_a8oiQVQyKODfTnCc9s-nBklDOeLa1PqBXo50i0aA1_hJACfWTBztSO46rZp8B3IZ77O180H8uYnoH0KFxsYLDAYOcyBf86O6sAOmAjJCkRAzpSgcoa13okNFPcuvwi']
+        soulobj = {'soulObject': {s3Key: 1494193409335}}
+        payload = {data: soulobj}
+        FirebaseHelper.androidFCMPush(recipient, payload)
+      end
+
     end
 
     context "with invalid input" do
