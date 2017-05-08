@@ -58,8 +58,7 @@ class Soul < ApplicationRecord
 
   def broadcastAndroid(androidDevices)
     puts('****************************IN ANDROID***********')
-    soulobj = {'soulObject': {s3Key: self.s3Key, soulType: self.soulType}}
-    payload = {data: soulobj}
+    payload = {data: {soulObject: self}}
     recipients = androidDevices.map do |elem|
       elem.token
     end
@@ -67,7 +66,7 @@ class Soul < ApplicationRecord
     if self.device.os == "android"
       recipients.append(self.token)
     end
-
+    binding.pry
     FirebaseHelper.androidFCMPush(recipients, payload)
   end
 

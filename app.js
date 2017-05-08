@@ -10,7 +10,7 @@
 "use strict"; //strict mode
 
 //call should have 5 parameters.
-//0 execuatable name (nodejs)
+//0 executable name (nodejs)
 //1 js file to execute with nodejs
 //2 notification message that user sees
 var alertMessage = process.argv[2];
