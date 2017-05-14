@@ -66,7 +66,7 @@ class Soul < ApplicationRecord
     if self.device.os == "android"
       recipients.append(self.token)
     end
-    # binding.pry
+
     FirebaseHelper.androidFCMPush(recipients, payload)
   end
 
