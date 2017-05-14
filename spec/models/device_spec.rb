@@ -37,7 +37,6 @@ RSpec.describe Device, type: :model do
 
   context "device validity tests" do
     it "should be valid with good input" do
-      # binding.pry
       expect(@dev1).to be_valid
     end
 

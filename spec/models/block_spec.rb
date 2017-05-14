@@ -116,7 +116,6 @@ RSpec.describe Block, type: :model do
         end
 
         it "should show that dev1 has dev5 nearby only because dev2 is blocked" do
-          # binding.pry
           expect(@dev1.nearbyDeviceCount).to be 1
           expect(@dev1.reaches?(@dev2)).to be false
           expect(@dev1.reaches?(@dev5)).to be true

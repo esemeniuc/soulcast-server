@@ -76,7 +76,7 @@ RSpec.describe "API call", :type => :request do
                              longitude: @deviceParams1[:device][:longitude],
                              radius: @deviceParams1[:device][:radius],
                              token: @deviceParams1[:device][:token] }
-    # binding.pry
+
     nearby_count = JSON.parse(response.body)["nearby"]
     
     expect(nearby_count).to be 2
@@ -111,7 +111,6 @@ RSpec.describe "API call", :type => :request do
 
   xit "echo" do
     post "/echo.json", @deviceParams1
-    binding.pry
     expect_token = JSON.parse(response.body)["token"]
     expect(expect_token).to be "AAAAAAAA"
   end
@@ -129,7 +128,7 @@ RSpec.describe "API call", :type => :request do
           blockee_token: "BBBBBBBB"
         } }
 
-      # binding.pry
+
       post "/souls.json", params: @soulParams1
 
       get "/device_history/#{dev1id}.json"

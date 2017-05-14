@@ -129,7 +129,7 @@ RSpec.describe HistoriesController, type: :controller do
                      radius: 20,
                      token: @dev2.token,
                      device_id: @dev2.id)
-      # binding.pry
+
       expect(@dev1.histories.count).to be 1
       @dev1.block(@dev2)
       expect(@dev1.histories.count).to be 0
@@ -209,7 +209,7 @@ RSpec.describe HistoriesController, type: :controller do
                      radius: 20,
                      token: @dev2.token,
                      device_id: @dev2.id)
-      # binding.pry
+
       expect(@dev2.histories.count).to eq(1)
       expect(@dev1.histories.count).to eq(1)
       Block.create(blocker_id: @dev2.id, blockee_id: @dev1.id)
