@@ -2,7 +2,7 @@ class Wave
   include ActiveModel::Model
   validates_presence_of :castVoice, :casterToken, :callerToken, :type, :epoch
   validates_length_of :epoch, maximum: 10
-  after_validation :sendWave
+  after_validation :echoBackWave
 
   attr_accessor :attributes
   def initialize(attributes = {})
@@ -11,10 +11,6 @@ class Wave
 
   def read_attribute_for_validation(key)
     @attributes[key]
-  end
-
-  def sendWave()
-    echoBackWave(self)
   end
 
 # ask if these should be class level methods
@@ -33,42 +29,43 @@ class Wave
   end
 
 
-  def self.generateioswave(iosToken, wave)
+  def generateioswave(iosToken)
     alertMessage = 'Incoming Wave'
-    jsonObject = {'wave': wave}.to_json
+    jsonObject = {'wave': self}.to_json
 
     execString = 'node app.js ' + alertMessage.shellescape + ' ' + jsonObject.shellescape + ' ' + iosToken.shellescape
     return execString
   end
 
-  def self.generateandroidWave(androidToken, wave)
+  def generateandroidWave(androidToken)
     recipients = [androidToken]
-    payload = {data: {'wave': wave}.to_json}
+    payload = {data: {'wave': self}.to_json}
     FirebaseHelper.androidFCMPush(recipients, payload)
   end
 
-  def self.echoBackWave(wave={})
+  def echoBackWave
+    wave = self
     if wave[:type].eql? "call"
       deviceOs = getDeviceOs(wave[:callerToken])
       if deviceOs.eql? "ios"
-        execString = generateJSONString(wave[:callerToken], wave)
+        execString = generateioswave(wave[:callerToken])
         if execString != nil # no devices to send to
           system execString
         end
       elsif deviceOs.eql? "android"
-        generateandroidWave(wave[:callerToken], wave)
+        generateandroidWave(wave[:callerToken])
       end
 
     elsif wave[:type].eql? "reply"
 
       deviceOs = getDeviceOs(wave[:casterToken])
       if deviceOs.eql? "ios"
-        execString = generateioswave(wave[:casterToken], wave)
+        execString = generateioswave(wave[:casterToken])
         if execString != nil # no devices to send to
           system execString
         end
       elsif deviceOs.eql? "android"
-        generateandroidWave(wave[:callerToken], wave)
+        generateandroidWave(wave[:callerToken])
       end
     end
   end
