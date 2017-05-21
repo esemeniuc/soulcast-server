@@ -1,2 +1,53 @@
 <h1>Waves#new</h1>
 <p>Find me in app/views/waves/new.html.erb</p>
+
+<%= form_for(@wave) do |f| %>
+    <% if @wave.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@wave.errors.count, "error") %> prohibited this wave from being saved:</h2>
+          <ul>
+            <% @wave.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+
+    <div class="field">
+      <%= f.label :castVoice %><br>
+      <%= f.text_field :castVoice %>
+    </div>
+
+    <div class="field">
+      <%= f.label :callVoice %><br>
+      <%= f.text_field :callVoice %>
+    </div>
+
+    <div class="field">
+      <%= f.label :replyVoice %><br>
+      <%= f.text_field :replyVoice %>
+    </div>
+
+    <div class="field">
+      <%= f.label :casterToken %><br>
+      <%= f.text_field :casterToken %>
+    </div>
+
+    <div class="field">
+      <%= f.label :type %><br>
+      <%= f.text_field :type %>
+    </div>
+
+    <div class="field">
+      <%= f.label :epoch %><br>
+      <%= f.number_field :epoch %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+
+<% end %>
+
+<%= link_to 'Back', waves_path %>

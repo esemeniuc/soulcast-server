@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :histories
   resources :souls
   resources :waves, :only => [:new, :create]
+  get 'waves/success' => 'waves#success', as: :success
 
   # actual stuff
   root  'static_pages#index' # show the homepage in production mode

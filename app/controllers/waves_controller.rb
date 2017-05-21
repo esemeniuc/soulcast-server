@@ -6,23 +6,23 @@ class WavesController < ApplicationController
   # POST /waves
   # POST /waves.json
   def create
-    binding.pry
     @wave = Wave.new(wave_params)
-    # make a wave object,
-    # return wave object
     respond_to do |format|
-      if wave.valid?
+      if @wave.valid?
 
 
-        logger.debug "wave was created"
+        format.html { redirect_to success_path, notice: 'Wave was successfully submitted.' }
 
       else
 
-        logger.debug "Error: wave not created"
+        format.html { render :new }
 
       end
     end
+  end
 
+
+  def success
   end
 
   private
