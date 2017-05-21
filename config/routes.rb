@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :blocks
   resources :histories
   resources :souls
+  resources :waves, :only => [:new, :create]
 
   # actual stuff
   root  'static_pages#index' # show the homepage in production mode
