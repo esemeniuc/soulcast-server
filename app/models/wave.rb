@@ -2,6 +2,7 @@ class Wave
   include ActiveModel::Model
   validates_presence_of :castVoice, :casterToken, :callerToken, :type, :epoch
   validates_length_of :epoch, maximum: 10
+  after_validation :sendWave
 
   attr_accessor :attributes
   def initialize(attributes = {})
@@ -12,7 +13,11 @@ class Wave
     @attributes[key]
   end
 
+  def sendWave()
+    echoBackWave(self)
+  end
 
+# ask if these should be class level methods
   def self.getDeviceOs(token)
     if (token != nil)
       device = Device.find_by_token(token)

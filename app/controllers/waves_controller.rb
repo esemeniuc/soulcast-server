@@ -10,7 +10,6 @@ class WavesController < ApplicationController
     respond_to do |format|
       if @wave.valid?
 
-
         format.html { redirect_to success_path, notice: 'Wave was successfully submitted.' }
 
       else
