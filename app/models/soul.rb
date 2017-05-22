@@ -46,11 +46,13 @@ class Soul < ApplicationRecord
 
   def soulRouter(devices)
     iosRecipients = devices.select do |currentDevice|
-      currentDevice.os == "ios"
+      # currentDevice.os == :ios
+      Device.oses[currentDevice.os] == Device.oses[:ios]
     end
 
     androidRecipients = devices.select do |currentDevice|
-      currentDevice.os == "android"
+      # currentDevice.os == :android
+      Device.oses[currentDevice.os] == Device.oses[:android]
     end
     return Hash(ios: iosRecipients, android: androidRecipients)
   end
@@ -63,7 +65,10 @@ class Soul < ApplicationRecord
       elem.token
     end
 
-    if self.device.os == "android"
+    # if self.device.os == :android
+    #   recipients.append(self.token)
+    # end
+    if Device.oses[self.device.os] == Device.oses[:android]
       recipients.append(self.token)
     end
 
