@@ -2,7 +2,7 @@ class Wave
   include ActiveModel::Model
   validates_presence_of :castVoice, :casterToken, :callerToken, :type, :epoch
   validates_length_of :epoch, maximum: 10
-  after_validation :echoBackWave
+  # after_validation :echoBackWave
 
   attr_accessor :attributes
   def initialize(attributes = {})
@@ -14,7 +14,7 @@ class Wave
   end
 
 # ask if these should be class level methods
-  def self.getDeviceOs(token)
+  def getDeviceOs(token)
     if (token != nil)
       device = Device.find_by_token(token)
     end
@@ -45,27 +45,27 @@ class Wave
 
   def echoBackWave
     wave = self
-    if wave[:type].eql? "call"
-      deviceOs = getDeviceOs(wave[:callerToken])
+    if wave.attributes[:type].eql? "call"
+      deviceOs = getDeviceOs(wave.attributes[:callerToken])
       if deviceOs.eql? "ios"
-        execString = generateioswave(wave[:callerToken])
+        execString = generateioswave(wave.attributes[:callerToken])
         if execString != nil # no devices to send to
           system execString
         end
       elsif deviceOs.eql? "android"
-        generateandroidWave(wave[:callerToken])
+        generateandroidWave(wave.attributes[:callerToken])
       end
 
-    elsif wave[:type].eql? "reply"
+    elsif wave.attributes[:type].eql? "reply"
 
-      deviceOs = getDeviceOs(wave[:casterToken])
+      deviceOs = getDeviceOs(wave.attributes[:casterToken])
       if deviceOs.eql? "ios"
-        execString = generateioswave(wave[:casterToken])
+        execString = generateioswave(wave.attributes[:casterToken])
         if execString != nil # no devices to send to
           system execString
         end
       elsif deviceOs.eql? "android"
-        generateandroidWave(wave[:callerToken])
+        generateandroidWave(wave.attributes[:callerToken])
       end
     end
   end
