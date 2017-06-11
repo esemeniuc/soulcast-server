@@ -8,4 +8,10 @@ class StaticPagesController < ApplicationController
     @page_title = 'Soulcast EULA'
     @description = nil
   end
+
+  def proof
+    @page_title = 'Soulcast | Kevin Zhang Proof'
+    @description = nil
+  end
+
 end
