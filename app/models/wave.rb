@@ -29,7 +29,7 @@ class Wave
   end
 
 
-  def generateioswave(iosToken)
+  def generateiosWave(iosToken)
     alertMessage = 'Incoming Wave'
     jsonObject = {'wave': self}.to_json
 
@@ -43,31 +43,41 @@ class Wave
     FirebaseHelper.androidFCMPush(recipients, payload)
   end
 
+  def generateWave(token, os)
+    if os.eql? "ios"
+      return generateiosWave(token)
+    elsif os.eql? "android"
+      return generateandroidWave(token)
+    end
+
+  end
+
   def echoBackWave
     wave = self
     if wave.attributes[:type].eql? "call"
       deviceOs = getDeviceOs(wave.attributes[:callerToken])
       if deviceOs.eql? "ios"
-        execString = generateioswave(wave.attributes[:callerToken])
+        execString = generateWave(wave.attributes[:callerToken], deviceOs)
         if execString != nil # no devices to send to
           system execString
         end
       elsif deviceOs.eql? "android"
-        generateandroidWave(wave.attributes[:callerToken])
+        generateWave(wave.attributes[:callerToken], deviceOs)
       end
 
     elsif wave.attributes[:type].eql? "reply"
 
       deviceOs = getDeviceOs(wave.attributes[:casterToken])
       if deviceOs.eql? "ios"
-        execString = generateioswave(wave.attributes[:casterToken])
+        execString = generateWave(wave.attributes[:callerToken], deviceOs)
         if execString != nil # no devices to send to
           system execString
         end
       elsif deviceOs.eql? "android"
-        generateandroidWave(wave.attributes[:callerToken])
+        generateWave(wave.attributes[:callerToken], deviceOs)
       end
     end
+    puts "Wave succesfully created and echoed"
   end
 
 end

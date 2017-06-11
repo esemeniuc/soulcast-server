@@ -10,7 +10,6 @@ class WavesController < ApplicationController
     respond_to do |format|
       if @wave.valid?
         @wave.echoBackWave()
-        format.html { redirect_to success_path, notice: 'Wave was successfully submitted.' }
 
       else
 
@@ -20,9 +19,6 @@ class WavesController < ApplicationController
     end
   end
 
-
-  def success
-  end
 
   private
   def wave_params
