@@ -8,3 +8,14 @@ body
 {
   background-color: #E6E6FA;
 }
+
+p:nth-child(4) > a:nth-child(2)
+{
+  width: 18%;
+  height: 40%;
+}
+.android_img
+{
+  height: 110%;
+  width: 110%;
+}
