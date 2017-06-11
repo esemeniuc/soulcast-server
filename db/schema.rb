@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170326210509) do
+ActiveRecord::Schema.define(version: 20170521205425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,18 @@ ActiveRecord::Schema.define(version: 20170326210509) do
     t.string   "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "waves", force: :cascade do |t|
+    t.text     "castVoice"
+    t.text     "callVoice"
+    t.text     "replyVoice"
+    t.string   "casterToken"
+    t.string   "callerToken"
+    t.string   "type"
+    t.integer  "epoch"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_foreign_key "histories", "devices"
