@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "API call", :type => :request do
   before(:each) do
-    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+    # DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @deviceParams1 = {device: {
         latitude:100,
         longitude:100,

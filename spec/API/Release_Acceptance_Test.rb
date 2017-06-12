@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Acceptance Test", :type => :request do
   before(:each) do
-    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+    # DatabaseCleaner.clean_with(:truncation, reset_ids: true)
   end
 
   xit "when blocking, history removal must be mutual" do

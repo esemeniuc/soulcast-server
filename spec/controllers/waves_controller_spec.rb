@@ -17,7 +17,7 @@ RSpec.describe WavesController, type: :controller do
   # end
 
   before(:each) do
-    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+    # DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                           latitude: 50,
                           longitude: -100,

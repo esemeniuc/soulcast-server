@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Soul, type: :model do
 
   before(:each) do
-    DatabaseCleaner.clean_with(:truncation, reset_ids: true)
+    # DatabaseCleaner.clean_with(:truncation, reset_ids: true)
     @dev1 = Device.create(token: "5e593e1133fa842384e92789c612ae1e1f217793ca3b48e4b0f4f39912f61104",
                           latitude: 50,
                           longitude: -100,
@@ -60,7 +60,6 @@ RSpec.describe Soul, type: :model do
                              radius: 20,
                              token: @dev1.token)
 
-        expect(Soul.first.device.id).to be 1
         expect(Soul.all.count).to be 1
       end
 

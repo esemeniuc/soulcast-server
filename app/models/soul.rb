@@ -57,7 +57,6 @@ class Soul < ApplicationRecord
 
 
   def broadcastAndroid(androidDevices)
-    puts('****************************IN ANDROID***********')
     payload = {data: {soulObject: self}}
     recipients = androidDevices.map do |elem|
       elem.token

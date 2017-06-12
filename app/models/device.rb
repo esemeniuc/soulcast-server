@@ -42,8 +42,8 @@ class Device < ApplicationRecord
 
     distanceInDeg = (deltaLat * deltaLat + deltaLon * deltaLon) ** 0.5 #pythag hypotenuse
 
-    puts "Distance between two points (degrees): #{format('%.2f', distanceInDeg)}"
-    puts "Acceptance radius distance (degrees): #{format('%.2f', minRadius)}"
+    # puts "Distance between two points (degrees): #{format('%.2f', distanceInDeg)}"
+    # puts "Acceptance radius distance (degrees): #{format('%.2f', minRadius)}"
     return (distanceInDeg < minRadius)
   end
 
@@ -81,7 +81,7 @@ class Device < ApplicationRecord
     devicesToRemove = Device.where(id: deviceIDsToRemove) #inner query gets all ids that blocked the broadcaster
     result = allDevices - devicesToRemove
 
-    puts allDevices.count.to_s + " other devices within mutual range, " + result.count.to_s + " other devices that are not blocked"
+    # puts allDevices.count.to_s + " other devices within mutual range, " + result.count.to_s + " other devices that are not blocked"
     return result
   end
 
