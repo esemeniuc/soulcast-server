@@ -23,7 +23,7 @@ class Wave
 
   def self.getDevicebyid(id)
     if (id != nil)
-      device = Device.find_by_token(id)
+      device = Device.find(id)
     end
     return device
   end

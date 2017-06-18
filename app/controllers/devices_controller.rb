@@ -70,7 +70,7 @@ class DevicesController < ApplicationController
     end
   end
 
-  # GET /nearby/?latitude=49.3&longitude=-122.9&radius=0.1&token=SSSSSSSS
+  # GET /nearby/?latitude=49.3&longitude=-122.9&radius=0.1&deviceid=SSSSSSSS
   def nearby
     if validParams?(params)
       render json: deviceCount(params)

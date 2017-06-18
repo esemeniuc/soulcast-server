@@ -46,7 +46,7 @@ assert(typeof payloadJSON.soulObject.s3Key === 'string');
 assert(typeof payloadJSON.soulObject.longitude === 'number');
 assert(typeof payloadJSON.soulObject.latitude === 'number');
 assert(typeof payloadJSON.soulObject.radius === 'number');
-assert(typeof payloadJSON.soulObject.token === 'string');
+// assert(typeof payloadJSON.soulObject.token === 'string');
 assert(typeof payloadJSON.soulObject.device_id === 'number');
 
 //start apns stuff
