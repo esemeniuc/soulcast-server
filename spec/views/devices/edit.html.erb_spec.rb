@@ -7,7 +7,7 @@ RSpec.describe "devices/edit", type: :view do
       :latitude => 1.5,
       :longitude => 1.5,
       :radius => 1.5,
-      :os => "MyString"
+      :os => "android"
     ))
   end
 

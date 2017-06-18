@@ -7,7 +7,7 @@ RSpec.describe "devices/show", type: :view do
       :latitude => 2.5,
       :longitude => 3.5,
       :radius => 4.5,
-      :os => "Os"
+      :os => "ios"
     ))
   end
 
@@ -17,6 +17,6 @@ RSpec.describe "devices/show", type: :view do
     expect(rendered).to match(/2.5/)
     expect(rendered).to match(/3.5/)
     expect(rendered).to match(/4.5/)
-    expect(rendered).to match(/Os/)
+    expect(rendered).to match(/ios/)
   end
 end

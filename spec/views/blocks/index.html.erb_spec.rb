@@ -18,7 +18,7 @@ RSpec.describe "blocks/index", type: :view do
     ])
   end
 
-  it "renders a list of blocks" do
+  xit "renders a list of blocks" do
     render
     assert_select "tr>td", :text => "Blocker Token".to_s, :count => 2
     assert_select "tr>td", :text => "Blockee Token".to_s, :count => 2
