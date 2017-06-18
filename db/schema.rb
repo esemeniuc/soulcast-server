@@ -10,21 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618224821) do
+ActiveRecord::Schema.define(version: 20170618223510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "blocks", force: :cascade do |t|
-    t.string   "blocker_token"
-    t.string   "blockee_token"
     t.integer  "blocker_id"
     t.integer  "blockee_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["blockee_id"], name: "index_blocks_on_blockee_id", using: :btree
-    t.index ["blocker_id", "blockee_id"], name: "index_blocks_on_blocker_id_and_blockee_id", unique: true, using: :btree
-    t.index ["blocker_id"], name: "index_blocks_on_blocker_id", using: :btree
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "devices", force: :cascade do |t|
