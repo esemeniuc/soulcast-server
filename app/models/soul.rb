@@ -3,13 +3,13 @@ class Soul < ApplicationRecord
   has_many :histories, dependent: :destroy
   # has_one :history, through: :device
   before_validation :get_device
-  validates :s3Key, :epoch, :latitude, :longitude, :radius, :token, :device_id, presence: true
+  validates :s3Key, :epoch, :latitude, :longitude, :radius, :device_id, presence: true
   validates_length_of :epoch, maximum: 10
   after_save :updateDeviceLocation, :sendToOthers, :status_output
 
   def get_device
     if self.device == nil # associate a device to our soul, not a hack
-      self.device = Device.find_by_token(self.token)
+      self.device = Device.find(self.device_id)
     end
   end
 
@@ -63,7 +63,8 @@ class Soul < ApplicationRecord
     end
 
     if Device.oses[self.device.os] == Device.oses[:android]
-      recipients.append(self.token)
+
+      recipients.append(self.device.token)
     end
 
     FirebaseHelper.androidFCMPush(recipients, payload)
