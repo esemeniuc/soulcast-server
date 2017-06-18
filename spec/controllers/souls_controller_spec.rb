@@ -47,8 +47,7 @@ RSpec.describe SoulsController, type: :controller do
 				epoch: 1000000,
 				latitude: 50,
 				longitude: -100,
-				radius: 20,
-				token: @dev1.token)
+				radius: 20)
 			expect(@dev2.histories.count).to be 1
 			expect(@dev6.histories.count).to be 1
 		end
@@ -58,8 +57,7 @@ RSpec.describe SoulsController, type: :controller do
 				epoch: 1000000,
 				latitude: 50,
 				longitude: -100,
-				radius: 20,
-				token: @dev6.token)
+				radius: 20)
 			expect(@dev1.histories.count).to be 1
 			expect(@dev2.histories.count).to be 1
 		end
@@ -70,8 +68,7 @@ RSpec.describe SoulsController, type: :controller do
 				epoch: 1000000,
 				latitude: 50,
 				longitude: -100,
-				radius: 20,
-				token: @dev1.token)
+				radius: 20)
 			expect(@dev3.histories.count).to be 0
 		end
 	end
@@ -104,8 +101,7 @@ RSpec.describe SoulsController, type: :controller do
 				epoch: 1000000,
 				latitude: 49.277712,
                 longitude: -122.914274,
-				radius: 10,
-				token: @dev6.token)
+				radius: 10)
 			expect(@dev1.histories.count).to be 0
 			expect(@dev3.histories.count).to be 0
 		end

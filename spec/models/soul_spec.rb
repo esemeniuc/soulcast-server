@@ -45,7 +45,6 @@ RSpec.describe Soul, type: :model do
                           latitude: 50,
                           longitude: -100,
                           radius: 20,
-                          token: @dev1.token,
                           device_id: @dev1.id)
 
         expect(Soul.all.count).to be 1
@@ -57,8 +56,7 @@ RSpec.describe Soul, type: :model do
                              epoch: 1000000,
                              latitude: 50,
                              longitude: -100,
-                             radius: 20,
-                             token: @dev1.token)
+                             radius: 20)
 
         expect(Soul.all.count).to be 1
       end
@@ -69,8 +67,7 @@ RSpec.describe Soul, type: :model do
                             epoch: 1000000,
                             latitude: 55,
                             longitude: -111,
-                            radius: 22,
-                            token: @dev1.token)
+                            radius: 22)
 
         expect(Device.find(@dev1.id).latitude).to eq soul1.latitude
         expect(Device.find(@dev1.id).longitude).to eq soul1.longitude
