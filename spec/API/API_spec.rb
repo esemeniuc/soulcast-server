@@ -31,7 +31,7 @@ RSpec.describe "API call", :type => :request do
         latitude:100,
         longitude:100,
         radius:20,
-        token:"AAAAAAAA" }}
+        device_id:1 }}
   end
 
   it "creates a new device" do

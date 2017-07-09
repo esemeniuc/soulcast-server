@@ -50,15 +50,15 @@ RSpec.describe Soul, type: :model do
         expect(Soul.all.count).to be 1
       end
 
-      it "should save a soul to the database without device_id" do
-        soul1 = Soul.create(soulType: "testType1",
+      it "should not save a soul to the database without device_id" do
+        soul1 = Soul.new(soulType: "testType1",
                              s3Key: 10000000,
                              epoch: 1000000,
                              latitude: 50,
                              longitude: -100,
                              radius: 20)
-
-        expect(Soul.all.count).to be 1
+        expect(soul1.valid?).to equal? false
+        expect(Soul.all.count).to be 0
       end
 
       it "should update the device location when saving" do
@@ -67,7 +67,8 @@ RSpec.describe Soul, type: :model do
                             epoch: 1000000,
                             latitude: 55,
                             longitude: -111,
-                            radius: 22)
+                            radius: 22,
+                            device_id: @dev1.id)
 
         expect(Device.find(@dev1.id).latitude).to eq soul1.latitude
         expect(Device.find(@dev1.id).longitude).to eq soul1.longitude
@@ -84,17 +85,7 @@ RSpec.describe Soul, type: :model do
     end
 
     context "with invalid input" do
-      it "should not save a soul to the database with nil token" do
-        soul1 = Soul.create(soulType: "testType1",
-                             s3Key: 10000000,
-                             epoch: 1000000,
-                             latitude: 50,
-                             longitude: -100,
-                             radius: 20,
-                             token: nil)
 
-        expect(Soul.all.count).to be 0
-      end
 
       it "should not save a soul to the database with token not in devices" do
         soul1 = Soul.create(soulType: "testType1",
@@ -136,7 +127,7 @@ RSpec.describe Soul, type: :model do
                             latitude: 55,
                             longitude: -111,
                             radius: 22,
-                            token: @dev1.token)
+                            device_id: @dev1.id)
 
         expect(Device.find(@dev1.id).latitude).to eq 50
         expect(Device.find(@dev1.id).longitude).to eq -100
@@ -154,7 +145,6 @@ RSpec.describe Soul, type: :model do
                         latitude: 50,
                         longitude: -100,
                         radius: 20,
-                        token: @dev1.token,
                         device_id: @dev1.id)
     end
     context "1 or more devices" do
