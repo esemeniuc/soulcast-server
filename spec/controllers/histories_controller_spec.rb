@@ -53,7 +53,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev2.token,
                      device_id: @dev2.id)
       expect(@dev1.histories.count).to be 1
     end
@@ -65,7 +64,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev1.token,
                      device_id: @dev1.id)
       expect(@dev2.histories.count).to be 1
     end
@@ -77,7 +75,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev1.token,
                      device_id: @dev1.id)
       soul2 = Soul.create(soulType: "testType1",
                      s3Key: 10000000,
@@ -85,7 +82,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev1.token,
                      device_id: @dev1.id)
       soul3 = Soul.create(soulType: "testType1",
                      s3Key: 10000000,
@@ -93,7 +89,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev1.token,
                      device_id: @dev1.id)
       expect(@dev2.histories.count).to be 3
     end
@@ -102,18 +97,18 @@ RSpec.describe HistoriesController, type: :controller do
       castingDevice = Device.create(token: "castingDeviceToken",
                           latitude: -50,
                           longitude: 100,
-                          radius: 10.0)
+                          radius: 10.0,
+                          os: "ios")
       receivingDevice = Device.create(token: "receivingDeviceToken",
                           latitude: 40,
                           longitude: -900,
-                          radius: 10.0)
+                          radius: 10.0, os: "ios")
       soul = Soul.create(soulType: "testType1",
                      s3Key: 10000000,
                      epoch: 1000000,
                      latitude: 88,
                      longitude: -100,
                      radius: 0.001,
-                     token: castingDevice.token,
                      device_id: castingDevice.id)
       expect(receivingDevice.histories.count).to be 0
     end
@@ -127,7 +122,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev2.token,
                      device_id: @dev2.id)
 
       expect(@dev1.histories.count).to be 1
@@ -154,7 +148,6 @@ RSpec.describe HistoriesController, type: :controller do
                          latitude: 50,
                          longitude: -100,
                          radius: 20,
-                         token: @dev1.token,
                          device_id: @dev1.id)
     end
     it "should have no history for dev2" do
@@ -199,7 +192,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev1.token,
                      device_id: @dev1.id)
       soul2 = Soul.create(soulType: "testType1",
                      s3Key: 10000000,
@@ -207,7 +199,6 @@ RSpec.describe HistoriesController, type: :controller do
                      latitude: 50,
                      longitude: -100,
                      radius: 20,
-                     token: @dev2.token,
                      device_id: @dev2.id)
 
       expect(@dev2.histories.count).to eq(1)

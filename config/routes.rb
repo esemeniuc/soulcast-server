@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :blocks
   resources :devices
   get 'static_pages/index'
 
@@ -7,7 +8,6 @@ Rails.application.routes.draw do
   get 'static_pages/proof'
   
   resources :improves
-  resources :blocks
   resources :histories
   resources :souls
   resources :waves, :only => [:new, :create]

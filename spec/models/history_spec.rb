@@ -15,7 +15,6 @@ RSpec.describe History, type: :model do
                          latitude: 50,
                          longitude: -100,
                          radius: 20,
-                         token: @dev1.token,
                          device_id: @dev1.id)
   end
 

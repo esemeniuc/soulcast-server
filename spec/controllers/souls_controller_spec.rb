@@ -48,7 +48,7 @@ RSpec.describe SoulsController, type: :controller do
 				latitude: 50,
 				longitude: -100,
 				radius: 20,
-				token: @dev1.token)
+      	device_id: @dev1.id)
 			expect(@dev2.histories.count).to be 1
 			expect(@dev6.histories.count).to be 1
 		end
@@ -59,7 +59,7 @@ RSpec.describe SoulsController, type: :controller do
 				latitude: 50,
 				longitude: -100,
 				radius: 20,
-				token: @dev6.token)
+      	device_id: @dev6.id)
 			expect(@dev1.histories.count).to be 1
 			expect(@dev2.histories.count).to be 1
 		end
@@ -71,7 +71,7 @@ RSpec.describe SoulsController, type: :controller do
 				latitude: 50,
 				longitude: -100,
 				radius: 20,
-				token: @dev1.token)
+      	device_id: @dev1.id)
 			expect(@dev3.histories.count).to be 0
 		end
 	end
@@ -105,7 +105,7 @@ RSpec.describe SoulsController, type: :controller do
 				latitude: 49.277712,
                 longitude: -122.914274,
 				radius: 10,
-				token: @dev6.token)
+      	device_id: @dev4.id)
 			expect(@dev1.histories.count).to be 0
 			expect(@dev3.histories.count).to be 0
 		end
