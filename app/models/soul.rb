@@ -8,7 +8,7 @@ class Soul < ApplicationRecord
   after_save :updateDeviceLocation, :sendToOthers, :status_output
 
   def get_device
-    if self.device == nil # associate a device to our soul, not a hack
+    if self.device_id # associate a device to our soul, not a hack
       self.device = Device.find(self.device_id)
     end
   end
